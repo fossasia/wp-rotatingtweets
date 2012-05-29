@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Replaces a shortcode such as [rotatingtweets screen_name='mpntod'], or a widget, with a rotating tweets display 
 
 == Description ==
-Replaces a shortcode such as [rotatingtweets screen_name='mpntod'], or a widget, with a rotating tweets display 
+Replaces a shortcode such as `[rotatingtweets screen_name='mpntod']`, or a widget, with a rotating tweets display 
 
 Possible variables for the shortcode include:
 
