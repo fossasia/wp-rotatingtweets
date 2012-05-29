@@ -11,22 +11,24 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Replaces a shortcode such as [rotatingtweets screen_name='mpntod'], or a widget, with a rotating tweets display 
 
 == Description ==
-Replaces a shortcode such as `[rotatingtweets screen_name='mpntod']`, or a widget, with a rotating tweets display 
+* Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='mpntod']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets
+* Caches the most recent data from Twitter to avoid problems with rate limiting
+* Uses [jQuery](http://jquery.com/) and [jQuery.Cycle](http://jquery.malsup.com/cycle/) to produce a nice smooth result
+If you'd like to see what it looks like in action, you can [see the plug-in working here](http://www.martintod.org.uk/2012/05/29/new-twitter-plugin-to-show-tweets-in-rotation/).
+== Installation ==
+1. Upload the contents of `rotatingtweets.zip` to the `/wp-content/plugins/` directory or use the Wordpress installer
+1. Activate the plugin through the 'Plugins' menu in WordPress
+1. Place a shortcode such `[rotatingtweets screen_name='mpntod']` in your post or page, or use a widget
 
 Possible variables for the shortcode include:
 
-* `screen_name` = Twitter user name - required
+* `screen_name` = Twitter user name
 * `include_rts` = `'0'` or `'1'` - include retweets - optional
 * `exclude_replies` = `'0'` or `'1'` - exclude replies - optional
 * `tweet_count` = number of tweets to show - optional - default is 5
 * `show_follow` = `'0'` or `'1'` - show follow button - optional
 
 But you may just decide to use the 'Rotating Tweets' widget!
-
-== Installation ==
-1. Upload `rotatingtweets.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place a shortcode such `[rotatingtweets screen_name='mpntod']` in your post or page, or use a widget
 
 == Frequently Asked Questions ==
 = Are there any frequently asked questions? =
