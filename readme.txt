@@ -8,14 +8,14 @@ Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Replaces a shortcode such as [rotatingtweets userid='mpntod'], or a widget, with a rotating tweets display 
+Replaces a shortcode such as [rotatingtweets screen_name='mpntod'], or a widget, with a rotating tweets display 
 
 == Description ==
-Replaces a shortcode such as [rotatingtweets userid='mpntod'], or a widget, with a rotating tweets display 
+Replaces a shortcode such as [rotatingtweets screen_name='mpntod'], or a widget, with a rotating tweets display 
 
 Possible variables for the shortcode include:
 
-* `screen_name` = Twitter user name
+* `screen_name` = Twitter user name - required
 * `include_rts` = `'0'` or `'1'` - include retweets - optional
 * `exclude_replies` = `'0'` or `'1'` - exclude replies - optional
 * `tweet_count` = number of tweets to show - optional - default is 5
