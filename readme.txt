@@ -12,6 +12,9 @@ Replaces a shortcode such as [rotatingtweets screen_name='mpntod'], or a widget,
 
 == Description ==
 * Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='mpntod']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets
+* Instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
+* Customisable - you decide whose tweets to show, how many to show, whether to include retweets and replies, and whether to show a follow button
+* Replaces t.co links with the original link
 * Caches the most recent data from Twitter to avoid problems with rate limiting
 * Uses [jQuery](http://jquery.com/) and [jQuery.Cycle](http://jquery.malsup.com/cycle/) to produce a nice smooth result.
 
@@ -23,7 +26,7 @@ If you'd like to see what it looks like in action, you can [see the plug-in work
 
 Possible variables for the shortcode include:
 
-* `screen_name` = Twitter user name
+* `screen_name` = Twitter user name - required
 * `include_rts` = `'0'` or `'1'` - include retweets - optional
 * `exclude_replies` = `'0'` or `'1'` - exclude replies - optional
 * `tweet_count` = number of tweets to show - optional - default is 5
