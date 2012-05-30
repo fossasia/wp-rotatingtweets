@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate
 Requires at least: 2.6
 Tested up to: 3.3.2
-Stable tag: 0.2
+Stable tag: 0.21
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,10 +39,16 @@ But you may just decide to use the 'Rotating Tweets' widget!
 Not yet. Why not ask one?
 
 == Upgrade notice ==
+= 0.21 =
+Fixed a missing `</div>` in the follow-button code
+
 = 0.2 =
 Fixes a serious problem with cacheing of different feeds
 
 == Changelog ==
+= 0.21 =
+Replaced a missing `</div>` in the follow-button code (with thanks to [jacobp](http://wordpress.org/support/profile/jacobp) for spotting it and suggesting a fix)
+
 = 0.2 =
 Fixed a problem with cacheing
 
