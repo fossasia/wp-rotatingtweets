@@ -8,11 +8,11 @@ Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Replaces a shortcode such as [rotatingtweets screen_name='mpntod'], or a widget, with a rotating tweets display 
+Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
 
 == Description ==
-* Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='mpntod']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets
-* Instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
+* Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter_name']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets
+* Space efficient - instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
 * Customisable - you decide whose tweets to show, how many to show, whether to include retweets and replies, and whether to show a follow button
 * Replaces t.co links with the original link
 * Caches the most recent data from Twitter to avoid problems with rate limiting
@@ -39,9 +39,13 @@ But you may just decide to use the 'Rotating Tweets' widget!
 Not yet. Why not ask one?
 
 == Upgrade notice ==
-There's no earlier version - so this 'upgrade' is pretty unavoidable!
+= 0.2 =
+Fixes a serious problem with cacheing of different feeds
 
 == Changelog ==
+= 0.2 =
+Fixed a problem with cacheing
+
 = 0.1 =
 First published version
 
