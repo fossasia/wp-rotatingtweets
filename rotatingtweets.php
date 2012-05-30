@@ -139,7 +139,6 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 	$exclude_replies :: [boolean] exclude replies - optional
 	$tweet_count :: [integer] number of tweets to show - optional - default 5
 	$show_follow :: [boolean] show follow button
-	$debug :: [boolean] Show extra variables
 */
 	extract( shortcode_atts( array(
 			'screen_name' => 'twitter',
@@ -147,10 +146,9 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 			'exclude_replies' => FALSE,
 			'tweet_count' => 5,
 			'show_follow' => FALSE,
-			'debug' => FALSE
 		), $atts ) );
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$tweet_count);
-	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,FALSE,$debug);
+	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,FALSE);
 	return $returnstring;
 }
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
@@ -246,7 +244,7 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$print=
 	endforeach;
 	$result .= "</div>\n";
 	if($show_follow==TRUE):
-		$result .= "<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button' title='Follow @".$user->screen_name."'>@".$user->screen_name."</a>";
+		$result .= "<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button' title='Follow @".$user->screen_name."'>@".$user->screen_name."</a></div>";
 		$script = 'http://platform.twitter.com/widgets.js';
 		wp_enqueue_script( 'twitter-wjs', $script, FALSE, FALSE, TRUE );
 	endif;
