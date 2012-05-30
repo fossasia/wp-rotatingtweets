@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Rotating Tweets widget & shortcode
-Description: Replaces a shortcode such as [rotatingtweets userid='mpntod'], or a widget, with a rotating tweets display 
-Version: 0.2
+Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
+Version: 0.25
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -23,7 +23,7 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 /**
- * Replaces a shortcode such as [rotatingtweets userid='mpntod'], or a widget, with a rotating tweets display 
+ * Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
  *
  * @package WordPress
  * @since 3.3.2
@@ -181,7 +181,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$twitterdata = wp_remote_request($callstring);
 		$twitterjson = json_decode($twitterdata['body']);
 	endif;
-	if(!empty($twitterjson)):
+	if(!empty($twitterjson) && empty($twitterjson->errors)):
 		$latest_json = $twitterjson;
 		$option[$stringname][json]=$latest_json;
 		$option[$stringname][datetime]=time();
@@ -193,9 +193,13 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 # Displays the tweets
 function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$print=TRUE) {
 	unset($result);
+	if(!empty($json->errors)) return;
 	$tweet_count = max(1,intval($tweet_count));
 	$result = "<div class='rotatingtweets' id='".uniqid('rotatingtweets_')."'>";
 	$tweet_counter = 0;
+	echo "<!--";
+		print_r($json);
+	echo "-->";
 	foreach($json as $twitter_object):
 		$twitter_vars = get_object_vars($twitter_object);
 		$tweet_counter++;
