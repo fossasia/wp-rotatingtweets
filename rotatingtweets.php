@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='mpntod'], or a widget, with a rotating tweets display 
-Version: 0.1
+Version: 0.2
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -139,6 +139,7 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 	$exclude_replies :: [boolean] exclude replies - optional
 	$tweet_count :: [integer] number of tweets to show - optional - default 5
 	$show_follow :: [boolean] show follow button
+	$debug :: [boolean] Show extra variables
 */
 	extract( shortcode_atts( array(
 			'screen_name' => 'twitter',
@@ -146,9 +147,10 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 			'exclude_replies' => FALSE,
 			'tweet_count' => 5,
 			'show_follow' => FALSE,
+			'debug' => FALSE
 		), $atts ) );
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$tweet_count);
-	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,FALSE);
+	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,FALSE,$debug);
 	return $returnstring;
 }
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
@@ -173,8 +175,8 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	$optionname = "rotatingtweets-cache";
 	$option = get_option($optionname);
-	$latest_json = $option[stringname][json];
-	$latest_json_date = $option[stringname][datetime];
+	$latest_json = $option[$stringname][json];
+	$latest_json_date = $option[$stringname][datetime];
 	$timegap = time()-$latest_json_date;
 	if($timegap > $cache_delay):
 		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".$tw_screen_name."&include_entities=1&count=20&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
@@ -183,8 +185,8 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	endif;
 	if(!empty($twitterjson)):
 		$latest_json = $twitterjson;
-		$option[stringname][json]=$latest_json;
-		$option[stringname][datetime]=time();
+		$option[$stringname][json]=$latest_json;
+		$option[$stringname][datetime]=time();
 		update_option($optionname,$option);
 	endif;
 	return($latest_json);
