@@ -27,10 +27,10 @@ If you'd like to see what it looks like in action, you can [see the plug-in work
 Possible variables for the shortcode include:
 
 * `screen_name` = Twitter user name - required
-* `include_rts` = `'0'` or `'1'` - include retweets - optional - default is '0'
-* `exclude_replies` = `'0'` or `'1'` - exclude replies - optional - default is '0'
-* `tweet_count` = number of tweets to show - optional - default is 5
-* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is '0'
+* `include_rts` = `'0'` or `'1'` - include retweets - optional - default is `'0'`
+* `exclude_replies` = `'0'` or `'1'` - exclude replies - optional - default is `'0'`
+* `tweet_count` = number of tweets to show - optional - default is `5`
+* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
 
 But you may just decide to use the 'Rotating Tweets' widget!
 
@@ -39,16 +39,13 @@ But you may just decide to use the 'Rotating Tweets' widget!
 Not yet. Why not ask one?
 
 == Upgrade notice ==
-= 0.25 =
-If there's an error in the twitter feed, it doesn't cache it and doesn't display it
-
-= 0.21 =
-Fixed a missing `</div>` in the follow-button code
-
-= 0.2 =
-Fixes a serious problem with cacheing of different feeds
+= 0.26 =
+If there's an error in the twitter feed, this upgrade makes sure the plug-in doesn't cache it and doesn't display it.
 
 == Changelog ==
+= 0.26 =
+Stops display and cacheing of non-existent twitter feeds
+
 = 0.25 =
 Stops display and cacheing of faulty twitter feeds
 
