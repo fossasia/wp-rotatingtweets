@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate
 Requires at least: 2.6
 Tested up to: 3.3.2
-Stable tag: 0.28
+Stable tag: 0.29
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,10 +39,13 @@ But you may just decide to use the 'Rotating Tweets' widget!
 Not yet. Why not ask one?
 
 == Upgrade notice ==
-= 0.28 =
-Fixes flaw in how flags are handled.
+= 0.29 =
+Better handling of retweets. No longer cuts off the end of the text on longer RTs.
 
 == Changelog ==
+= 0.29 =
+Better handling of retweets. No longer cuts off the end of the text on longer RTs.
+
 = 0.28 =
 Properly fixes flaw in how flags are handled.
 
