@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.28
+Version: 0.29
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -200,23 +200,43 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$print=
 			endif;
 			$main_text = $twitter_object->text;
 			$user = $twitter_object->user;
+			# Check tweet content
+			if(substr($main_text,0,2)=="RT"):
+				echo "<!--";
+				print_r($twitter_object);
+				echo "-->";
+			endif;
 			# Now the substitutions
 			$entities = $twitter_object->entities;
-			$urls = $entities->urls;
-			# Fix up links, hashtags and use names
+			# Fix up retweets, links, hashtags and use names
 			unset($before);
 			unset($after);
-			if(!empty($urls)):
-				foreach($urls as $url):
-					$before[] = "*".$url->url."*";
-					$after[] = "<a href='".$url->expanded_url."'>".$url->display_url."</a>";
-				endforeach;
+			# First clean up the retweets
+			$rt_data = $twitter_object->retweeted_status;
+			if(!empty($rt_data)):
+				$rt_user = $rt_data->user;
+				$main_text = "RT @".$rt_user->screen_name . " " . $rt_data->text;
+				$before[] = "*@".$rt_user->screen_name."*i";
+				$after[] = "<a href='http://twitter.com/".$rt_user->screen_name."' title='".$rt_user->name."'>@".$rt_user->screen_name."</a>";
+				$entities = $rt_data->entities;
 			endif;
+			# First the user mentions
 			$user_mentions = $entities->user_mentions;
 			if(!empty($user_mentions)):
 				foreach($user_mentions as $user_mention):
 					$before[] = "*@".$user_mention->screen_name."*i";
 					$after[] = "<a href='http://twitter.com/".$user_mention->screen_name."' title='".$user_mention->name."'>@".$user_mention->screen_name."</a>";
+				endforeach;
+			endif;
+			# Clearing up duplicates to avoid strange result (possibly risky?)
+			$before = array_unique($before);
+			$after = array_unique($after);
+			# Now the URLs
+			$urls = $entities->urls;
+			if(!empty($urls)):
+				foreach($urls as $url):
+					$before[] = "*".$url->url."*";
+					$after[] = "<a href='".$url->expanded_url."'>".$url->display_url."</a>";
 				endforeach;
 			endif;
 			$media = $entities->media;
