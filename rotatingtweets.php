@@ -200,12 +200,6 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$print=
 			endif;
 			$main_text = $twitter_object->text;
 			$user = $twitter_object->user;
-			# Check tweet content
-			if(substr($main_text,0,2)=="RT"):
-				echo "<!--";
-				print_r($twitter_object);
-				echo "-->";
-			endif;
 			# Now the substitutions
 			$entities = $twitter_object->entities;
 			# Fix up retweets, links, hashtags and use names
@@ -227,10 +221,10 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$print=
 					$before[] = "*@".$user_mention->screen_name."*i";
 					$after[] = "<a href='http://twitter.com/".$user_mention->screen_name."' title='".$user_mention->name."'>@".$user_mention->screen_name."</a>";
 				endforeach;
+				# Clearing up duplicates to avoid strange result (possibly risky?)
+				$before = array_unique($before);
+				$after = array_unique($after);
 			endif;
-			# Clearing up duplicates to avoid strange result (possibly risky?)
-			$before = array_unique($before);
-			$after = array_unique($after);
 			# Now the URLs
 			$urls = $entities->urls;
 			if(!empty($urls)):
