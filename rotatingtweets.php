@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.40
+Version: 0.401
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -99,7 +99,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			<p><label for="<?php echo $this->get_field_id('tw_show_follow'); ?>"><?php _e('Show follow button?'); ?> <input id="<?php echo $this->get_field_id('tw_show_follow'); ?>" name="<?php echo $this->get_field_name('tw_show_follow'); ?>" type="checkbox" value="1" <?php if($tw_show_follow==1): ?>checked="checked" <?php endif; ?>/></label></p>
 			<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
 			<?php 
-			for ($i=1; $i<20; $i++) {
+			for ($i=1; $i<=20; $i++) {
 				echo "\n\t<option value='$i' ";
 			if($tw_tweet_count==$i): ?>selected="selected" <?php endif; 
 				echo ">$i</option>";
