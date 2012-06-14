@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.29
+Version: 0.30
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -190,7 +190,6 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$print=
 	$result = "<div class='rotatingtweets' id='".uniqid('rotatingtweets_')."'>";
 	$tweet_counter = 0;
 	foreach($json as $twitter_object):
-		$twitter_vars = get_object_vars($twitter_object);
 		$tweet_counter++;
 		if($tweet_counter <= $tweet_count):
 			if($tweet_counter == 1):
