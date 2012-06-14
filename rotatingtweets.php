@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.30
+Version: 0.40
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -54,26 +54,28 @@ class rotatingtweets_Widget extends WP_Widget {
 		$tw_exclude_replies = $instance['tw_exclude_replies'];
 		$tw_tweet_count = $instance['tw_tweet_count'];
 		$tw_show_follow = $instance['tw_show_follow'];
+		$tw_timeout = $instance['tw_timeout'];
+		if(empty($tw_timeout)) $tw_timeout = 4000;
 		$tweets = rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_tweet_count);
-
         ?>
               <?php echo $before_widget; 
 						if ( $title )
 							echo $before_title . $title . $after_title; 
-						rotating_tweets_display($tweets,$tw_tweet_count,$tw_show_follow);
+						rotating_tweets_display($tweets,$tw_tweet_count,$tw_show_follow,$tw_timeout);
 					echo $after_widget; ?>
         <?php
     }
 
     /** @see WP_Widget::update */
     function update($new_instance, $old_instance) {				
-	$instance = $old_instance;
-	$instance['title'] = strip_tags($new_instance['title']);
-	$instance['tw_screen_name'] = strip_tags($new_instance['tw_screen_name']);
-	$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
-	$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
-	$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
-	$instance['tw_show_follow'] = absint($new_instance['tw_show_follow']);;
+		$instance = $old_instance;
+		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['tw_screen_name'] = strip_tags($new_instance['tw_screen_name']);
+		$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
+		$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
+		$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
+		$instance['tw_show_follow'] = absint($new_instance['tw_show_follow']);
+		$instance['tw_timeout'] = max(min(intval($new_instance['tw_timeout']/1000)*1000,6000),3000);
 	return $instance;
     }
 
@@ -85,6 +87,10 @@ class rotatingtweets_Widget extends WP_Widget {
 		$tw_exclude_replies = absint($instance['tw_exclude_replies']);
         $tw_tweet_count = intval($instance['tw_tweet_count']);
 		$tw_show_follow = absint($instance['tw_show_follow']);
+		$tw_timeout = intval($instance['tw_timeout']);
+# If values not set, set default values
+		if(empty($tw_timeout)) $tw_timeout = 4000;
+		if(empty($tw_tweet_count)) $tw_tweet_count = 5;
         ?>
             <p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
             <p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
@@ -97,6 +103,20 @@ class rotatingtweets_Widget extends WP_Widget {
 				echo "\n\t<option value='$i' ";
 			if($tw_tweet_count==$i): ?>selected="selected" <?php endif; 
 				echo ">$i</option>";
+			}			
+			?></select></label></p>
+			<p><label for="<?php echo $this->get_field_id('tw_timeout'); ?>"><?php _e('Speed'); ?> <select id="<?php echo $this->get_field_id('tw_timeout'); ?>" name="<?php echo $this->get_field_name('tw_timeout');?>">
+			<?php 
+			$timeoutoptions = array (
+								"3000" => "Faster (3 seconds)",
+								"4000" => "Normal (4 seconds)",
+								"5000" => "Slower (5 seconds)",
+								"6000" => "Slowest (6 seconds)"
+			);
+			foreach ($timeoutoptions as $val => $words) {
+				echo "\n\t<option value='$val' ";
+			if($tw_timeout==$val): ?>selected="selected" <?php endif; 
+				echo ">$words</option>";
 			}			
 			?></select></label></p>
         <?php 
@@ -146,9 +166,10 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 			'exclude_replies' => FALSE,
 			'tweet_count' => 5,
 			'show_follow' => FALSE,
+			'timeout' => 4000
 		), $atts ) );
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$tweet_count);
-	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,FALSE);
+	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,$timeout,FALSE);
 	return $returnstring;
 }
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
@@ -183,11 +204,12 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 }
 
 # Displays the tweets
-function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$print=TRUE) {
+function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeout=4000,$print=TRUE) {
 	unset($result);
 	if(!empty($json->errors) or empty($json)) return;
 	$tweet_count = max(1,intval($tweet_count));
-	$result = "<div class='rotatingtweets' id='".uniqid('rotatingtweets_')."'>";
+	$timeout = max(intval($timeout),0);
+	$result = "<div class='rotatingtweets' id='".uniqid('rotatingtweets_'.$timeout.'_')."'>";
 	$tweet_counter = 0;
 	foreach($json as $twitter_object):
 		$tweet_counter++;
