@@ -39,10 +39,13 @@ But you may just decide to use the 'Rotating Tweets' widget!
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.29 =
-Better handling of retweets. No longer cuts off the end of the text on longer RTs.
+= 0.30 =
+Fixes bug - problem with 'get_object_vars()' on line 193
 
 == Changelog ==
+= 0.30 =
+Fixes bug - problem with 'get_object_vars()' on line 193
+
 = 0.29 =
 Better handling of retweets. No longer cuts off the end of the text on longer RTs.
 
