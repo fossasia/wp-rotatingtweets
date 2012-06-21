@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.401
+Version: 0.42
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -70,7 +70,7 @@ class rotatingtweets_Widget extends WP_Widget {
     function update($new_instance, $old_instance) {				
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
-		$instance['tw_screen_name'] = strip_tags($new_instance['tw_screen_name']);
+		$instance['tw_screen_name'] = strip_tags(trim($new_instance['tw_screen_name']));
 		$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
 		$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
 		$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
@@ -82,7 +82,7 @@ class rotatingtweets_Widget extends WP_Widget {
     /** @see WP_Widget::form */
     function form($instance) {				
         $title = esc_attr($instance['title']);
-        $tw_screen_name = esc_attr($instance['tw_screen_name']);
+        $tw_screen_name = esc_attr(trim($instance['tw_screen_name']));
         $tw_include_rts = absint($instance['tw_include_rts']);
 		$tw_exclude_replies = absint($instance['tw_exclude_replies']);
         $tw_tweet_count = intval($instance['tw_tweet_count']);
@@ -99,7 +99,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			<p><label for="<?php echo $this->get_field_id('tw_show_follow'); ?>"><?php _e('Show follow button?'); ?> <input id="<?php echo $this->get_field_id('tw_show_follow'); ?>" name="<?php echo $this->get_field_name('tw_show_follow'); ?>" type="checkbox" value="1" <?php if($tw_show_follow==1): ?>checked="checked" <?php endif; ?>/></label></p>
 			<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
 			<?php 
-			for ($i=1; $i<=20; $i++) {
+			for ($i=1; $i<20; $i++) {
 				echo "\n\t<option value='$i' ";
 			if($tw_tweet_count==$i): ?>selected="selected" <?php endif; 
 				echo ">$i</option>";
@@ -177,7 +177,7 @@ add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_tweet_count) {
 	# Clear up variables
-	$check_regex = "%^[A-Za-z0-9_]+$%";
+#	$check_regex = "%^[A-Za-z0-9_]+$%";
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
@@ -192,7 +192,9 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	if($timegap > $cache_delay):
 		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".$tw_screen_name."&include_entities=1&count=20&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
 		$twitterdata = wp_remote_request($callstring);
-		$twitterjson = json_decode($twitterdata['body']);
+		if(!is_wp_error($twitterdata)):
+			$twitterjson = json_decode($twitterdata['body']);
+		endif;
 	endif;
 	if(!empty($twitterjson) && empty($twitterjson->errors)):
 		$latest_json = $twitterjson;
