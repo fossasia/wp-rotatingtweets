@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.42
+Version: 0.43
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -190,13 +190,18 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$latest_json_date = $option[$stringname][datetime];
 	$timegap = time()-$latest_json_date;
 	if($timegap > $cache_delay):
-		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".$tw_screen_name."&include_entities=1&count=20&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
+		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".urlencode($tw_screen_name)."&include_entities=1&count=20&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
 		$twitterdata = wp_remote_request($callstring);
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body']);
 		endif;
 	endif;
-	if(!empty($twitterjson) && empty($twitterjson->errors)):
+	if(!empty($twitterjson->errors)):
+		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited
+		$option[$stringname][datetime]=time();
+		update_option($optionname,$option);
+	elseif(!empty($twitterjson)):
+		# If there's regular data, then update the cache and return the data
 		$latest_json = $twitterjson;
 		$option[$stringname][json]=$latest_json;
 		$option[$stringname][datetime]=time();
@@ -208,70 +213,77 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 # Displays the tweets
 function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeout=4000,$print=TRUE) {
 	unset($result);
-	if(!empty($json->errors) or empty($json)) return;
 	$tweet_count = max(1,intval($tweet_count));
 	$timeout = max(intval($timeout),0);
 	$result = "<div class='rotatingtweets' id='".uniqid('rotatingtweets_'.$timeout.'_')."'>";
-	$tweet_counter = 0;
-	foreach($json as $twitter_object):
-		$tweet_counter++;
-		if($tweet_counter <= $tweet_count):
-			if($tweet_counter == 1):
-				$result .= "\n<div class = 'rotatingtweet'>";
-			else:
-				$result .= "\n<div class = 'rotatingtweet' style='display:none'>";				
+	if(empty($json)):
+		$result .= "\n<p class='rtw_main'>Error. No data received from Twitter. Please check Twitter name used.</p>";
+	else:
+		$tweet_counter = 0;
+		foreach($json as $twitter_object):
+			$tweet_counter++;
+			if($tweet_counter <= $tweet_count):
+				if($tweet_counter == 1):
+					$result .= "\n<div class = 'rotatingtweet'>";
+				else:
+					$result .= "\n<div class = 'rotatingtweet' style='display:none'>";				
+				endif;
+				$main_text = $twitter_object->text;
+				if(!empty($main_text)):
+					$user = $twitter_object->user;
+					# Now the substitutions
+					$entities = $twitter_object->entities;
+					# Fix up retweets, links, hashtags and use names
+					unset($before);
+					unset($after);
+					# First clean up the retweets
+					$rt_data = $twitter_object->retweeted_status;
+					if(!empty($rt_data)):
+						$rt_user = $rt_data->user;
+						$main_text = "RT @".$rt_user->screen_name . " " . $rt_data->text;
+						$before[] = "*@".$rt_user->screen_name."*i";
+						$after[] = "<a href='http://twitter.com/".$rt_user->screen_name."' title='".$rt_user->name."'>@".$rt_user->screen_name."</a>";
+						$entities = $rt_data->entities;
+					endif;
+					# First the user mentions
+					$user_mentions = $entities->user_mentions;
+					if(!empty($user_mentions)):
+						foreach($user_mentions as $user_mention):
+							$before[] = "*@".$user_mention->screen_name."*i";
+							$after[] = "<a href='http://twitter.com/".$user_mention->screen_name."' title='".$user_mention->name."'>@".$user_mention->screen_name."</a>";
+						endforeach;
+						# Clearing up duplicates to avoid strange result (possibly risky?)
+						$before = array_unique($before);
+						$after = array_unique($after);
+					endif;
+					# Now the URLs
+					$urls = $entities->urls;
+					if(!empty($urls)):
+						foreach($urls as $url):
+							$before[] = "*".$url->url."*";
+							$after[] = "<a href='".$url->expanded_url."'>".$url->display_url."</a>";
+						endforeach;
+					endif;
+					$media = $entities->media;
+					if(!empty($media)):
+						foreach($media as $medium):
+							$before[] = "*".$medium->url."*";
+							$after[] = "<a href='".$medium->expanded_url."'>".$medium->display_url."</a>";
+						endforeach;			
+					endif;
+					$before[]="%#(\w+)%";
+					$after[]='<a href="http://search.twitter.com/search?q=%23$1" title="#$1">#$1</a>';
+					$main_text = preg_replace($before,$after,$main_text);
+					$result .= "<p class='rtw_main'>$main_text</p>\n";
+					$result .= "<p class='rtw_meta'><a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a> from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a> via ".$twitter_object->source;
+		#			$result .= '<br /><a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';		
+				else:
+					$result .= "\n<p class='rtw_main'>Twitter error. Houston we have a problem.</p><!-- ".print_r($twitter_object,TRUE)." -->";
+				endif;
+				$result .= "</div>";
 			endif;
-			$main_text = $twitter_object->text;
-			$user = $twitter_object->user;
-			# Now the substitutions
-			$entities = $twitter_object->entities;
-			# Fix up retweets, links, hashtags and use names
-			unset($before);
-			unset($after);
-			# First clean up the retweets
-			$rt_data = $twitter_object->retweeted_status;
-			if(!empty($rt_data)):
-				$rt_user = $rt_data->user;
-				$main_text = "RT @".$rt_user->screen_name . " " . $rt_data->text;
-				$before[] = "*@".$rt_user->screen_name."*i";
-				$after[] = "<a href='http://twitter.com/".$rt_user->screen_name."' title='".$rt_user->name."'>@".$rt_user->screen_name."</a>";
-				$entities = $rt_data->entities;
-			endif;
-			# First the user mentions
-			$user_mentions = $entities->user_mentions;
-			if(!empty($user_mentions)):
-				foreach($user_mentions as $user_mention):
-					$before[] = "*@".$user_mention->screen_name."*i";
-					$after[] = "<a href='http://twitter.com/".$user_mention->screen_name."' title='".$user_mention->name."'>@".$user_mention->screen_name."</a>";
-				endforeach;
-				# Clearing up duplicates to avoid strange result (possibly risky?)
-				$before = array_unique($before);
-				$after = array_unique($after);
-			endif;
-			# Now the URLs
-			$urls = $entities->urls;
-			if(!empty($urls)):
-				foreach($urls as $url):
-					$before[] = "*".$url->url."*";
-					$after[] = "<a href='".$url->expanded_url."'>".$url->display_url."</a>";
-				endforeach;
-			endif;
-			$media = $entities->media;
-			if(!empty($media)):
-				foreach($media as $medium):
-					$before[] = "*".$medium->url."*";
-					$after[] = "<a href='".$medium->expanded_url."'>".$medium->display_url."</a>";
-				endforeach;			
-			endif;
-			$before[]="%#(\w+)%";
-			$after[]='<a href="http://search.twitter.com/search?q=%23$1" title="#$1">#$1</a>';
-			$main_text = preg_replace($before,$after,$main_text);
-			$result .= "<p class='rtw_main'>$main_text</p>\n";
-			$result .= "<p class='rtw_meta'><a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a> from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a> via ".$twitter_object->source;
-#			$result .= '<br /><a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';		
-			$result .= "</div>";
-		endif;
-	endforeach;
+		endforeach;
+	endif;
 	$result .= "</div>\n";
 	if($show_follow==TRUE):
 		$result .= "<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button' title='Follow @".$user->screen_name."'>@".$user->screen_name."</a></div>";
