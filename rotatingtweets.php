@@ -198,7 +198,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	endif;
 	if(!empty($twitterjson->errors)):
 		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited
-		$option[$stringname][datetime]=time();
+		$option[$stringname][datetime]=time()-60;
 		update_option($optionname,$option);
 	elseif(!empty($twitterjson)):
 		# If there's regular data, then update the cache and return the data
@@ -215,18 +215,19 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 	unset($result);
 	$tweet_count = max(1,intval($tweet_count));
 	$timeout = max(intval($timeout),0);
-	$result = "<div class='rotatingtweets' id='".uniqid('rotatingtweets_'.$timeout.'_')."'>";
+	$result = "\n<div class='rotatingtweets' id='".uniqid('rotatingtweets_'.$timeout.'_')."'>";
 	if(empty($json)):
-		$result .= "\n<p class='rtw_main'>Error. No data received from Twitter. Please check Twitter name used.</p>";
+		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
+		$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the Twitter name used in the settings.</p></div>";
 	else:
 		$tweet_counter = 0;
 		foreach($json as $twitter_object):
 			$tweet_counter++;
 			if($tweet_counter <= $tweet_count):
 				if($tweet_counter == 1):
-					$result .= "\n<div class = 'rotatingtweet'>";
+					$result .= "\n\t<div class = 'rotatingtweet'>";
 				else:
-					$result .= "\n<div class = 'rotatingtweet' style='display:none'>";				
+					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'>";				
 				endif;
 				$main_text = $twitter_object->text;
 				if(!empty($main_text)):
@@ -274,19 +275,21 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 					$before[]="%#(\w+)%";
 					$after[]='<a href="http://search.twitter.com/search?q=%23$1" title="#$1">#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
-					$result .= "<p class='rtw_main'>$main_text</p>\n";
-					$result .= "<p class='rtw_meta'><a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a> from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a> via ".$twitter_object->source;
+					$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
+					$result .= "\n\t\t<p class='rtw_meta'><a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a> from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a> via ".$twitter_object->source;
 		#			$result .= '<br /><a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';		
 				else:
-					$result .= "\n<p class='rtw_main'>Strange and inexplicable error. In theory this shouldn't happen.</p><!-- ".print_r($json,TRUE)." -->";
+					$result .= "\n\t\t<p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
+					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
+					$result .= "\n\t\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the comments on this page's HTML to understand more.</p>";
 				endif;
-				$result .= "</div>";
+				$result .= "\n\t</div>";
 			endif;
 		endforeach;
 	endif;
-	$result .= "</div>\n";
+	$result .= "\n</div>";
 	if($show_follow==TRUE):
-		$result .= "<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button' title='Follow @".$user->screen_name."'>@".$user->screen_name."</a></div>";
+		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button' title='Follow @".$user->screen_name."'>@".$user->screen_name."</a></div>";
 		$script = 'http://platform.twitter.com/widgets.js';
 		wp_enqueue_script( 'twitter-wjs', $script, FALSE, FALSE, TRUE );
 	endif;
