@@ -278,7 +278,7 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 					$result .= "<p class='rtw_meta'><a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a> from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a> via ".$twitter_object->source;
 		#			$result .= '<br /><a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';		
 				else:
-					$result .= "\n<p class='rtw_main'>Twitter error. Houston we have a problem.</p><!-- ".print_r($twitter_object,TRUE)." -->";
+					$result .= "\n<p class='rtw_main'>Strange and inexplicable error. In theory this shouldn't happen.</p><!-- ".print_r($json,TRUE)." -->";
 				endif;
 				$result .= "</div>";
 			endif;
