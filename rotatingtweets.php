@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.44
+Version: 0.46
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -197,17 +197,45 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		endif;
 	endif;
 	if(!empty($twitterjson->errors)):
-		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited
-		$option[$stringname][datetime]=time()-60;
+		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited.
+		$option[$stringname][datetime]=time();
 		update_option($optionname,$option);
+	elseif(!empty($twitterjson->error)):
+		# If Twitter is being rate limited, delays the next load until the reset time
+		# For some reason the rate limiting error has a different error variable!
+		$rate = rotatingtweets_get_rate_data();
+		if($rate && $rate->remaining_hits == 0):
+			$option[$stringname]['datetime']= $rate->reset_time_in_seconds - $cache_delay + 1;
+			update_option($optionname,$option);
+		endif;
 	elseif(!empty($twitterjson)):
 		# If there's regular data, then update the cache and return the data
 		$latest_json = $twitterjson;
-		$option[$stringname][json]=$latest_json;
-		$option[$stringname][datetime]=time();
+		$option[$stringname]['json']=$latest_json;
+		$option[$stringname]['datetime']=time();
 		update_option($optionname,$option);
 	endif;
 	return($latest_json);
+}
+
+# Gets the rate limiting data to see how long it will be before we can tweet again
+function rotatingtweets_get_rate_data() {
+	$callstring = "http://api.twitter.com/1/account/rate_limit_status.json";
+	$ratedata = wp_remote_request($callstring);
+	if(!is_wp_error($ratedata)):
+		$rate = json_decode($ratedata['body']);
+		return($rate);
+	else:
+		return(FALSE);
+	endif;
+}
+
+# This function is used for debugging what happens when the site is rate-limited - best not used otherwise!
+function rotatingtweets_trigger_rate_limiting() {
+	$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=twitter";
+	for ($i=1; $i<150; $i++) {
+		$ratedata = wp_remote_request($callstring);
+	}
 }
 
 # Displays the tweets
@@ -218,7 +246,18 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 	$result = "\n<div class='rotatingtweets' id='".uniqid('rotatingtweets_'.$timeout.'_')."'>";
 	if(empty($json)):
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
-		$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the Twitter name used in the settings.</p></div>";
+		$rate = rotatingtweets_get_rate_data();
+		# Check if the problem is rate limiting
+		if($rate && $rate->remaining_hits == 0):
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>This website is currently <a href='https://dev.twitter.com/docs/rate-limiting/faq'>rate-limited by Twitter</a>.</p></div>";
+			$waittimevalue = intval(($rate->reset_time_in_seconds-time - time())/60);
+			$waittime = $waittimevalue." minutes";
+			if($waittimevalue == 1) $waittime = "1 minute";
+			if($waittimevalue == 0) $waittime = "less than a minute";
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Next attempt to get data will be in {$waittime}.</p></div>";
+		else:
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the Twitter name used in the settings.</p></div>";
+		endif;
 	else:
 		$tweet_counter = 0;
 		foreach($json as $twitter_object):
@@ -298,6 +337,6 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 	wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
 	wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
 	if($print) echo $result;
-	return $result;
+	return($result);
 }
 ?>
