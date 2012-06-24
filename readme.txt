@@ -41,10 +41,13 @@ But you may just decide to use the 'Rotating Tweets' widget!
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.46 = 
+= 0.47 = 
 Includes fix for the major bug causing crashes when Twitter goes down.  Also improved error checking if Twitter has returned an empty value or is rate-limited. 
 
 == Changelog ==
+= 0.47 = 
+Minor tidying up of the code
+
 = 0.46 = 
 Properly handles rate-limiting by Twitter
 

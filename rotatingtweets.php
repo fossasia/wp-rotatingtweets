@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.46
+Version: 0.47
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -186,8 +186,8 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	$optionname = "rotatingtweets-cache";
 	$option = get_option($optionname);
-	$latest_json = $option[$stringname][json];
-	$latest_json_date = $option[$stringname][datetime];
+	$latest_json = $option[$stringname]['json'];
+	$latest_json_date = $option[$stringname]['datetime'];
 	$timegap = time()-$latest_json_date;
 	if($timegap > $cache_delay):
 		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".urlencode($tw_screen_name)."&include_entities=1&count=20&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
@@ -198,7 +198,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	endif;
 	if(!empty($twitterjson->errors)):
 		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited.
-		$option[$stringname][datetime]=time();
+		$option[$stringname]['datetime']=time();
 		update_option($optionname,$option);
 	elseif(!empty($twitterjson->error)):
 		# If Twitter is being rate limited, delays the next load until the reset time
