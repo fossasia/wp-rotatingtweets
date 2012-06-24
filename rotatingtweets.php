@@ -178,6 +178,7 @@ add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_tweet_count) {
 	# Clear up variables
 #	$check_regex = "%^[A-Za-z0-9_]+$%";
+#	rotatingtweets_trigger_rate_limiting();
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
@@ -203,17 +204,31 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	elseif(!empty($twitterjson->error)):
 		# If Twitter is being rate limited, delays the next load until the reset time
 		# For some reason the rate limiting error has a different error variable!
+/*
+		echo "<!-- Rate limited ";
+		print_r($twitterjson);
 		$rate = rotatingtweets_get_rate_data();
+		print_r($rate);
+		echo "-->";
+*/
 		if($rate && $rate->remaining_hits == 0):
 			$option[$stringname]['datetime']= $rate->reset_time_in_seconds - $cache_delay + 1;
 			update_option($optionname,$option);
 		endif;
 	elseif(!empty($twitterjson)):
 		# If there's regular data, then update the cache and return the data
-		$latest_json = $twitterjson;
-		$option[$stringname]['json']=$latest_json;
-		$option[$stringname]['datetime']=time();
-		update_option($optionname,$option);
+/*
+		echo "<!-- Rate limited - but not identified as such";
+		print_r($twitterjson);
+		echo "-->";
+*/
+		$firstentry = $twitterjson[0];
+		if(!empty($firstentry->text)):
+			$latest_json = $twitterjson;
+			$option[$stringname]['json']=$latest_json;
+			$option[$stringname]['datetime']=time();
+			update_option($optionname,$option);
+		endif;
 	endif;
 	return($latest_json);
 }
