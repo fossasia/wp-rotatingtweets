@@ -221,8 +221,9 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		echo "<!-- Rate limited - but not identified as such";
 		print_r($twitterjson);
 		echo "-->";
-*/
-		$firstentry = $twitterjson[0];
+*/		
+		unset($firstentry);
+		if(is_array($twitterjson)) $firstentry = $twitterjson[0];
 		if(!empty($firstentry->text)):
 			$latest_json = $twitterjson;
 			$option[$stringname]['json']=$latest_json;
