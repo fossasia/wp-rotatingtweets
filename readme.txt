@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets
 Requires at least: 2.6
 Tested up to: 3.4
-Stable tag: 0.46
+Stable tag: 0.471
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,12 +41,13 @@ But you may just decide to use the 'Rotating Tweets' widget!
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.47 = 
+= 0.471 = 
 Includes fix for the major bug causing crashes when Twitter goes down.  Also improved error checking if Twitter has returned an empty value or is rate-limited. 
 
 == Changelog ==
-= 0.47 = 
-Minor tidying up of the code
+= 0.471 = 
+Making sure that cache never gets overwritten unless new, valid twitter data has been downloaded.
+Dealing with the problem that someone in a long conversation may not get enough valid tweets to show by asking for only 20 tweets from Twitter.
 
 = 0.46 = 
 Properly handles rate-limiting by Twitter
