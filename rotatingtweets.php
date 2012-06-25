@@ -191,7 +191,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$latest_json_date = $option[$stringname]['datetime'];
 	$timegap = time()-$latest_json_date;
 	if($timegap > $cache_delay):
-		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".urlencode($tw_screen_name)."&include_entities=1&count=50&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
+		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".urlencode($tw_screen_name)."&include_entities=1&count=70&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
 		$twitterdata = wp_remote_request($callstring);
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body']);
@@ -204,10 +204,12 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	elseif(!empty($twitterjson->error)):
 		# If Twitter is being rate limited, delays the next load until the reset time
 		# For some reason the rate limiting error has a different error variable!
+
+		$rate = rotatingtweets_get_rate_data();
+		
 /*
 		echo "<!-- Rate limited ";
 		print_r($twitterjson);
-		$rate = rotatingtweets_get_rate_data();
 		print_r($rate);
 		echo "-->";
 */
