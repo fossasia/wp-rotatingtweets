@@ -263,7 +263,7 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Next attempt to get data will be in {$waittime}.</p></div>";
 		else:
 			$error_message = get_transient('rotatingtweets_wp_error');
-			if($error_messsage):
+			if($error_message):
 				$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Wordpress error message: ".$error_message.".</p></div>";
 			endif;
 			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the Twitter name used in the settings.</p></div>";
