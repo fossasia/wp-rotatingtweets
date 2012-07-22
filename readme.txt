@@ -41,10 +41,13 @@ But you may just decide to use the 'Rotating Tweets' widget!
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.471 = 
-Includes fix for the major bug causing crashes when Twitter goes down.  Also improved error checking if Twitter has returned an empty value or is rate-limited. 
+= 0.48 =
+Includes fix for the major bug causing crashes when Twitter goes down. More detailed error messages for Wordpress installations unable to access Twitter.
 
 == Changelog ==
+= 0.48 =
+More detailed error messages for Wordpress installations unable to access Twitter.
+
 = 0.471 = 
 Making sure that cache never gets overwritten unless new, valid twitter data has been downloaded.
 Dealing with the problem that someone in a long conversation may not get enough valid tweets to show by asking for only 20 tweets from Twitter.
