@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.471
+Version: 0.48
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -193,6 +193,8 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$twitterdata = wp_remote_request($callstring);
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body']);
+		else:
+			set_transient('rotatingtweets_wp_error',$twitterdata->get_error_message(), 120);
 		endif;
 	endif;
 	if(!empty($twitterjson->errors)):
@@ -229,6 +231,7 @@ function rotatingtweets_get_rate_data() {
 		$rate = json_decode($ratedata['body']);
 		return($rate);
 	else:
+		set_transient('rotatingtweets_wp_error',$ratedata->get_error_message(), 120);
 		return(FALSE);
 	endif;
 }
@@ -259,6 +262,10 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 			if($waittimevalue == 0) $waittime = "less than a minute";
 			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Next attempt to get data will be in {$waittime}.</p></div>";
 		else:
+			$error_message = get_transient('rotatingtweets_wp_error');
+			if($error_messsage):
+				$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Wordpress error message: ".$error_message.".</p></div>";
+			endif;
 			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the Twitter name used in the settings.</p></div>";
 		endif;
 	else:
