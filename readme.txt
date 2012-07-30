@@ -8,7 +8,7 @@ Stable tag: 0.471
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Displays animated rotation of latest tweets on a Twitter account via widget or shortcode such as [rotatingtweets screen_name='your_name']
+Widget and/or shortcode to show your latest tweets one at a time an animated rotation
 
 == Description ==
 * Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter_name']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets
@@ -21,10 +21,19 @@ Displays animated rotation of latest tweets on a Twitter account via widget or s
 
 If you'd like to see what it looks like in action, you can [see the plug-in working here](http://www.martintod.org.uk/2012/05/29/new-twitter-plugin-to-show-tweets-in-rotation/).
 == Installation ==
+= Installation =
 1. Upload the contents of `rotatingtweets.zip` to the `/wp-content/plugins/` directory or use the Wordpress installer
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Place a shortcode such `[rotatingtweets screen_name='mpntod']` in your post or page, or use a widget
 
+= Set-up =
+Options include:
+
+1. Going to the Widgets menu on the admin page and adding the Rotating Tweets widget. Options include the name of the Twitter account to show, whether to show retweets and the speed of rotation.
+1. Using the basic Rotating Tweets shortcode, for example `[rotatingtweets screen_name='mpntod']`
+1. Using a more complicated Rotating Tweets shortcode, for example `[rotatingtweets screen_name='mpntod' include_rts='1' tweet_count='7' timeout='3000']`
+
+= Variables =
 Possible variables for the shortcode include:
 
 * `screen_name` = Twitter user name - required
@@ -33,8 +42,6 @@ Possible variables for the shortcode include:
 * `tweet_count` = number of tweets to show - optional - default is `5`
 * `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
 * `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
-
-But you may just decide to use the 'Rotating Tweets' widget!
 
 == Frequently Asked Questions ==
 = How often does the plug-in call Twitter =
@@ -96,5 +103,5 @@ First published version
 
 == Screenshots ==
 1. This animation is slightly faster than the default setting, but gives a sense of what you get:
-2. You can add rotating tweets to a post like this:
-3. Or add them via a widget:
+2. You can add rotating tweets via a Widget:
+3. Or by using a shortcode:
