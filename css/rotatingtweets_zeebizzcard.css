@@ -1,0 +1,4 @@
+/* This adjusts the zeebizzcard template */
+#sidebar .rotatingtweets {
+	min-height: 68px;
+}
