@@ -54,6 +54,7 @@ Includes fix for the major bug causing crashes when Twitter goes down. More deta
 == Changelog ==
 = 0.48 =
 More detailed error messages for Wordpress installations unable to access Twitter.
+Fixes problem on the zeeBizzCard template and sets up fix for other templates that use their own install of the `jquery-cycle` javascript.
 
 = 0.471 = 
 Making sure that cache never gets overwritten unless new, valid twitter data has been downloaded.

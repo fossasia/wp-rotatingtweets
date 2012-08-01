@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.48.4
+Version: 0.48.5
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -40,8 +40,17 @@ class rotatingtweets_Widget extends WP_Widget {
         parent::WP_Widget(false, $name = 'Rotating Tweets',array('description'=>'A widget to show tweets for a particular user in rotation.'));	
 		if ( is_active_widget( false, false, $this->id_base ) )
 			wp_enqueue_script( 'jquery' );
-			wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
-			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
+			# Get Stylesheet
+			$style = get_stylesheet();
+			switch ($style):
+				case 'zeeBizzCard':
+					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
+					break;
+				default:
+					wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
+					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
+					break;
+			endswitch;
 			wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
 		}
 
