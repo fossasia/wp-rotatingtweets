@@ -1,7 +1,7 @@
 === Rotating Tweets widget and shortcode ===
 Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
-Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery
+Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle
 Requires at least: 2.6
 Tested up to: 3.4
 Stable tag: 0.486
@@ -42,16 +42,21 @@ Possible variables for the shortcode include:
 * `tweet_count` = number of tweets to show - optional - default is `5`
 * `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
 * `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
+* `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
+* `no_show_screen_name` = `'0'` or `'1'` - remove the screen name from the Twitter follow button - optional - default is `'0'`
 
 == Frequently Asked Questions ==
 = How often does the plug-in call Twitter =
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.48 =
-Includes fix for the major bug causing crashes when Twitter goes down. More detailed error messages for Wordpress installations unable to access Twitter.
+= 0.49 =
+Let's you customise the Twitter 'follow' button
 
 == Changelog ==
+= 0.49 =
+Let's you customise the Twitter 'follow' button
+
 = 0.48 =
 More detailed error messages for Wordpress installations unable to access Twitter.
 Fixes problem on the zeeBizzCard template and sets up fix for other templates that use their own install of the `jquery-cycle` javascript.

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.48.5
+Version: 0.488
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -64,13 +64,32 @@ class rotatingtweets_Widget extends WP_Widget {
 		$tw_tweet_count = $instance['tw_tweet_count'];
 		$tw_show_follow = $instance['tw_show_follow'];
 		$tw_timeout = $instance['tw_timeout'];
+		switch($tw_show_follow) {
+		case 2: 
+			$tw_no_show_count = TRUE;
+			$tw_no_show_screen_name = FALSE;
+			break;
+		case 3: 
+			$tw_no_show_count = FALSE;
+			$tw_no_show_screen_name = TRUE;
+			break;
+		case 4:
+			$tw_no_show_count = TRUE;
+			$tw_no_show_screen_name = TRUE;
+			break;
+		default: 
+			$tw_no_show_count = FALSE;
+			$tw_no_show_screen_name = FALSE;
+			break;
+		}
+		
 		if(empty($tw_timeout)) $tw_timeout = 4000;
 		$tweets = rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_tweet_count);
         ?>
               <?php echo $before_widget; 
 						if ( $title )
 							echo $before_title . $title . $after_title; 
-						rotating_tweets_display($tweets,$tw_tweet_count,$tw_show_follow,$tw_timeout);
+						rotating_tweets_display($tweets,$tw_tweet_count,$tw_show_follow,$tw_timeout,TRUE,$tw_no_show_count,$tw_no_show_screen_name);
 					echo $after_widget; ?>
         <?php
     }
@@ -101,36 +120,57 @@ class rotatingtweets_Widget extends WP_Widget {
 		if(empty($tw_timeout)) $tw_timeout = 4000;
 		if(empty($tw_tweet_count)) $tw_tweet_count = 5;
         ?>
-            <p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
-            <p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
-            <p><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"><?php _e('Include retweets?'); ?> <input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/></label></p>
-            <p><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"><?php _e('Exclude replies?'); ?> <input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/></label></p>
-			<p><label for="<?php echo $this->get_field_id('tw_show_follow'); ?>"><?php _e('Show follow button?'); ?> <input id="<?php echo $this->get_field_id('tw_show_follow'); ?>" name="<?php echo $this->get_field_name('tw_show_follow'); ?>" type="checkbox" value="1" <?php if($tw_show_follow==1): ?>checked="checked" <?php endif; ?>/></label></p>
-			<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
-			<?php 
-			for ($i=1; $i<20; $i++) {
-				echo "\n\t<option value='$i' ";
-			if($tw_tweet_count==$i): ?>selected="selected" <?php endif; 
-				echo ">$i</option>";
-			}			
-			?></select></label></p>
-			<p><label for="<?php echo $this->get_field_id('tw_timeout'); ?>"><?php _e('Speed'); ?> <select id="<?php echo $this->get_field_id('tw_timeout'); ?>" name="<?php echo $this->get_field_name('tw_timeout');?>">
-			<?php 
-			$timeoutoptions = array (
-								"3000" => "Faster (3 seconds)",
-								"4000" => "Normal (4 seconds)",
-								"5000" => "Slower (5 seconds)",
-								"6000" => "Slowest (6 seconds)"
-			);
-			foreach ($timeoutoptions as $val => $words) {
-				echo "\n\t<option value='$val' ";
-			if($tw_timeout==$val): ?>selected="selected" <?php endif; 
-				echo ">$words</option>";
-			}			
-			?></select></label></p>
-        <?php 
-    }
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"><?php _e('Include retweets?'); ?> <input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"><?php _e('Exclude replies?'); ?> <input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
+		<?php 
+		for ($i=1; $i<20; $i++) {
+			echo "\n\t<option value='$i' ";
+		if($tw_tweet_count==$i): ?>selected="selected" <?php endif; 
+			echo ">$i</option>";
+		}			
+		?></select></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_timeout'); ?>"><?php _e('Speed'); ?> <select id="<?php echo $this->get_field_id('tw_timeout'); ?>" name="<?php echo $this->get_field_name('tw_timeout');?>">
+		<?php 
+		$timeoutoptions = array (
+							"3000" => "Faster (3 seconds)",
+							"4000" => "Normal (4 seconds)",
+							"5000" => "Slower (5 seconds)",
+							"6000" => "Slowest (6 seconds)"
+		);
+		foreach ($timeoutoptions as $val => $words) {
+			echo "\n\t<option value='$val' ";
+		if($tw_timeout==$val): ?>selected="selected" <?php endif; 
+			echo ">$words</option>";
+		}			
+		?></select></label></p>
+		<p><?php _e('Show follow button?'); ?></p>
+<?php
+/*
+		$plugindir = plugin_dir_url(__FILE__);
+		$showfollowoptions = array (
+			0 => 'None',
+			1 => "Show name and number of followers<br /><img src='".$plugindir."images/follow-full.png' height='20' width='206' align='top' alt='Twitter Follow Button showing screen name and follower count' />",
+			2 => "Show name only<br /><img src='".$plugindir."images/follow-full-no-count.png' height='20' align='top' width='117' alt='Twitter Follow Button showing only screen name and no follower count' />",
+			3 => "Show button only<br /><img src='".$plugindir."images/follow-short.png' height='20' width='60' align='top' alt='Twitter Follow Button without screen name or follow count' />"
+		);
+*/
+		$showfollowoptions = array (
+			0 => 'None',
+			1 => "Show name and number of followers",
+			2 => "Show name only",
+			3 => "Show followers only",
+			4 => "Show button only"
+		);
 
+		foreach ($showfollowoptions as $val => $html) {
+			echo "<input type='radio' value='$val' id='".$this->get_field_id('tw_tweet_count_'.$val)."' name= '".$this->get_field_name('tw_show_follow')."'";
+			if($tw_show_follow==$val): ?> checked="checked" <?php endif; 
+			echo "><label for '".$this->get_field_id('tw_tweet_count_'.$val)."'> $html</label><br />";
+		}
+	}
 } // class rotatingtweets_Widget
 
 // register rotatingtweets_Widget widget
@@ -168,6 +208,8 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 	$exclude_replies :: [boolean] exclude replies - optional
 	$tweet_count :: [integer] number of tweets to show - optional - default 5
 	$show_follow :: [boolean] show follow button
+	$no_show_count :: [boolean] remove count from follow button
+	$no_show_screen_name :: [boolean] remove screen name from follow button
 */
 	extract( shortcode_atts( array(
 			'screen_name' => 'twitter',
@@ -175,10 +217,12 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 			'exclude_replies' => FALSE,
 			'tweet_count' => 5,
 			'show_follow' => FALSE,
-			'timeout' => 4000
+			'timeout' => 4000,
+			'no_show_count' => FALSE,
+			'no_show_screen_name' => FALSE
 		), $atts ) );
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$tweet_count);
-	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,$timeout,FALSE);
+	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,$timeout,FALSE,$no_show_count,$no_show_screen_name);
 	return $returnstring;
 }
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
@@ -255,7 +299,7 @@ function rotatingtweets_trigger_rate_limiting() {
 }
 
 # Displays the tweets
-function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeout=4000,$print=TRUE) {
+function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeout=4000,$print=TRUE,$no_show_count=FALSE,$no_show_screen_name=FALSE) {
 	unset($result);
 	$tweet_count = max(1,intval($tweet_count));
 	$timeout = max(intval($timeout),0);
@@ -330,7 +374,7 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 					if(!empty($media)):
 						foreach($media as $medium):
 							$before[] = "*".$medium->url."*";
-							$after[] = "<a href='".$medium->expanded_url."'>".$medium->display_url."</a>";
+							$after[] = "<a href='".$url->url."' title='".$url->expanded_url."'>".$url->display_url."</a>";
 						endforeach;			
 					endif;
 					$before[]="%#(\w+)%";
@@ -349,8 +393,11 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 		endforeach;
 	endif;
 	$result .= "\n</div>";
-	if($show_follow==TRUE && !empty($user->screen_name)):
-		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button' title='Follow @".$user->screen_name."'>@".$user->screen_name."</a></div>";
+	if($show_follow && !empty($user->screen_name)):
+		unset($shortenvariables);
+		if($no_show_count) $shortenvariables = ' data-show-count="false"';
+		if($no_show_screen_name) $shortenvariables .= ' data-show-screen-name="false"';
+		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='Follow @".$user->screen_name."'>Follow @".$user->screen_name."</a></div>";
 		$script = 'http://platform.twitter.com/widgets.js';
 		wp_enqueue_script( 'twitter-wjs', $script, FALSE, FALSE, TRUE );
 	endif;
