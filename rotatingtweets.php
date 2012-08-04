@@ -367,14 +367,18 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 					if(!empty($urls)):
 						foreach($urls as $url):
 							$before[] = "*".$url->url."*";
-							$after[] = "<a href='".$url->url."' title='".$url->expanded_url."'>".$url->display_url."</a>";
+							$displayurl = $url->display_url;
+							if(strlen($displayurl)>29) $displayurl = substr($displayurl,0,29)."&hellip;";
+							$after[] = "<a href='".$url->url."' title='".$url->expanded_url."'>".esc_html($displayurl)."</a>";
 						endforeach;
 					endif;
 					$media = $entities->media;
 					if(!empty($media)):
 						foreach($media as $medium):
 							$before[] = "*".$medium->url."*";
-							$after[] = "<a href='".$url->url."' title='".$url->expanded_url."'>".$url->display_url."</a>";
+							$displayurl = $medium->display_url;
+							if(strlen($displayurl)>30) $displayurl = substr($displayurl,0,30)."&hellip;";
+							$after[] = "<a href='".$medium->url."' title='".$medium->expanded_url."'>".esc_html($displayurl)."</a>";
 						endforeach;			
 					endif;
 					$before[]="%#(\w+)%";
@@ -382,7 +386,8 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 					$main_text = preg_replace($before,$after,$main_text);
 					$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
 					$result .= "\n\t\t<p class='rtw_meta'><a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a> from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a> via ".$twitter_object->source;
-		#			$result .= '<br /><a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';		
+#					$result .= ' <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';	
+#					$result .= ' &middot; <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">reply</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">retweet</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">favorite</a></p>';			
 				else:
 					$result .= "\n\t\t<p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
 					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
@@ -398,8 +403,6 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 		if($no_show_count) $shortenvariables = ' data-show-count="false"';
 		if($no_show_screen_name) $shortenvariables .= ' data-show-screen-name="false"';
 		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='Follow @".$user->screen_name."'>Follow @".$user->screen_name."</a></div>";
-		$script = 'http://platform.twitter.com/widgets.js';
-		wp_enqueue_script( 'twitter-wjs', $script, FALSE, FALSE, TRUE );
 	endif;
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
