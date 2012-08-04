@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle
 Requires at least: 2.6
 Tested up to: 3.4
-Stable tag: 0.490
+Stable tag: 0.491
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,12 +51,12 @@ Possible variables for the shortcode include:
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.49 =
+= 0.491 =
 Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.
 
 == Changelog ==
-= 0.49 =
-Lets you customise the Twitter 'follow' button
+= 0.491 =
+Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.
 
 = 0.48 =
 More detailed error messages for Wordpress installations unable to access Twitter.
