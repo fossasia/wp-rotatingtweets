@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.490
+Version: 0.491
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -148,15 +148,6 @@ class rotatingtweets_Widget extends WP_Widget {
 		?></select></label></p>
 		<p><?php _e('Show follow button?'); ?></p>
 <?php
-/*
-		$plugindir = plugin_dir_url(__FILE__);
-		$showfollowoptions = array (
-			0 => 'None',
-			1 => "Show name and number of followers<br /><img src='".$plugindir."images/follow-full.png' height='20' width='206' align='top' alt='Twitter Follow Button showing screen name and follower count' />",
-			2 => "Show name only<br /><img src='".$plugindir."images/follow-full-no-count.png' height='20' align='top' width='117' alt='Twitter Follow Button showing only screen name and no follower count' />",
-			3 => "Show button only<br /><img src='".$plugindir."images/follow-short.png' height='20' width='60' align='top' alt='Twitter Follow Button without screen name or follow count' />"
-		);
-*/
 		$showfollowoptions = array (
 			0 => 'None',
 			1 => "Show name and number of followers",
