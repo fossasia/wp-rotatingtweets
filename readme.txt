@@ -52,11 +52,11 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 
 == Upgrade notice ==
 = 0.49 =
-Let's you customise the Twitter 'follow' button
+Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.
 
 == Changelog ==
 = 0.49 =
-Let's you customise the Twitter 'follow' button
+Lets you customise the Twitter 'follow' button
 
 = 0.48 =
 More detailed error messages for Wordpress installations unable to access Twitter.
