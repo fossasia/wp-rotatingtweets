@@ -392,7 +392,6 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 			endif;
 		endforeach;
 	endif;
-	$result .= "\n</div>";
 	if($show_follow && !empty($user->screen_name)):
 		unset($shortenvariables);
 		if($no_show_count) $shortenvariables = ' data-show-count="false"';
@@ -401,6 +400,7 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 		$script = 'http://platform.twitter.com/widgets.js';
 		wp_enqueue_script( 'twitter-wjs', $script, FALSE, FALSE, TRUE );
 	endif;
+	$result .= "\n</div>";
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
 	wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
