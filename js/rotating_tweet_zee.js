@@ -8,7 +8,7 @@ jQuery(document).ready(function() {
 		var timeoutdelay = rotate_id.split('_');
 		jQuery(rotate_id).cycle({
 			pause: 1,
-			height: '6em',
+			height: '7em',
 			timeout: timeoutdelay[1],
 			fx: 'scrollUp'
 		});
