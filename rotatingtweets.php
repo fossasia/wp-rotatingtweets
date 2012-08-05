@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.491
+Version: 0.492
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -229,8 +229,16 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	$optionname = "rotatingtweets-cache";
 	$option = get_option($optionname);
-	$latest_json = $option[$stringname]['json'];
-	$latest_json_date = $option[$stringname]['datetime'];
+	# Attempt to deal with 'Cannot use string offset as an array' error
+	if(is_array($option)):
+		$latest_json = $option[$stringname]['json'];
+		$latest_json_date = $option[$stringname]['datetime'];
+		$timegap = time()-$latest_json_date;
+	else:
+		# Clears the cache and forces a reload
+		$timegap = $cache_delay + 1;
+		unset($option);
+	endif;
 	$timegap = time()-$latest_json_date;
 	if($timegap > $cache_delay):
 		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".urlencode($tw_screen_name)."&include_entities=1&count=70&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;

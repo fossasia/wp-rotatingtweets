@@ -51,10 +51,13 @@ Possible variables for the shortcode include:
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.491 =
-Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.
+= 0.492 =
+Attempts to solve `Cannot use string offset as an array` error on line 232
 
 == Changelog ==
+= 0.492 =
+Attempts to solve `Cannot use string offset as an array` error on line 232
+
 = 0.491 =
 Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.
 
