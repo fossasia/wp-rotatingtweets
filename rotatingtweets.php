@@ -82,7 +82,6 @@ class rotatingtweets_Widget extends WP_Widget {
 			$tw_no_show_screen_name = FALSE;
 			break;
 		}
-		
 		if(empty($tw_timeout)) $tw_timeout = 4000;
 		$tweets = rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_tweet_count);
         ?>
