@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.500
+Version: 0.499
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -44,7 +44,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			$style = get_stylesheet();
 			switch ($style):
 				case 'zeebizzcard':
-					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet_zee.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
+					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
 					break;
 				default:
 					wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
@@ -67,6 +67,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$newargs['show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
 		$newargs['show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
 		$newargs['show_meta_via'] = !$instance['tw_hide_meta_via'];
+		$newargs['rotation_type'] = $instance['tw_rotation_type'];
 		$newargs['show_meta_reply_retweet_favorite'] = $instance['tw_show_meta_reply_retweet_favorite'];
 		switch($newargs['show_follow']) {
 		case 2: 
@@ -104,6 +105,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['tw_screen_name'] = strip_tags(trim($new_instance['tw_screen_name']));
+		$instance['tw_rotation_type'] = strip_tags(trim($new_instance['tw_rotation_type']));
 		$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
 		$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
 		$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
@@ -121,6 +123,8 @@ class rotatingtweets_Widget extends WP_Widget {
     function form($instance) {				
         $title = esc_attr($instance['title']);
         $tw_screen_name = esc_attr(trim($instance['tw_screen_name']));
+		$tw_rotation_type = $instance['tw_rotation_type'];
+		if(empty($tw_rotation_type)) $tw_rotation_type = 'scrollUp';
         $tw_include_rts = absint($instance['tw_include_rts']);
 		$tw_exclude_replies = absint($instance['tw_exclude_replies']);
         $tw_tweet_count = intval($instance['tw_tweet_count']);
@@ -157,6 +161,26 @@ class rotatingtweets_Widget extends WP_Widget {
 		foreach ($timeoutoptions as $val => $words) {
 			echo "\n\t<option value='$val' ";
 		if($tw_timeout==$val): ?>selected="selected" <?php endif; 
+			echo ">$words</option>";
+		}			
+		?></select></label></p>
+		<?php
+		# For reference, all the rotations that look good.
+		# $goodRotations = array('blindX','blindY','blindZ','cover','curtainY','fade','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','toss','turnUp','turnDown','uncover');
+		$rotationoptions = array (
+			'scrollUp' => 'Scroll Up',
+			'scrollDown' => 'Scroll Down',
+			'scrollLeft' => 'Scroll Left',
+			'scrollRight' => 'Scroll Right',
+			'fade' => 'Fade'
+		);
+		asort($rotationoptions);
+		?>
+		<p><label for="<?php echo $this->get_field_id('tw_rotation_type'); ?>"><?php _e('Type of rotation'); ?> <select id="<?php echo $this->get_field_id('tw_rotation_type'); ?>" name="<?php echo $this->get_field_name('tw_rotation_type');?>">
+		<?php 		
+		foreach ($rotationoptions as $val => $words) {
+			echo "\n\t<option value='$val' ";
+		if($tw_rotation_type==$val): ?>selected="selected" <?php endif; 
 			echo ">$words</option>";
 		}			
 		?></select></label></p>
@@ -245,7 +269,8 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 			'show_meta_timestamp' => TRUE,
 			'show_meta_screen_name' => TRUE,
 			'show_meta_via' => TRUE,
-			'show_meta_reply_retweet_favorite' => FALSE
+			'show_meta_reply_retweet_favorite' => FALSE,
+			'rotation_type' => 'scrollUp'
 		), $atts ) ;
 	extract($args);
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies);
@@ -337,7 +362,16 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	unset($result);
 	$tweet_count = max(1,intval($args['tweet_count']));
 	$timeout = max(intval($args['timeout']),0);
-	$result = "\n<div class='rotatingtweets' id='".uniqid('rotatingtweets_'.$timeout.'_')."'>";
+	# Check that the rotation type is valid. If not, leave it as 'scrollUp'
+	$rotation_type = 'scrollUp';
+	# All the valid rotations - if people to use one that looks weird, that's their business!
+	$possibleRotations = array('blindX','blindY','blindZ','cover','curtainX','curtainY','fade','fadeZoom','growX','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','slideX','slideY','toss','turnUp','turnDown','turnLeft','turnRight','uncover','wipe','zoom');
+	foreach($possibleRotations as $possibleRotation):
+		if(strtolower($args['rotation_type']) == strtolower($possibleRotation)) $rotation_type = $possibleRotation;
+	endforeach;
+	# Create an ID that has all the relevant info in - rotation type and speed of rotation
+	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
+	$result = "\n<div class='rotatingtweets' id='$id'>";
 	if(empty($json)):
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
 		$rate = rotatingtweets_get_rate_data();
@@ -436,7 +470,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$meta .= ' <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';	
 						*/
 						if(!empty($meta)) $meta .= ' &middot; ';
-						$meta .= '<a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">reply</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">retweet</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">favorite</a></p>';
+						$meta .= '<a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">reply</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">retweet</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">favorite</a>';
 					endif;
 					if(!empty($meta)):
 						$result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle
 Requires at least: 2.6
 Tested up to: 3.4
-Stable tag: 0.491
+Stable tag: 0.500
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,9 @@ Possible variables for the shortcode include:
 * `show_meta_screen` = `'0'` or `'1'` - show who posted each tweet - optional - default is `'1'`
 * `show_meta_via` = `'0'` or `'1'` - show how each tweet was posted - optional - default is `'1'`
 * `show_meta_reply_retweet_favorite` = `'0'` or `'1'` - show 'reply', 'retweet' and 'favorite' buttons - optional - default is `'0'`
+* `rotation_type` = any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'`
+
+although the only one you *have* to have is `screen_name`.
 
 == Frequently Asked Questions ==
 = How often does the plug-in call Twitter =
