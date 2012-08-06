@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.501
+Version: 0.502
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -472,11 +472,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(!empty($meta)) $meta .= ' &middot; ';
 						$meta .= '<a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">reply</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">retweet</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">favorite</a>';
 					endif;
-					/* Experiment with Prev / Next buttons */
-					if(!$args['show_meta_prev_next']):
+					/* Experiment with Prev / Next buttons 
+					if($args['show_meta_prev_next']):
 						if(!empty($meta)) $meta .= ' &middot; ';
 						$meta .= '<a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';					
 					endif;
+					*/
 					if(!empty($meta)):
 						$result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
 					endif;
@@ -490,11 +491,15 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		endforeach;
 	endif;
 	$result .= "\n</div>";
-	$result .= "<div id='".$id."_nav' class='rtw_nav'>";
-	for ($i = 1; $i <= $tweet_count; $i++) {
-		$result .= '<a href="#">&bull;</a> ';
-	}
-	$result .= "</div>";
+/*
+	if($args['show_meta_progress_blobs']):
+		$result .= "<div id='".$id."_nav' class='rtw_nav'>";
+		for ($i = 1; $i <= $tweet_count; $i++) {
+			$result .= '<a href="#">&bull;</a> ';
+		}
+		$result .= "</div>";
+	endif;
+*/
 	if($args['show_follow'] && !empty($user->screen_name)):
 		unset($shortenvariables);
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';

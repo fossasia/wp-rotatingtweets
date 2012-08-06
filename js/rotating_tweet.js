@@ -21,6 +21,13 @@ jQuery(document).ready(function() {
 			pause: 1,
 			height: rotate_height,
 			timeout: rotate_timeout,
+			fx: rotate_fx
+		});
+/*
+		jQuery(rotate_id).cycle({
+			pause: 1,
+			height: rotate_height,
+			timeout: rotate_timeout,
 			prev: jQuery(rotate_id).find('.rtw_prev'),
 			next: jQuery(rotate_id).find('.rtw_next'),
 			pager: rotate_id + '_nav',
@@ -30,6 +37,7 @@ jQuery(document).ready(function() {
 			},
 			fx: rotate_fx
 		});
+*/
 	});
 });
 /* And call the Twitter script while we're at it! */
