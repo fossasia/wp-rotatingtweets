@@ -23,6 +23,11 @@ jQuery(document).ready(function() {
 			timeout: rotate_timeout,
 			prev: jQuery(rotate_id).find('.rtw_prev'),
 			next: jQuery(rotate_id).find('.rtw_next'),
+			pager: rotate_id + '_nav',
+	        pagerAnchorBuilder: function(idx, slide) {
+				// return sel string for existing anchor
+				return rotate_id + '_nav a:eq(' + (idx) + ')';
+			},
 			fx: rotate_fx
 		});
 	});
