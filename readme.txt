@@ -4,14 +4,14 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle
 Requires at least: 2.6
 Tested up to: 3.4
-Stable tag: 0.491
+Stable tag: 0.500
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Widget and/or shortcode to show your latest tweets one at a time an animated rotation
 
 == Description ==
-* Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter_name']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets
+* **Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets**
 * **Space efficient** - instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
 * **Reliable** - keeps showing your latest Tweets even if the Twitter website is down.
 * **Customisable** - you decide whose tweets to show, how many to show, whether to include retweets and replies, and whether to show a follow button. You can also decide how quickly the tweets rotate and what type of animation to use.
@@ -59,14 +59,14 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 
 == Upgrade notice ==
 = 0.500 =
-Adds options for how tweet information is displayed.
+Adds options for how tweet information is displayed and how the tweet rotates.
 
 == Changelog ==
 = 0.500 =
-Adds options for how tweet information is displayed.
+Adds options for how tweet information is displayed and how the tweet rotates.
 
 = 0.492 =
-Attempts to solve `Cannot use string offset as an array` error on line 232
+Solves `Cannot use string offset as an array` error on line 232
 
 = 0.491 =
 Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.

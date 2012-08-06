@@ -3,6 +3,7 @@
 */
 jQuery(document).ready(function() {
 	jQuery('.rotatingtweets').each(function() {
+		/* Get the ID of the rotating tweets div - and parse it to get rotation speed and rotation fx */
 		var rotate_id = "#"+this.id
 		var rotate_id_split = rotate_id.split('_');
 		var rotate_timeout = rotate_id_split[1];
