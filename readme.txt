@@ -45,16 +45,23 @@ Possible variables for the shortcode include:
 * `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
 * `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
 * `no_show_screen_name` = `'0'` or `'1'` - remove the screen name from the Twitter follow button - optional - default is `'0'`
+* `show_meta_timestamp` = `'0'` or `'1'` - show the time and date of each tweet - optional - default is `'1'`
+* `show_meta_screen` = `'0'` or `'1'` - show who posted each tweet - optional - default is `'1'`
+* `show_meta_via` = `'0'` or `'1'` - show how each tweet was posted - optional - default is `'1'`
+* `show_meta_reply_retweet_favorite` = `'0'` or `'1'` - show 'reply', 'retweet' and 'favorite' buttons - optional - default is `'0'`
 
 == Frequently Asked Questions ==
 = How often does the plug-in call Twitter =
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.492 =
-Attempts to solve `Cannot use string offset as an array` error on line 232
+= 0.500 =
+Adds options for how tweet information is displayed.
 
 == Changelog ==
+= 0.500 =
+Adds options for how tweet information is displayed.
+
 = 0.492 =
 Attempts to solve `Cannot use string offset as an array` error on line 232
 

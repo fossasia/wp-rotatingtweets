@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets widget & shortcode
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.492
+Version: 0.500
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -58,38 +58,44 @@ class rotatingtweets_Widget extends WP_Widget {
     function widget($args, $instance) {		
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-		$tw_screen_name = $instance['tw_screen_name'];
-		$tw_include_rts = $instance['tw_include_rts'];
-		$tw_exclude_replies = $instance['tw_exclude_replies'];
-		$tw_tweet_count = $instance['tw_tweet_count'];
-		$tw_show_follow = $instance['tw_show_follow'];
-		$tw_timeout = $instance['tw_timeout'];
-		switch($tw_show_follow) {
+		$newargs['screen_name'] = $instance['tw_screen_name'];
+		$newargs['include_rts'] = $instance['tw_include_rts'];
+		$newargs['exclude_replies'] = $instance['tw_exclude_replies'];
+		$newargs['tweet_count'] = $instance['tw_tweet_count'];
+		$newargs['show_follow'] = $instance['tw_show_follow'];
+		$newargs['timeout'] = $instance['tw_timeout'];
+		$newargs['show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
+		$newargs['show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
+		$newargs['show_meta_via'] = !$instance['tw_hide_meta_via'];
+		$newargs['show_meta_reply_retweet_favorite'] = $instance['tw_show_meta_reply_retweet_favorite'];
+		switch($newargs['show_follow']) {
 		case 2: 
-			$tw_no_show_count = TRUE;
-			$tw_no_show_screen_name = FALSE;
+			$newargs['no_show_count'] = TRUE;
+			$newargs['no_show_screen_name'] = FALSE;
 			break;
 		case 3: 
-			$tw_no_show_count = FALSE;
-			$tw_no_show_screen_name = TRUE;
+			$newargs['no_show_count'] = FALSE;
+			$newargs['no_show_screen_name'] = TRUE;
 			break;
 		case 4:
-			$tw_no_show_count = TRUE;
-			$tw_no_show_screen_name = TRUE;
+			$newargs['no_show_count'] = TRUE;
+			$newargs['no_show_screen_name'] = TRUE;
 			break;
 		default: 
-			$tw_no_show_count = FALSE;
-			$tw_no_show_screen_name = FALSE;
+			$newargs['no_show_count'] = FALSE;
+			$newargs['no_show_screen_name'] = FALSE;
 			break;
 		}
-		if(empty($tw_timeout)) $tw_timeout = 4000;
-		$tweets = rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_tweet_count);
+		if(empty($newargs['timeout'])) $newargs['timeout'] = 4000;
+		$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
         ?>
               <?php echo $before_widget; 
 						if ( $title )
 							echo $before_title . $title . $after_title; 
-						rotating_tweets_display($tweets,$tw_tweet_count,$tw_show_follow,$tw_timeout,TRUE,$tw_no_show_count,$tw_no_show_screen_name);
-					echo $after_widget; ?>
+						rotating_tweets_display($tweets,$newargs,TRUE);
+					echo $after_widget;
+#					echo "<!-- ";print_r($newargs);echo " -->";
+					?>
         <?php
     }
 
@@ -102,10 +108,15 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
 		$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
 		$instance['tw_show_follow'] = absint($new_instance['tw_show_follow']);
+		# Complicated way to ensure the defaults remain as they were before the 0.500 upgrade - i.e. showing meta timestamp, screen name and via, but not reply, retweet, favorite
+		$instance['tw_hide_meta_timestamp'] = !$new_instance['tw_show_meta_timestamp'];
+		$instance['tw_hide_meta_screen_name'] = !$new_instance['tw_show_meta_screen_name'];
+		$instance['tw_hide_meta_via'] = !$new_instance['tw_show_meta_via'];
+		$instance['tw_show_meta_reply_retweet_favorite'] = absint($new_instance['tw_show_meta_reply_retweet_favorite']);
 		$instance['tw_timeout'] = max(min(intval($new_instance['tw_timeout']/1000)*1000,6000),3000);
 	return $instance;
     }
-
+	
     /** @see WP_Widget::form */
     function form($instance) {				
         $title = esc_attr($instance['title']);
@@ -114,6 +125,10 @@ class rotatingtweets_Widget extends WP_Widget {
 		$tw_exclude_replies = absint($instance['tw_exclude_replies']);
         $tw_tweet_count = intval($instance['tw_tweet_count']);
 		$tw_show_follow = absint($instance['tw_show_follow']);
+		$metaoption['tw_show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
+		$metaoption['tw_show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
+		$metaoption['tw_show_meta_via'] = !$instance['tw_hide_meta_via'];
+		$metaoption['tw_show_meta_reply_retweet_favorite'] = absint($instance['tw_show_meta_reply_retweet_favorite']);
 		$tw_timeout = intval($instance['tw_timeout']);
 # If values not set, set default values
 		if(empty($tw_timeout)) $tw_timeout = 4000;
@@ -121,8 +136,8 @@ class rotatingtweets_Widget extends WP_Widget {
         ?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
 		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
-		<p><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"><?php _e('Include retweets?'); ?> <input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/></label></p>
-		<p><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"><?php _e('Exclude replies?'); ?> <input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/></label></p>
+		<p><input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"> <?php _e('Include retweets?'); ?></label></p>
+		<p><input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"> <?php _e('Exclude replies?'); ?></label></p>
 		<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
 		<?php 
 		for ($i=1; $i<20; $i++) {
@@ -145,6 +160,23 @@ class rotatingtweets_Widget extends WP_Widget {
 			echo ">$words</option>";
 		}			
 		?></select></label></p>
+		<?php /* Ask about which Tweet details to show */ ?>
+		<p><?php _e('Show tweet details?'); ?></p><p>
+		<?php 
+		$tweet_detail_options = array(
+			'tw_show_meta_timestamp' => 'Time/date of tweet',
+			'tw_show_meta_screen_name' => 'Name of person tweeting',
+			'tw_show_meta_via' => 'Source of tweet',
+			'tw_show_meta_reply_retweet_favorite' => "'reply &middot; retweet &middot; favourite' links"
+		);
+		$tw_br='';
+		foreach ($tweet_detail_options as $field => $text):
+		echo $tw_br;
+		?>
+		<input id="<?php echo $this->get_field_id($field); ?>" name="<?php echo $this->get_field_name($field); ?>" type="checkbox" value="1" <?php if($metaoption[$field]==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id($field); ?>"> <?php _e($text); ?></label>
+		<?php 
+		$tw_br = "<br />";
+		endforeach; ?></p>
 		<p><?php _e('Show follow button?'); ?></p>
 <?php
 		$showfollowoptions = array (
@@ -201,7 +233,7 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 	$no_show_count :: [boolean] remove count from follow button
 	$no_show_screen_name :: [boolean] remove screen name from follow button
 */
-	extract( shortcode_atts( array(
+	$args = shortcode_atts( array(
 			'screen_name' => 'twitter',
 			'include_rts' => FALSE,
 			'exclude_replies' => FALSE,
@@ -209,21 +241,26 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 			'show_follow' => FALSE,
 			'timeout' => 4000,
 			'no_show_count' => FALSE,
-			'no_show_screen_name' => FALSE
-		), $atts ) );
-	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$tweet_count);
-	$returnstring = rotating_tweets_display($tweets,$tweet_count,$show_follow,$timeout,FALSE,$no_show_count,$no_show_screen_name);
+			'no_show_screen_name' => FALSE,
+			'show_meta_timestamp' => TRUE,
+			'show_meta_screen_name' => TRUE,
+			'show_meta_via' => TRUE,
+			'show_meta_reply_retweet_favorite' => FALSE
+		), $atts ) ;
+	extract($args);
+	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies);
+	$returnstring = rotating_tweets_display($tweets,$args,FALSE);
 	return $returnstring;
 }
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
-function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_tweet_count) {
+function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies) {
 	# Clear up variables
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
-	$tw_tweet_count = max(1,intval($tw_tweet_count));
+#	$tw_tweet_count = max(1,intval($tw_tweet_count));
 	# Get the option strong
 	$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	$optionname = "rotatingtweets-cache";
@@ -245,7 +282,6 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body']);
 		else:
-#			echo "<!-- ";print_r($twitterdata);echo " -->";
 			set_transient('rotatingtweets_wp_error',$twitterdata->get_error_messages(), 120);
 		endif;
 	endif;
@@ -297,10 +333,10 @@ function rotatingtweets_trigger_rate_limiting() {
 }
 
 # Displays the tweets
-function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeout=4000,$print=TRUE,$no_show_count=FALSE,$no_show_screen_name=FALSE) {
+function rotating_tweets_display($json,$args,$print=TRUE) {
 	unset($result);
-	$tweet_count = max(1,intval($tweet_count));
-	$timeout = max(intval($timeout),0);
+	$tweet_count = max(1,intval($args['tweet_count']));
+	$timeout = max(intval($args['timeout']),0);
 	$result = "\n<div class='rotatingtweets' id='".uniqid('rotatingtweets_'.$timeout.'_')."'>";
 	if(empty($json)):
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
@@ -383,9 +419,28 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 					$after[]='<a href="http://search.twitter.com/search?q=%23$1" title="#$1">#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
 					$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
-					$result .= "\n\t\t<p class='rtw_meta'><a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a> from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a> via ".$twitter_object->source;
-#					$result .= ' <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';	
-#					$result .= ' &middot; <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">reply</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">retweet</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">favorite</a></p>';			
+					unset($meta);
+					if($args['show_meta_timestamp']):
+						$meta .= "<a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a>";
+					endif;
+					if($args['show_meta_screen_name']):
+						if(!empty($meta)) $meta .= ' ';
+						$meta .="from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a>";
+					endif;
+					if($args['show_meta_via']):
+						if(!empty($meta)) $meta .= ' ';
+						$meta .="via ".$twitter_object->source;
+					endif;
+					if($args['show_meta_reply_retweet_favorite']):
+						/* Code for $meta showing graphics
+						$meta .= ' <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';	
+						*/
+						if(!empty($meta)) $meta .= ' &middot; ';
+						$meta .= '<a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">reply</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">retweet</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">favorite</a></p>';
+					endif;
+					if(!empty($meta)):
+						$result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
+					endif;
 				else:
 					$result .= "\n\t\t<p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
 					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
@@ -396,10 +451,10 @@ function rotating_tweets_display($json,$tweet_count=5,$show_follow=FALSE,$timeou
 		endforeach;
 	endif;
 	$result .= "\n</div>";
-	if($show_follow && !empty($user->screen_name)):
+	if($args['show_follow'] && !empty($user->screen_name)):
 		unset($shortenvariables);
-		if($no_show_count) $shortenvariables = ' data-show-count="false"';
-		if($no_show_screen_name) $shortenvariables .= ' data-show-screen-name="false"';
+		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
+		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
 		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='Follow @".$user->screen_name."'>Follow @".$user->screen_name."</a></div>";
 	endif;
 	wp_enqueue_script( 'jquery' );
