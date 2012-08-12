@@ -8,21 +8,36 @@ jQuery(document).ready(function() {
 		var rotate_id_split = rotate_id.split('_');
 		var rotate_timeout = rotate_id_split[1];
 		var rotate_fx = rotate_id_split[2];
-		/* If we have the zeebizcard template - set a minimum height - used to do this via a separate script, but this is easier to maintain */
-		if (jQuery('#zee_stylesheet-css').is('link')) {
-			var rotate_height = '7em';
-		} else {
-			var rotate_height = 'auto';
-		}
 		/* If the rotation type has not been set - then set it to scrollUp */
 		if(rotate_fx == null){rotate_fx = 'scrollUp'};
 		/* Call the rotation */
 		jQuery(rotate_id).cycle({
 			pause: 1,
-			height: rotate_height,
+			height: 'auto',
 			timeout: rotate_timeout,
 			fx: rotate_fx
 		});
+		/* If the height of the rotating tweet box is zero - kill the box and start again */
+		var rt_height = jQuery(rotate_id).height();
+		if(rt_height == 0) {
+			var rt_children_id = rotate_id + ' .rotatingtweet';
+			var rt_height = 0;
+			/* Go through the tweets - get their height - and set the minimum height */
+			jQuery(rt_children_id).each(function() {
+				var rt_tweet_height = jQuery(this).height();
+				if(rt_tweet_height > rt_height) {
+					rt_height = rt_tweet_height;
+				}
+			});
+			var rt_height_px = rt_height + 'px';
+			jQuery(rotate_id).cycle('destroy');
+			jQuery(rotate_id).cycle({
+				pause: 1,
+				height: rt_height_px,
+				timeout: rotate_timeout,
+				fx: rotate_fx
+			});
+		}		
 /*
 		jQuery(rotate_id).cycle({
 			pause: 1,

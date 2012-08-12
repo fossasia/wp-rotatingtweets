@@ -4,11 +4,11 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle
 Requires at least: 2.6
 Tested up to: 3.4
-Stable tag: 0.500
+Stable tag: 0.502
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Widget and/or shortcode to show your latest tweets one at a time an animated rotation
+Twitter widget and shortcode to show your latest tweets one at a time an animated rotation
 
 == Description ==
 * **Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets**
@@ -58,10 +58,13 @@ although the only one you *have* to have is `screen_name`.
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.500 =
-Adds options for how tweet information is displayed and how the tweet rotates.
+= 0.502
+Javascript fix for zero height tweets problem
 
 == Changelog ==
+= 0.502
+Javascript fix for zero height tweets problem
+
 = 0.500 =
 Adds options for how tweet information is displayed and how the tweet rotates.
 
