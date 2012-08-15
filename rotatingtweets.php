@@ -44,11 +44,11 @@ class rotatingtweets_Widget extends WP_Widget {
 			$style = get_stylesheet();
 			switch ($style):
 				case 'zeebizzcard':
-					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
+					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.min.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
 					break;
 				default:
-					wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
-					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
+					wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),array('jquery'),FALSE,FALSE );
+					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.min.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
 					break;
 			endswitch;
 			wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
