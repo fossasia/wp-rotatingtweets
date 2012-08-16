@@ -501,7 +501,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		unset($shortenvariables);
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
 		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
-		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='Follow @".$user->screen_name."'>".sprintf(__('Follow @%s','rotatingtweets'),$user->screen_name)."</a></div>";
+		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),$user->screen_name);
+		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."'>".$followUserText."</a></div>";
 	endif;
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
