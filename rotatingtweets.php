@@ -235,13 +235,10 @@ function rotatingtweets_contextualtime($small_ts, $large_ts=false) {
   if($n < (60*60*24)) { $hours = round($n/(60*60)); return sprintf(_n('about an hour ago','about %d hours ago',$hours,'rotatingtweets'),$hours); }
   if($n < (60*60*24*6.5)) { $days = round($n/(60*60*24)); return sprintf(_n('about a day ago','about %d days ago',$days,'rotatingtweets'),$days); }
   if($n < (time() - strtotime('last week'))) return __('last week','rotatingtweets');
-  if(round($n/(60*60*24*7))  == 1) return __('about a week ago','rotatingtweets');
   if($n < (60*60*24*7*3.5)) { $weeks = round($n/(60*60*24*7)); return sprintf(_n('about a week ago','about %d weeks ago',$weeks,'rotatingtweets'),$weeks); } 
   if($n < (time() - strtotime('last month'))) return __('last month','rotatingtweets');
-  if(round($n/(60*60*24*7*4))  == 1) return __('about a month ago','rotatingtweets');
   if($n < (60*60*24*7*4*11.5)) { $months = round($n/(60*60*24*7*4)) ; return sprintf(_n('about a month ago','about %d months ago',$months,'rotatingtweets'),$months);}
   if($n < (time() - strtotime('last year'))) return __('last year','rotatingtweets');
-  if(round($n/(60*60*24*7*52)) == 1) return __('about a year ago','rotatingtweets');
   if($n >= (60*60*24*7*4*12)){$years=round($n/(60*60*24*7*52)) ;return sprintf(_n('about a year ago','about %d years ago',$years,'rotatingtweets'),$years);}
   return false;
 }
