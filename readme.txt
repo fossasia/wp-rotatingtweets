@@ -19,9 +19,9 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 * Replaces [t.co](http://t.co) links with the original link
 * Caches the most recent data from Twitter to avoid problems with rate limiting
 * Uses [jQuery](http://jquery.com/) and [jQuery.Cycle](http://jquery.malsup.com/cycle/) to produce a nice smooth result.
-* **Multi-lingual** - now set up to be multi-lingual. If you have created your own language pack, or have an update of an existing one, you can send [gettext PO and MO files](http://codex.wordpress.org/Translating_WordPress) to [me](http://www.martintod.org.uk/contact-martin/) so that I can bundle it into RotatingTweets. You can download [the latest POT file](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/rotatingtweets.pot), and [PO files in each language](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/).
+* **Multi-lingual** - now set up to be multi-lingual. The Twitter 'follow' button is automatically translated if Twitter has made the appropriate language available. If you want to volunteer to create a language pack to translate all the other text in the plugin, that would be great! If you can send the accompanying [gettext PO and MO files](http://codex.wordpress.org/Translating_WordPress) to [me](http://www.martintod.org.uk/contact-martin/), I will then share them with everyone else. You can download [the latest POT file](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/rotatingtweets.pot), and [PO files in each language](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/) from this site.
 
-If you'd like to see what it looks like in action, you can [see the plug-in working here](http://www.martintod.org.uk/2012/05/29/new-twitter-plugin-to-show-tweets-in-rotation/).
+If you'd like to see what the plug-in looks like in action, you can [see the plug-in working here](http://www.martintod.org.uk/2012/05/29/new-twitter-plugin-to-show-tweets-in-rotation/).
 
 == Installation ==
 = Installation =
