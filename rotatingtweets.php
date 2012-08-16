@@ -192,7 +192,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			'tw_show_meta_timestamp' => __('Time/date of tweet','rotatingtweets'),
 			'tw_show_meta_screen_name' => __('Name of person tweeting','rotatingtweets'),
 			'tw_show_meta_via' => __('Source of tweet','rotatingtweets'),
-			'tw_show_meta_reply_retweet_favorite' => __("'reply &middot; retweet &middot; favourite' links",'rotatingtweets')
+			'tw_show_meta_reply_retweet_favorite' => __("'reply &middot; retweet &middot; favorite' links",'rotatingtweets')
 		);
 		$tw_br='';
 		foreach ($tweet_detail_options as $field => $text):
