@@ -459,7 +459,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					endif;
 					if($args['show_meta_screen_name']):
 						if(!empty($meta)) $meta .= ' ';
-						$meta .= sprintf(__('from <a target="_BLANK" href="http://twitter.com/%1$s" title="%2$s">%2$s\'s Twitter</a>','rotatingtweets'),$user->screen_name,$user->name);
+						$meta .= sprintf(__('from <a target=\'_BLANK\' href=\'http://twitter.com/%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),$user->screen_name,$user->name);
 					endif;
 					if($args['show_meta_via']):
 						if(!empty($meta)) $meta .= ' ';
