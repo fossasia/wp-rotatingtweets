@@ -499,10 +499,21 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 */
 	if($args['show_follow'] && !empty($user->screen_name)):
 		unset($shortenvariables);
+		$rtlocale = strtolower(get_locale());
+		$rtlocaleMain = explode('_',$rtlocale);
+		$possibleOptions = array ('id','da','ru','msa','ja','no','ur','nl','fa','hi','de','ko','sv','tr','fr','it','en','fil','pt','he','zh-tw','fi','pl','ar','es','hu','th','zh-cn'); // Source https://api.twitter.com/1/help/languages.xml
+		if(in_array($rtlocale,$possibleOptions)):
+			$twitterlocale = $rtlocale;
+		elseif(in_array($rtlocaleMain[0],$possibleOptions)):
+			$twitterlocale = $rtlocaleMain[0];
+		else:
+			# Default
+			$twitterlocale = 'en';
+		endif;
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
 		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
 		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),$user->screen_name);
-		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."'>".$followUserText."</a></div>";
+		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
