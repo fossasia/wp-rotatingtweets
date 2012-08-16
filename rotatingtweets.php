@@ -222,7 +222,11 @@ class rotatingtweets_Widget extends WP_Widget {
 
 // register rotatingtweets_Widget widget
 add_action('widgets_init', create_function('', 'return register_widget("rotatingtweets_Widget");'));
-load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+
+function rotatingtweets_init() {
+  load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action('plugins_loaded', 'rotatingtweets_init');
 
 function rotatingtweets_contextualtime($small_ts, $large_ts=false) {
   if(!$large_ts) $large_ts = time();
