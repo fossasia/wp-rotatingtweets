@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Rotating Tweets (Twitter widget & shortcode) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 0.504\n"
+"Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 0.505\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
-"POT-Creation-Date: 2012-08-16 15:42:33+00:00\n"
+"POT-Creation-Date: 2012-08-16 18:01:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -97,7 +97,7 @@ msgid "Source of tweet"
 msgstr ""
 
 #: rotatingtweets.php:195
-msgid "'reply &middot; retweet &middot; favourite' links"
+msgid "'reply &middot; retweet &middot; favorite' links"
 msgstr ""
 
 #: rotatingtweets.php:205
@@ -125,122 +125,126 @@ msgstr ""
 msgid "Show button only"
 msgstr ""
 
-#: rotatingtweets.php:230
+#: rotatingtweets.php:229
 msgid "less than a second ago"
 msgstr ""
 
-#: rotatingtweets.php:231
+#: rotatingtweets.php:230
 msgid "%d seconds ago"
 msgstr ""
 
-#: rotatingtweets.php:232
+#: rotatingtweets.php:231
 msgid "about a minute ago"
 msgid_plural "about %d minutes ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:233 rotatingtweets.php:235
+#: rotatingtweets.php:232 rotatingtweets.php:234
 msgid "about an hour ago"
 msgid_plural "about %d hours ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:234
+#: rotatingtweets.php:233
 msgid "yesterday"
 msgstr ""
 
-#: rotatingtweets.php:236
+#: rotatingtweets.php:235
 msgid "about a day ago"
 msgid_plural "about %d days ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:237
+#: rotatingtweets.php:236
 msgid "last week"
 msgstr ""
 
-#: rotatingtweets.php:238
+#: rotatingtweets.php:237
 msgid "about a week ago"
 msgid_plural "about %d weeks ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:239
+#: rotatingtweets.php:238
 msgid "last month"
 msgstr ""
 
-#: rotatingtweets.php:240
+#: rotatingtweets.php:239
 msgid "about a month ago"
 msgid_plural "about %d months ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:241
+#: rotatingtweets.php:240
 msgid "last year"
 msgstr ""
 
-#: rotatingtweets.php:242
+#: rotatingtweets.php:241
 msgid "about a year ago"
 msgid_plural "about %d years ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:375
+#: rotatingtweets.php:374
 msgid "Problem retrieving data from Twitter"
 msgstr ""
 
-#: rotatingtweets.php:379
+#: rotatingtweets.php:378
 msgid ""
 "This website is currently <a href='https://dev.twitter.com/docs/rate-"
 "limiting/faq'>rate-limited by Twitter</a>."
 msgstr ""
 
-#: rotatingtweets.php:381
+#: rotatingtweets.php:380
 msgid "Next attempt to get data will be in %d minute"
 msgid_plural "Next attempt to get data will be in %d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:382
+#: rotatingtweets.php:381
 msgid "Next attempt to get data will be in less than a minute"
 msgstr ""
 
-#: rotatingtweets.php:388
+#: rotatingtweets.php:387
 msgid "Wordpress error message"
 msgstr ""
 
-#: rotatingtweets.php:391
+#: rotatingtweets.php:390
 msgid "Please check the Twitter name used in the settings."
 msgstr ""
 
-#: rotatingtweets.php:460
+#: rotatingtweets.php:459
 msgid ""
 "from <a target='_BLANK' href='http://twitter.com/%1$s' title='%2$s'>%2$s's "
 "Twitter</a>"
 msgstr ""
 
-#: rotatingtweets.php:464
+#: rotatingtweets.php:463
 msgid "via %s"
 msgstr ""
 
-#: rotatingtweets.php:471
+#: rotatingtweets.php:470
 msgid "reply"
 msgstr ""
 
-#: rotatingtweets.php:471
+#: rotatingtweets.php:470
 msgid "retweet"
 msgstr ""
 
-#: rotatingtweets.php:471
+#: rotatingtweets.php:470
 msgid "favorite"
 msgstr ""
 
-#: rotatingtweets.php:483
+#: rotatingtweets.php:482
 msgid "Problem retrieving data from Twitter."
 msgstr ""
 
-#: rotatingtweets.php:485
+#: rotatingtweets.php:484
 msgid "Please check the comments on this page's HTML to understand more."
+msgstr ""
+
+#: rotatingtweets.php:504
+msgid "Follow @%s"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
