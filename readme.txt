@@ -1,7 +1,7 @@
 === Rotating Tweets (Twitter widget and shortcode) ===
 Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
-Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle
+Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.4.1
 Stable tag: 0.502
@@ -19,8 +19,10 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 * Replaces [t.co](http://t.co) links with the original link
 * Caches the most recent data from Twitter to avoid problems with rate limiting
 * Uses [jQuery](http://jquery.com/) and [jQuery.Cycle](http://jquery.malsup.com/cycle/) to produce a nice smooth result.
+* **Multi-lingual** - now set up to be multi-lingual. If you have created your own language pack, or have an update of an existing one, you can send [gettext PO and MO files](http://codex.wordpress.org/Translating_WordPress) to [me](http://www.martintod.org.uk/contact-martin/) so that I can bundle it into RotatingTweets. You can download [the latest POT file](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/rotatingtweets.pot), and [PO files in each language](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/).
 
 If you'd like to see what it looks like in action, you can [see the plug-in working here](http://www.martintod.org.uk/2012/05/29/new-twitter-plugin-to-show-tweets-in-rotation/).
+
 == Installation ==
 = Installation =
 1. Upload the contents of `rotatingtweets.zip` to the `/wp-content/plugins/` directory or use the Wordpress installer
@@ -58,10 +60,13 @@ although the only one you *have* to have is `screen_name`.
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.502 =
-Javascript fix for zero height tweets problem
+= 0.505 =
+Minimised Javascript. Set-up for I18n.  Includes Javascript fix for zero height tweets problem.
 
 == Changelog ==
+= 0.505 =
+Minimised Javascript. Set-up for I18n.
+
 = 0.502 =
 Javascript fix for zero height tweets problem
 
