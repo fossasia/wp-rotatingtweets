@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.504
+Version: 0.505
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -222,11 +222,6 @@ class rotatingtweets_Widget extends WP_Widget {
 
 // register rotatingtweets_Widget widget
 add_action('widgets_init', create_function('', 'return register_widget("rotatingtweets_Widget");'));
-
-function rotatingtweets_init() {
-  load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-}
-add_action('plugins_loaded', 'rotatingtweets_init');
 
 function rotatingtweets_contextualtime($small_ts, $large_ts=false) {
   if(!$large_ts) $large_ts = time();
@@ -515,4 +510,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	if($print) echo $result;
 	return($result);
 }
+# Load the language files - needs to come after the widget_init line - and possibly the shortcode one too!
+function rotatingtweets_init() {
+	load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action('plugins_loaded', 'rotatingtweets_init');
 ?>
