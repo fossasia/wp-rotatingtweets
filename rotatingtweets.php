@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.503
+Version: 0.504
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -37,7 +37,7 @@ License: GPL2
 class rotatingtweets_Widget extends WP_Widget {
     /** constructor */
     function rotatingtweets_Widget() {
-        parent::WP_Widget(false, $name = 'Rotating Tweets',array('description'=>'A widget to show tweets for a particular user in rotation.'));	
+        parent::WP_Widget(false, $name = 'Rotating Tweets',array('description'=>__('A widget to show tweets for a particular user in rotation.','rotatingtweets')));	
 		if ( is_active_widget( false, false, $this->id_base ) )
 			wp_enqueue_script( 'jquery' );
 			# Get Stylesheet
@@ -138,11 +138,11 @@ class rotatingtweets_Widget extends WP_Widget {
 		if(empty($tw_timeout)) $tw_timeout = 4000;
 		if(empty($tw_tweet_count)) $tw_tweet_count = 5;
         ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
-		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
-		<p><input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"> <?php _e('Include retweets?'); ?></label></p>
-		<p><input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"> <?php _e('Exclude replies?'); ?></label></p>
-		<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
+		<p><input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"> <?php _e('Include retweets?','rotatingtweets'); ?></label></p>
+		<p><input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"> <?php _e('Exclude replies?','rotatingtweets'); ?></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?','rotatingtweets'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
 		<?php 
 		for ($i=1; $i<20; $i++) {
 			echo "\n\t<option value='$i' ";
@@ -150,13 +150,13 @@ class rotatingtweets_Widget extends WP_Widget {
 			echo ">$i</option>";
 		}			
 		?></select></label></p>
-		<p><label for="<?php echo $this->get_field_id('tw_timeout'); ?>"><?php _e('Speed'); ?> <select id="<?php echo $this->get_field_id('tw_timeout'); ?>" name="<?php echo $this->get_field_name('tw_timeout');?>">
+		<p><label for="<?php echo $this->get_field_id('tw_timeout'); ?>"><?php _e('Speed','rotatingtweets'); ?> <select id="<?php echo $this->get_field_id('tw_timeout'); ?>" name="<?php echo $this->get_field_name('tw_timeout');?>">
 		<?php 
 		$timeoutoptions = array (
-							"3000" => "Faster (3 seconds)",
-							"4000" => "Normal (4 seconds)",
-							"5000" => "Slower (5 seconds)",
-							"6000" => "Slowest (6 seconds)"
+							"3000" => __("Faster (3 seconds)",'rotatingtweets'),
+							"4000" => __("Normal (4 seconds)",'rotatingtweets'),
+							"5000" => __("Slower (5 seconds)",'rotatingtweets'),
+							"6000" => __("Slowest (6 seconds)",'rotatingtweets')
 		);
 		foreach ($timeoutoptions as $val => $words) {
 			echo "\n\t<option value='$val' ";
@@ -168,15 +168,15 @@ class rotatingtweets_Widget extends WP_Widget {
 		# For reference, all the rotations that look good.
 		# $goodRotations = array('blindX','blindY','blindZ','cover','curtainY','fade','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','toss','turnUp','turnDown','uncover');
 		$rotationoptions = array (
-			'scrollUp' => 'Scroll Up',
-			'scrollDown' => 'Scroll Down',
-			'scrollLeft' => 'Scroll Left',
-			'scrollRight' => 'Scroll Right',
-			'fade' => 'Fade'
+			'scrollUp' => __('Scroll Up','rotatingtweets'),
+			'scrollDown' => __('Scroll Down','rotatingtweets'),
+			'scrollLeft' => __('Scroll Left','rotatingtweets'),
+			'scrollRight' => __('Scroll Right','rotatingtweets'),
+			'fade' => __('Fade','rotatingtweets')
 		);
 		asort($rotationoptions);
 		?>
-		<p><label for="<?php echo $this->get_field_id('tw_rotation_type'); ?>"><?php _e('Type of rotation'); ?> <select id="<?php echo $this->get_field_id('tw_rotation_type'); ?>" name="<?php echo $this->get_field_name('tw_rotation_type');?>">
+		<p><label for="<?php echo $this->get_field_id('tw_rotation_type'); ?>"><?php _e('Type of rotation','rotatingtweets'); ?> <select id="<?php echo $this->get_field_id('tw_rotation_type'); ?>" name="<?php echo $this->get_field_name('tw_rotation_type');?>">
 		<?php 		
 		foreach ($rotationoptions as $val => $words) {
 			echo "\n\t<option value='$val' ";
@@ -185,30 +185,30 @@ class rotatingtweets_Widget extends WP_Widget {
 		}			
 		?></select></label></p>
 		<?php /* Ask about which Tweet details to show */ ?>
-		<p><?php _e('Show tweet details?'); ?></p><p>
+		<p><?php _e('Show tweet details?','rotatingtweets'); ?></p><p>
 		<?php 
 		$tweet_detail_options = array(
-			'tw_show_meta_timestamp' => 'Time/date of tweet',
-			'tw_show_meta_screen_name' => 'Name of person tweeting',
-			'tw_show_meta_via' => 'Source of tweet',
-			'tw_show_meta_reply_retweet_favorite' => "'reply &middot; retweet &middot; favourite' links"
+			'tw_show_meta_timestamp' => __('Time/date of tweet','rotatingtweets'),
+			'tw_show_meta_screen_name' => __('Name of person tweeting','rotatingtweets'),
+			'tw_show_meta_via' => __('Source of tweet','rotatingtweets'),
+			'tw_show_meta_reply_retweet_favorite' => __("'reply &middot; retweet &middot; favourite' links",'rotatingtweets')
 		);
 		$tw_br='';
 		foreach ($tweet_detail_options as $field => $text):
 		echo $tw_br;
 		?>
-		<input id="<?php echo $this->get_field_id($field); ?>" name="<?php echo $this->get_field_name($field); ?>" type="checkbox" value="1" <?php if($metaoption[$field]==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id($field); ?>"> <?php _e($text); ?></label>
+		<input id="<?php echo $this->get_field_id($field); ?>" name="<?php echo $this->get_field_name($field); ?>" type="checkbox" value="1" <?php if($metaoption[$field]==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id($field); ?>"> <?php echo $text; ?></label>
 		<?php 
 		$tw_br = "<br />";
 		endforeach; ?></p>
-		<p><?php _e('Show follow button?'); ?></p>
+		<p><?php _e('Show follow button?','rotatingtweets'); ?></p>
 <?php
 		$showfollowoptions = array (
-			0 => 'None',
-			1 => "Show name and number of followers",
-			2 => "Show name only",
-			3 => "Show followers only",
-			4 => "Show button only"
+			0 => _x('None','Show follow button?','rotatingtweets'),
+			1 => __("Show name and number of followers",'rotatingtweets'),
+			2 => __("Show name only",'rotatingtweets'),
+			3 => __("Show followers only",'rotatingtweets'),
+			4 => __("Show button only",'rotatingtweets')
 		);
 
 		foreach ($showfollowoptions as $val => $html) {
@@ -221,26 +221,27 @@ class rotatingtweets_Widget extends WP_Widget {
 
 // register rotatingtweets_Widget widget
 add_action('widgets_init', create_function('', 'return register_widget("rotatingtweets_Widget");'));
+load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 function rotatingtweets_contextualtime($small_ts, $large_ts=false) {
   if(!$large_ts) $large_ts = time();
   $n = $large_ts - $small_ts;
-  if($n <= 1) return 'less than 1 second ago';
-  if($n < (60)) return $n . ' seconds ago';
-  if($n < (60*60)) { $minutes = round($n/60); return 'about ' . $minutes . ' minute' . ($minutes > 1 ? 's' : '') . ' ago'; }
-  if($n < (60*60*16)) { $hours = round($n/(60*60)); return 'about ' . $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago'; }
-  if($n < (time() - strtotime('yesterday'))) return 'yesterday';
-  if($n < (60*60*24)) { $hours = round($n/(60*60)); return 'about ' . $hours . ' hour' . ($hours > 1 ? 's' : '') . ' ago'; }
-  if($n < (60*60*24*6.5)) return 'about ' . round($n/(60*60*24)) . ' days ago';
-  if($n < (time() - strtotime('last week'))) return 'last week';
-  if(round($n/(60*60*24*7))  == 1) return 'about a week ago';
-  if($n < (60*60*24*7*3.5)) return 'about ' . round($n/(60*60*24*7)) . ' weeks ago';
-  if($n < (time() - strtotime('last month'))) return 'last month';
-  if(round($n/(60*60*24*7*4))  == 1) return 'about a month ago';
-  if($n < (60*60*24*7*4*11.5)) return 'about ' . round($n/(60*60*24*7*4)) . ' months ago';
-  if($n < (time() - strtotime('last year'))) return 'last year';
-  if(round($n/(60*60*24*7*52)) == 1) return 'about a year ago';
-  if($n >= (60*60*24*7*4*12)) return 'about ' . round($n/(60*60*24*7*52)) . ' years ago'; 
+  if($n <= 1) return __('less than a second ago','rotatingtweets');
+  if($n < (60)) return sprintf(__('%d seconds ago','rotatingtweets'),$n);
+  if($n < (60*60)) { $minutes = round($n/60); return sprintf(_n('about a minute ago','about %d minutes ago',$minutes,'rotatingtweets'),$minutes); }
+  if($n < (60*60*16)) { $hours = round($n/(60*60)); return sprintf(_n('about an hour ago','about %d hours ago',$hours,'rotatingtweets'),$hours); }
+  if($n < (time() - strtotime('yesterday'))) return __('yesterday','rotatingtweets');
+  if($n < (60*60*24)) { $hours = round($n/(60*60)); return sprintf(_n('about an hour ago','about %d hours ago',$hours,'rotatingtweets'),$hours); }
+  if($n < (60*60*24*6.5)) return sprintf(_n('about a day ago','about %d days ago',round($n/(60*60*24)),'rotatingtweets'),round($n/(60*60*24)));
+  if($n < (time() - strtotime('last week'))) return __('last week','rotatingtweets');
+  if(round($n/(60*60*24*7))  == 1) return __('about a week ago','rotatingtweets');
+  if($n < (60*60*24*7*3.5)) return sprintf(_n('about a week ago','about %d weeks ago',round($n/(60*60*24*7)),'rotatingtweets'),round($n/(60*60*24*7))); 
+  if($n < (time() - strtotime('last month'))) return __('last month','rotatingtweets');
+  if(round($n/(60*60*24*7*4))  == 1) return __('about a month ago','rotatingtweets');
+  if($n < (60*60*24*7*4*11.5)) return sprintf(_n('about a month ago','about %d months ago',round($n/(60*60*24*7*4)),'rotatingtweets'),round($n/(60*60*24*7*4)));
+  if($n < (time() - strtotime('last year'))) return __('last year','rotatingtweets');
+  if(round($n/(60*60*24*7*52)) == 1) return __('about a year ago','rotatingtweets');
+  if($n >= (60*60*24*7*4*12)) return sprintf(_n('about a year ago','about %d years ago',round($n/(60*60*24*7*52)),'rotatingtweets'),round($n/(60*60*24*7*52)));
   return false;
 }
 
@@ -373,24 +374,23 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
 	$result = "\n<div class='rotatingtweets' id='$id'>";
 	if(empty($json)):
-		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
+		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>". __('Problem retrieving data from Twitter','rotatingtweets'). "</p></div>";
 		$rate = rotatingtweets_get_rate_data();
 		# Check if the problem is rate limiting
 		if($rate && $rate->remaining_hits == 0):
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>This website is currently <a href='https://dev.twitter.com/docs/rate-limiting/faq'>rate-limited by Twitter</a>.</p></div>";
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __("This website is currently <a href='https://dev.twitter.com/docs/rate-limiting/faq'>rate-limited by Twitter</a>.",'rotatingtweets')."</p></div>";
 			$waittimevalue = intval(($rate->reset_time_in_seconds-time - time())/60);
-			$waittime = $waittimevalue." minutes";
-			if($waittimevalue == 1) $waittime = "1 minute";
-			if($waittimevalue == 0) $waittime = "less than a minute";
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Next attempt to get data will be in {$waittime}.</p></div>";
+			$waittime = sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue);
+			if($waittimevalue == 0) $waittime = __("Next attempt to get data will be in less than a minute",'rotatingtweets');
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>{$waittime}.</p></div>";
 		else:
 			$error_messages = get_transient('rotatingtweets_wp_error');
 			if($error_messages):
 				foreach($error_messages as $error_message):
-					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Wordpress error message: ".$error_message.".</p></div>";
+					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Wordpress error message','rotatingtweets').": ".$error_message.".</p></div>";
 				endforeach;
 			endif;
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the Twitter name used in the settings.</p></div>";
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Please check the Twitter name used in the settings.','rotatingtweets')."</p></div>";
 		endif;
 	else:
 		$tweet_counter = 0;
@@ -459,18 +459,18 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					endif;
 					if($args['show_meta_screen_name']):
 						if(!empty($meta)) $meta .= ' ';
-						$meta .="from <a target='_BLANK' href='http://twitter.com/".$user->screen_name."' title=\"".$user->name."\">".$user->name."'s Twitter</a>";
+						$meta .= sprintf(__('from <a target="_BLANK" href="http://twitter.com/%1$s" title="%2$s">%2$s\'s Twitter</a>','rotatingtweets'),$user->screen_name,$user->name);
 					endif;
 					if($args['show_meta_via']):
 						if(!empty($meta)) $meta .= ' ';
-						$meta .="via ".$twitter_object->source;
+						$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object->source);
 					endif;
 					if($args['show_meta_reply_retweet_favorite']):
 						/* Code for $meta showing graphics
 						$meta .= ' <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';	
 						*/
 						if(!empty($meta)) $meta .= ' &middot; ';
-						$meta .= '<a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">reply</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">retweet</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">favorite</a>';
+						$meta .= '<a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">'.__('reply','rotatingtweets').'</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">'.__('retweet','rotatingtweets').'</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">'.__('favorite','rotatingtweets').'</a>';
 					endif;
 					/* Experiment with Prev / Next buttons 
 					if($args['show_meta_prev_next']):
@@ -482,9 +482,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
 					endif;
 				else:
-					$result .= "\n\t\t<p class='rtw_main'>Problem retrieving data from Twitter.</p></div>";
+					$result .= "\n\t\t<p class='rtw_main'>".__("Problem retrieving data from Twitter.",'rotatingtweets')."</p></div>";
 					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
-					$result .= "\n\t\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>Please check the comments on this page's HTML to understand more.</p>";
+					$result .= "\n\t\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".__("Please check the comments on this page's HTML to understand more.",'rotatingtweets')."</p>";
 				endif;
 				$result .= "\n\t</div>";
 			endif;
