@@ -637,7 +637,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, TRUE).'</div>';
 						$result .= rotatingtweets_timestamp_link($twitter_object,'long');
 						if($retweeter) {
-							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' align='bottom' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name)."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name));
+							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name));
 						}
 						$result .= "\n</div>";
 						break;
@@ -653,7 +653,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
 						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, TRUE).'</div>';
 						if($retweeter) {
-							$result .= rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' align='bottom' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name)."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name));
+							$result .= rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name)."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name));
 						}
 						$result .= "</div></div></div>";
 						break;
