@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.505
+Version: 0.600
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -40,19 +40,7 @@ class rotatingtweets_Widget extends WP_Widget {
     function rotatingtweets_Widget() {
         parent::WP_Widget(false, $name = 'Rotating Tweets',array('description'=>__('A widget to show tweets for a particular user in rotation.','rotatingtweets')));	
 		if ( is_active_widget( false, false, $this->id_base ) )
-			wp_enqueue_script( 'jquery' );
-			# Get Stylesheet
-			$style = get_stylesheet();
-			switch ($style):
-				case 'zeebizzcard':
-					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.min.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
-					break;
-				default:
-					wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),array('jquery'),FALSE,FALSE );
-					wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.min.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
-					break;
-			endswitch;
-			wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
+			rotatingtweets_enqueue_scripts(); 
 		}
 
     /** @see WP_Widget::widget */
@@ -70,6 +58,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$newargs['show_meta_via'] = !$instance['tw_hide_meta_via'];
 		$newargs['rotation_type'] = $instance['tw_rotation_type'];
 		$newargs['show_meta_reply_retweet_favorite'] = $instance['tw_show_meta_reply_retweet_favorite'];
+		$newargs['official_format'] = $instance['tw_official_format'];
 		switch($newargs['show_follow']) {
 		case 2: 
 			$newargs['no_show_count'] = TRUE;
@@ -96,7 +85,6 @@ class rotatingtweets_Widget extends WP_Widget {
 							echo $before_title . $title . $after_title; 
 						rotating_tweets_display($tweets,$newargs,TRUE);
 					echo $after_widget;
-#					echo "<!-- ";print_r($newargs);echo " -->";
 					?>
         <?php
     }
@@ -115,6 +103,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance['tw_hide_meta_timestamp'] = !$new_instance['tw_show_meta_timestamp'];
 		$instance['tw_hide_meta_screen_name'] = !$new_instance['tw_show_meta_screen_name'];
 		$instance['tw_hide_meta_via'] = !$new_instance['tw_show_meta_via'];
+		$instance['tw_official_format'] = absint($new_instance['tw_official_format']);
 		$instance['tw_show_meta_reply_retweet_favorite'] = absint($new_instance['tw_show_meta_reply_retweet_favorite']);
 		$instance['tw_timeout'] = max(min(intval($new_instance['tw_timeout']/1000)*1000,6000),3000);
 	return $instance;
@@ -122,7 +111,7 @@ class rotatingtweets_Widget extends WP_Widget {
 	
     /** @see WP_Widget::form */
     function form($instance) {				
-        $title = esc_attr($instance['title']);
+		$title = esc_attr($instance['title']);
         $tw_screen_name = esc_attr(trim($instance['tw_screen_name']));
 		$tw_rotation_type = $instance['tw_rotation_type'];
 		if(empty($tw_rotation_type)) $tw_rotation_type = 'scrollUp';
@@ -130,6 +119,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$tw_exclude_replies = absint($instance['tw_exclude_replies']);
         $tw_tweet_count = intval($instance['tw_tweet_count']);
 		$tw_show_follow = absint($instance['tw_show_follow']);
+		$tw_official_format = absint($instance['tw_official_format']);
 		$metaoption['tw_show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
 		$metaoption['tw_show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
 		$metaoption['tw_show_meta_via'] = !$instance['tw_hide_meta_via'];
@@ -186,8 +176,23 @@ class rotatingtweets_Widget extends WP_Widget {
 		}			
 		?></select></label></p>
 		<?php /* Ask about which Tweet details to show */ ?>
-		<p><?php _e('Show tweet details?','rotatingtweets'); ?></p><p>
-		<?php 
+		<p><?php _e('Display format','rotatingtweets'); ?></p>
+<?php
+		$officialoptions = array (
+			0 => __('Original rotating tweets layout','rotatingtweets'),
+			1 => __("<a target='_blank' href='https://dev.twitter.com/terms/display-guidelines'>Official Twitter guidelines</a> (regular)",'rotatingtweets'),
+			2 => __("<a target='_blank' href='https://dev.twitter.com/terms/display-guidelines'>Official Twitter guidelines</a> (wide)",'rotatingtweets'),
+		);
+		foreach ($officialoptions as $val => $html) {
+			echo "<input type='radio' value='$val' id='".$this->get_field_id('tw_official_format_'.$val)."' name= '".$this->get_field_name('tw_official_format')."'";
+			if($tw_official_format==$val): ?> checked="checked" <?php endif; 
+			echo " class='rtw_ad_official'><label for='".$this->get_field_id('tw_official_format_'.$val)."'> $html</label><br />";
+		};
+		unset($hideStr);
+		if($tw_official_format > 0) $hideStr = ' style = "display:none;" ';
+		?>
+		<p /><div class='rtw_ad_tw_det' <?=$hideStr;?>><p><?php _e('Show tweet details?','rotatingtweets'); ?></p><p>
+		<?php
 		$tweet_detail_options = array(
 			'tw_show_meta_timestamp' => __('Time/date of tweet','rotatingtweets'),
 			'tw_show_meta_screen_name' => __('Name of person tweeting','rotatingtweets'),
@@ -201,7 +206,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		<input id="<?php echo $this->get_field_id($field); ?>" name="<?php echo $this->get_field_name($field); ?>" type="checkbox" value="1" <?php if($metaoption[$field]==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id($field); ?>"> <?php echo $text; ?></label>
 		<?php 
 		$tw_br = "<br />";
-		endforeach; ?></p>
+		endforeach; ?></p></div>
 		<p><?php _e('Show follow button?','rotatingtweets'); ?></p>
 <?php
 		$showfollowoptions = array (
@@ -215,14 +220,17 @@ class rotatingtweets_Widget extends WP_Widget {
 		foreach ($showfollowoptions as $val => $html) {
 			echo "<input type='radio' value='$val' id='".$this->get_field_id('tw_tweet_count_'.$val)."' name= '".$this->get_field_name('tw_show_follow')."'";
 			if($tw_show_follow==$val): ?> checked="checked" <?php endif; 
-			echo "><label for '".$this->get_field_id('tw_tweet_count_'.$val)."'> $html</label><br />";
+			echo "><label for='".$this->get_field_id('tw_tweet_count_'.$val)."'> $html</label><br />";
 		}
+		# This is an appalling hack to deal with the problem that jQuery gets broken when people hit save - as per http://lists.automattic.com/pipermail/wp-hackers/2011-March/037997.html - but it works!
+		echo "<script type='text/javascript' src='".plugins_url('js/rotating_tweet_admin.js', __FILE__)."'></script>";
 	}
 } // class rotatingtweets_Widget
 
 // register rotatingtweets_Widget widget
 add_action('widgets_init', create_function('', 'return register_widget("rotatingtweets_Widget");'));
 
+# Converts Tweet timestamp into a time description
 function rotatingtweets_contextualtime($small_ts, $large_ts=false) {
   if(!$large_ts) $large_ts = time();
   $n = $large_ts - $small_ts;
@@ -240,6 +248,73 @@ function rotatingtweets_contextualtime($small_ts, $large_ts=false) {
   if($n < (time() - strtotime('last year'))) return __('last year','rotatingtweets');
   if($n >= (60*60*24*7*4*12)){$years=round($n/(60*60*24*7*52)) ;return sprintf(_n('about a year ago','about %d years ago',$years,'rotatingtweets'),$years);}
   return false;
+}
+# Converts Tweet timestamp into a short time description - as specified by Twitter
+function rotatingtweets_contextualtime_short($small_ts, $large_ts=false) {
+  if(!$large_ts) $large_ts = time();
+  $n = $large_ts - $small_ts;
+  if($n < (60)) return sprintf(_x('%ds','abbreviated timestamp in seconds','rotatingtweets'),$n);
+  if($n < (60*60)) { $minutes = round($n/60); return sprintf(_x('%dm','abbreviated timestamp in minutes','rotatingtweets'),$minutes); }
+  if($n < (60*60*24)) { $hours = round($n/(60*60)); return sprintf(_x('%dh','abbreviated timestamp in hours','rotatingtweets'),$hours); }
+  if($n < (60*60*24*364)) return date(_x('j M','short date format as per http://uk.php.net/manual/en/function.date.php','rotatingtweets'),$small_ts);
+  return date(_x('j M Y','slightly longer date format as per http://uk.php.net/manual/en/function.date.php','rotatingtweets'),$small_ts);
+}
+# Get intents - either visual or graphic
+function rotatingtweets_intents($twitter_object,$lang, $icons = TRUE) {
+	$addstring = array();
+	$types = array (
+		array ( 'link'=>'https://twitter.com/intent/tweet?in_reply_to=', 'icon'=>'images/reply.png', 'text' => __('reply', 'rotatingtweets')),
+		array ( 'link'=>'https://twitter.com/intent/retweet?tweet_id=', 'icon'=>'images/retweet.png', 'text' => __('retweet', 'rotatingtweets')),
+		array ( 'link'=>'https://twitter.com/intent/favorite?tweet_id=', 'icon'=>'images/favorite.png', 'text' => __('favorite', 'rotatingtweets'))
+	);
+	foreach($types as $type) {
+		$string = "\n<a href='".$type['link'].$twitter_object->id_str."' title='{$type['text']}' lang='{$lang}'>";
+		if($icons):
+			$addstring[] = $string."<img src='".plugins_url($type['icon'],__FILE__)."' width='16' height='16' alt='{$type['text']}' /></a>";
+			$glue = '';
+		else:
+			$addstring[] = $string.$type['text'].'</a>';
+			$glue = ' &middot; ';
+		endif;
+	}
+	$string = implode($glue,$addstring);
+	return($string);
+}
+function rotatingtweets_user_intent($person,$lang,$linkcontent) {
+	$return = "<a href='https://twitter.com/intent/user?user_id={$person->id}' title='{$person->name}' lang='{$lang}'>";
+	switch($linkcontent){
+	case 'icon':
+		$return .= "<img src='{$person->profile_image_url}' alt='{$person->name}' /></a>";
+		break;
+	case 'name':
+		$return .= $person->name."</a>";
+		break;
+	case 'screen_name':
+		$return .= "@".$person->screen_name."</a>";
+		break;
+	default:
+		$return .= $linkcontent."</a>";
+		break;
+	}
+	return ($return);
+}
+
+function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default') {
+	$string = '<a target="_blank" href="https://twitter.com/twitterapi/status/'.$twitter_object->id_str.'">';
+	$tweettimestamp = strtotime($twitter_object->created_at);
+	switch($timetype) {
+		case 'short':
+			$string .= rotatingtweets_contextualtime_short($tweettimestamp);
+			break;
+		case 'long':
+			$string .= date_i18n(get_option('time_format'),$tweettimestamp)." &middot; ".date_i18n(get_option('date_format') ,$tweettimestamp);
+			break;
+		default:
+			$string .= ucfirst(rotatingtweets_contextualtime($tweettimestamp));
+			break;
+	}
+	$string .= '</a>';
+	return ($string);
 }
 
 # Processes the shortcode 
@@ -268,9 +343,15 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 			'show_meta_screen_name' => TRUE,
 			'show_meta_via' => TRUE,
 			'show_meta_reply_retweet_favorite' => FALSE,
-			'rotation_type' => 'scrollUp'
+			'rotation_type' => 'scrollUp',
+			'official_format' => FALSE,
+			'ratelimit' => FALSE
 		), $atts ) ;
 	extract($args);
+	# Enables you to trigger rate limiting to test the plug-in - not recommended!
+	if($ratelimit) rotatingtweets_trigger_rate_limiting();
+	# Makes sure the scripts are listed
+	rotatingtweets_enqueue_scripts(); 
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies);
 	$returnstring = rotating_tweets_display($tweets,$args,FALSE);
 	return $returnstring;
@@ -283,7 +364,6 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
-#	$tw_tweet_count = max(1,intval($tw_tweet_count));
 	# Get the option strong
 	$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	$optionname = "rotatingtweets-cache";
@@ -298,7 +378,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$timegap = $cache_delay + 1;
 		unset($option);
 	endif;
-	$timegap = time()-$latest_json_date;
+	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
 		$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=".urlencode($tw_screen_name)."&include_entities=1&count=70&include_rts=".$tw_include_rts."&exclude_replies=".$tw_exclude_replies;
 		$twitterdata = wp_remote_request($callstring);
@@ -308,6 +388,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			set_transient('rotatingtweets_wp_error',$twitterdata->get_error_messages(), 120);
 		endif;
 	endif;
+	# Checks for errors in the reply
 	if(!empty($twitterjson->errors)):
 		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited.
 		$option[$stringname]['datetime']=time();
@@ -347,6 +428,56 @@ function rotatingtweets_get_rate_data() {
 	endif;
 }
 
+# Gets the language options
+# Once a day finds out what language options Twitter has.  If there's any issue, pushes back the next attempt by another day.
+function rotatingtweets_get_twitter_language() {
+	$cache_delay = 60*60*24;
+	$fallback = array ('id','da','ru','msa','ja','no','ur','nl','fa','hi','de','ko','sv','tr','fr','it','en','fil','pt','he','zh-tw','fi','pl','ar','es','hu','th','zh-cn');
+	$optionname = 'rotatingtweets-twitter-languages';
+	$option = get_option($optionname);
+	# Attempt to deal with 'Cannot use string offset as an array' error
+	if(is_array($option)):
+		$latest_languages = $option['languages'];
+		$latest_date = $option['datetime'];
+		$timegap = time()-$latest_date;
+	else:
+		$latest_languages = $fallback;
+		$timegap = $cache_delay + 1;
+		$option['languages'] = $fallback;
+		$option['datetime'] = time();
+	endif;
+	if($timegap > $cache_delay):
+		$callstring = "https://api.twitter.com/1/help/languages.json";
+		$twitterdata = wp_remote_request($callstring);
+		if(!is_wp_error($twitterdata)):
+			$twitterjson = json_decode($twitterdata['body']);
+			if(!empty($twitterjson->errors)||!empty($twitterjson->error)):
+				# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited.
+				$option['datetime']=time();
+				update_option($optionname,$option);
+			else:
+				# If there's regular data, then update the cache and return the data
+				$latest_languages = array();
+				if(is_array($twitterjson)):
+					foreach($twitterjson as $langarray):
+						$latest_languages[] = $langarray->code;
+					endforeach;
+				endif;
+				if(!empty($latest_languages)):
+					$option['languages']=$latest_languages;
+					$option['datetime']=time();
+					update_option($optionname,$option);
+				endif;
+			endif;
+		else:
+			$option['datetime']=time();
+			update_option($optionname,$option);
+		endif;
+	endif;
+	if(empty($latest_languages)) $latest_languages = $fallback;
+	return($latest_languages);
+}
+
 # This function is used for debugging what happens when the site is rate-limited - best not used otherwise!
 function rotatingtweets_trigger_rate_limiting() {
 	$callstring = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=twitter";
@@ -362,6 +493,18 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	$timeout = max(intval($args['timeout']),0);
 	# Check that the rotation type is valid. If not, leave it as 'scrollUp'
 	$rotation_type = 'scrollUp';
+	# Get Twitter language string
+	$rtlocale = strtolower(get_locale());
+	$rtlocaleMain = explode('_',$rtlocale);
+	$possibleOptions = rotatingtweets_get_twitter_language();
+	if(in_array($rtlocale,$possibleOptions)):
+		$twitterlocale = $rtlocale;
+	elseif(in_array($rtlocaleMain[0],$possibleOptions)):
+		$twitterlocale = $rtlocaleMain[0];
+	else:
+		# Default
+		$twitterlocale = 'en';
+	endif;
 	# All the valid rotations - if people to use one that looks weird, that's their business!
 	$possibleRotations = array('blindX','blindY','blindZ','cover','curtainX','curtainY','fade','fadeZoom','growX','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','slideX','slideY','toss','turnUp','turnDown','turnLeft','turnRight','uncover','wipe','zoom');
 	foreach($possibleRotations as $possibleRotation):
@@ -394,26 +537,35 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		foreach($json as $twitter_object):
 			$tweet_counter++;
 			if($tweet_counter <= $tweet_count):
-				if($tweet_counter == 1):
+				if($tweet_counter == 1 ):
 					$result .= "\n\t<div class = 'rotatingtweet'>";
 				else:
 					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'>";				
 				endif;
+				# Now to process the text
 				$main_text = $twitter_object->text;
 				if(!empty($main_text)):
 					$user = $twitter_object->user;
+					$tweetuser = $user;
 					# Now the substitutions
 					$entities = $twitter_object->entities;
 					# Fix up retweets, links, hashtags and use names
 					unset($before);
 					unset($after);
+					unset($retweeter);
 					# First clean up the retweets
 					$rt_data = $twitter_object->retweeted_status;
 					if(!empty($rt_data)):
 						$rt_user = $rt_data->user;
-						$main_text = "RT @".$rt_user->screen_name . " " . $rt_data->text;
+						if($args['official_format']):
+							$main_text = $rt_data->text;
+							$retweeter = $user;
+							$tweetuser = $rt_user;
+						else:
+							$main_text = "RT @".$rt_user->screen_name . " " . $rt_data->text;
+						endif;
 						$before[] = "*@".$rt_user->screen_name."*i";
-						$after[] = "<a href='http://twitter.com/".$rt_user->screen_name."' title='".$rt_user->name."'>@".$rt_user->screen_name."</a>";
+						$after[] = rotatingtweets_user_intent($rt_user,$twitterlocale,'screen_name');
 						$entities = $rt_data->entities;
 					endif;
 					# First the user mentions
@@ -421,7 +573,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					if(!empty($user_mentions)):
 						foreach($user_mentions as $user_mention):
 							$before[] = "*@".$user_mention->screen_name."*i";
-							$after[] = "<a href='http://twitter.com/".$user_mention->screen_name."' title='".$user_mention->name."'>@".$user_mention->screen_name."</a>";
+							$after[] = rotatingtweets_user_intent($user_mention,$twitterlocale,'screen_name');
 						endforeach;
 						# Clearing up duplicates to avoid strange result (possibly risky?)
 						$before = array_unique($before);
@@ -449,35 +601,71 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					$before[]="%#(\w+)%";
 					$after[]='<a href="http://search.twitter.com/search?q=%23$1" title="#$1">#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
-					$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
-					unset($meta);
-					if($args['show_meta_timestamp']):
-						$meta .= "<a href='http://twitter.com/".$user->screen_name."/status/".$twitter_object->id_str."'>".ucfirst(rotatingtweets_contextualtime(strtotime($twitter_object->created_at)))."</a>";
-					endif;
-					if($args['show_meta_screen_name']):
-						if(!empty($meta)) $meta .= ' ';
-						$meta .= sprintf(__('from <a target=\'_BLANK\' href=\'http://twitter.com/%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),$user->screen_name,$user->name);
-					endif;
-					if($args['show_meta_via']):
-						if(!empty($meta)) $meta .= ' ';
-						$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object->source);
-					endif;
-					if($args['show_meta_reply_retweet_favorite']):
-						/* Code for $meta showing graphics
-						$meta .= ' <a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'" title="Reply"><img src="'.plugins_url('images/reply.png', __FILE__).'" width="16" height="16" alt="Reply" /></a> <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'" title="Retweet" ><img src="'.plugins_url('images/retweet.png', __FILE__).'" width="16" height="16" alt="Retweet" /></a> <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'" title="Favourite"><img src="'.plugins_url('images/favorite.png', __FILE__).'" alt="Favorite" width="16" height="16"  /></a></p>';	
-						*/
-						if(!empty($meta)) $meta .= ' &middot; ';
-						$meta .= '<a href="http://twitter.com/intent/tweet?in_reply_to='.$twitter_object->id_str.'">'.__('reply','rotatingtweets').'</a> &middot; <a href="http://twitter.com/intent/retweet?tweet_id='.$twitter_object->id_str.'">'.__('retweet','rotatingtweets').'</a> &middot; <a href="http://twitter.com/intent/favorite?tweet_id='.$twitter_object->id_str.'">'.__('favorite','rotatingtweets').'</a>';
-					endif;
-					/* Experiment with Prev / Next buttons 
-					if($args['show_meta_prev_next']):
-						if(!empty($meta)) $meta .= ' &middot; ';
-						$meta .= '<a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';					
-					endif;
-					*/
-					if(!empty($meta)):
-						$result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
-					endif;
+
+					# Now for the meta text
+					switch ($args['official_format']) {
+					case 0:
+						# This is the original Rotating Tweets display routine
+						$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
+						unset($meta);
+						if($args['show_meta_timestamp']):
+							$meta .= rotatingtweets_timestamp_link($twitter_object,'default');
+						endif;
+						if($args['show_meta_screen_name']):
+							if(!empty($meta)) $meta .= ' ';
+							$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user->id,$user->name);
+						endif;
+						if($args['show_meta_via']):
+							if(!empty($meta)) $meta .= ' ';
+							$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object->source);
+						endif;
+						if($args['show_meta_reply_retweet_favorite']):
+							if(!empty($meta)) $meta .= ' &middot; ';
+							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, FALSE);
+						endif;
+						if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
+						break;
+					case 1:
+						# This is an attempt to replicate the original Tweet
+						$result .= "\n\t<div class='rtw_info'>";
+						$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></a></div>";
+						$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon')."</div>";
+						$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name')."</div>";
+						$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name')."</div>";
+						$result .= "\n\t</div>";
+						$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
+						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, TRUE).'</div>';
+						$result .= rotatingtweets_timestamp_link($twitter_object,'long');
+						if($retweeter) {
+							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s'),$retweeter->name));
+#							$result .= " &middot; <a href='https://twitter.com/intent/user?user_id=".$retweeter->id."' title='{$retweeter->name}'>".sprintf(__('Retweeted by %s'),$retweeter->name).'</a>';
+						}
+						$result .= "\n</div>";
+						break;
+					case 2:
+						# This is a slightly adjusted version of the original tweet - designed for wide boxes - consistent with Twitter guidelines
+						$result .= "\n\t\t<div class='rtw_wide'>";
+						$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon')."</div>";
+						$result .= "\n\t<div class='rtw_wide_block'><div class='rtw_info'>";
+						$result .= "\n\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short').'</a></div>';
+						$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name')."</div>";
+						$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name')."</div>";
+						$result .= "\n\t</div>";
+						$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
+						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, TRUE).'</div>';
+						if($retweeter) {
+							$result .= rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s'),$retweeter->name));
+						}
+						$result .= "</div></div></div>";
+						break;
+					case 3:
+						# This one uses the twitter standard approach for embedding via their javascript API - unfortunately I can't work out how to make it work with the rotating tweet javascript!  If anyone can work out how to calculate the height of a oEmbed Twitter tweet, I will be very grateful! :-)
+						$result .= '<blockquote class="twitter-tweet">';
+						$result .= "<p>".$main_text."</p>";
+						$result .= '&mdash; '.$user->name.' (@'.$user->screen_name.') <a href="https://twitter.com/twitterapi/status/'.$twitter_object->id_str.'" data-datetime="'.date('c',strtotime($twitter_object->created_at)).'">'.date_i18n(get_option('date_format') ,strtotime($twitter_object->created_at)).'</a>';
+						$result .= '</blockquote>';
+						break;
+					}
 				else:
 					$result .= "\n\t\t<p class='rtw_main'>".__("Problem retrieving data from Twitter.",'rotatingtweets')."</p></div>";
 					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
@@ -499,26 +687,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 */
 	if($args['show_follow'] && !empty($user->screen_name)):
 		unset($shortenvariables);
-		$rtlocale = strtolower(get_locale());
-		$rtlocaleMain = explode('_',$rtlocale);
-		$possibleOptions = array ('id','da','ru','msa','ja','no','ur','nl','fa','hi','de','ko','sv','tr','fr','it','en','fil','pt','he','zh-tw','fi','pl','ar','es','hu','th','zh-cn'); // Source https://api.twitter.com/1/help/languages.xml
-		if(in_array($rtlocale,$possibleOptions)):
-			$twitterlocale = $rtlocale;
-		elseif(in_array($rtlocaleMain[0],$possibleOptions)):
-			$twitterlocale = $rtlocaleMain[0];
-		else:
-			# Default
-			$twitterlocale = 'en';
-		endif;
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
 		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
 		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),$user->screen_name);
-		$result .= "\n<div class='follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
+		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$user->screen_name."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
-	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.js', __FILE__),array('jquery'),FALSE,FALSE );
-	wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
-	wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
+	rotatingtweets_enqueue_scripts();
 	if($print) echo $result;
 	return($result);
 }
@@ -527,4 +701,29 @@ function rotatingtweets_init() {
 	load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 add_action('plugins_loaded', 'rotatingtweets_init');
+
+function rotatingtweets_enqueue_scripts() {
+	wp_enqueue_script( 'jquery' ); 
+	# Get Stylesheet
+	$style = get_stylesheet();
+	switch ($style):
+		case 'zeebizzcard':
+			wp_dequeue_script( 'zee_jquery-cycle');
+			wp_enqueue_script( 'zee_jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),array('jquery'),FALSE,FALSE );
+			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
+			break;
+		default:
+			wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),array('jquery'),FALSE,FALSE );
+			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
+			break;
+	endswitch;
+	wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
+}
+
+function rotatingtweets_enqueue_admin_scripts($hook) {
+		if( 'widgets.php' != $hook ) return;
+		wp_enqueue_script( 'jquery' ); 
+		wp_enqueue_script( 'rotating_tweet_admin', plugins_url('js/rotating_tweet_admin.js', __FILE__),array('jquery'),FALSE,FALSE );		
+}
+add_action( 'admin_enqueue_scripts', 'rotatingtweets_enqueue_admin_scripts' );
 ?>

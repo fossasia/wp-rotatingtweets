@@ -10,10 +10,15 @@ jQuery(document).ready(function() {
 		var rotate_fx = rotate_id_split[2];
 		/* If the rotation type has not been set - then set it to scrollUp */
 		if(rotate_fx == null){rotate_fx = 'scrollUp'};
+		/* If we're displaying an 'official' tweet, reset all the heights */
+		var rt_height_px = 'auto';
+//		var rt_official_child = rotate_id + ' .twitter-tweet';
+//		var rt_official_num = jQuery(rt_official_child).length;
+//		if (rt_official_num > 0) rt_height_px = '211px';
 		/* Call the rotation */
 		jQuery(rotate_id).cycle({
 			pause: 1,
-			height: 'auto',
+			height: rt_height_px,
 			timeout: rotate_timeout,
 			fx: rotate_fx
 		});
@@ -37,7 +42,42 @@ jQuery(document).ready(function() {
 				timeout: rotate_timeout,
 				fx: rotate_fx
 			});
-		}		
+		}
+		/* Only do this if we're showing the official tweets */
+		var rt_children_id = rotate_id + ' .rtw_info';
+		var rt_icon_id = rotate_id + ' .rtw_wide_icon a img';
+		var rt_block_id = rotate_id + ' .rtw_wide_block';
+		var rt_official_num = jQuery(rt_children_id).length;
+		if(rt_official_num > 0) {
+			/* Now run through and make sure all the boxes are the right size */
+			if(jQuery(rt_icon_id).length > 0) {
+				console.log(jQuery(rt_icon_id).show().width());
+				var rt_icon_width = 0;
+				jQuery(rt_icon_id).each( function() {
+					newiconsize = jQuery(this).width();
+					if(newiconsize>rt_icon_width) {
+						rt_icon_width = newiconsize;
+					}
+				});
+				console.log('Iconsize: '+rt_icon_width);
+				if(rt_icon_width > 0) {
+					jQuery(rt_block_id).css('padding-left', ( rt_icon_width + 10 ) + 'px');
+				}
+			}
+			/* Now get the padding-left dimension (if it exists) and subtract it from the max width	*/
+			var rt_max_width = jQuery(rotate_id).width() - parseInt(jQuery(rt_block_id).css('padding-left'));
+			console.log(rt_max_width);			
+			/* Go through the tweets - and set the minimum width */
+			jQuery(rt_children_id).each(function() {
+				jQuery(this).width(rt_max_width);
+			});
+			var rt_children_id = rotate_id + ' .rtw_meta';
+			/* Go through the tweets - and set the minimum width */
+			jQuery(rt_children_id).each(function() {
+				jQuery(this).width(rt_max_width);
+			});
+		};
+
 /*
 		jQuery(rotate_id).cycle({
 			pause: 1,
@@ -54,7 +94,37 @@ jQuery(document).ready(function() {
 		});
 */
 	});
+	// Script to show mouseover effects when going over the Twitter intents
+	jQuery('.rtw_intents a img').hover(function() {
+		var rtw_src = jQuery(this).attr('src');
+		var clearOutHovers = /_hover.png$/;
+		jQuery(this).attr('src',rtw_src.replace(clearOutHovers,".png"));
+		var rtw_src = jQuery(this).attr('src');
+		var srcReplacePattern = /.png$/;
+		jQuery(this).attr('src',rtw_src.replace(srcReplacePattern,"_hover.png"));
+	},function() {
+		var rtw_src = jQuery(this).attr('src');
+		var clearOutHovers = /_hover.png/;
+		jQuery(this).attr('src',rtw_src.replace(clearOutHovers,".png"));
+	});
+	jQuery('.rtw_wide .rtw_meta').hide();
+	jQuery('.rotatingtweets').has('.rtw_wide').hover(function() {
+		jQuery(this).find('.rtw_meta').show();
+	},function() {
+		jQuery(this).find('.rtw_meta').hide();
+	});
 });
+/*
+jQuery(window).ready(function() {
+	// Experimenting with resizing the size of the box when using displayed tweets
+	twttr.ready(function(twttr) {
+		jQuery('blockquote').each( function() {
+			console.log(jQuery(this).prop('class'));
+			console.log(jQuery(this).height());			
+		});
+	});
+});
+*/
 /* And call the Twitter script while we're at it! */
 /* Standard script to call Twitter */
 !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
