@@ -95,23 +95,26 @@ jQuery(document).ready(function() {
 */
 	});
 	// Script to show mouseover effects when going over the Twitter intents
-	jQuery('.rtw_intents a img').hover(function() {
-		var rtw_src = jQuery(this).attr('src');
+	jQuery('.rtw_intents a').hover(function() {
+		var rtw_src = jQuery(this).find('img').attr('src');
 		var clearOutHovers = /_hover.png$/;
-		jQuery(this).attr('src',rtw_src.replace(clearOutHovers,".png"));
-		var rtw_src = jQuery(this).attr('src');
+		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
+		var rtw_src = jQuery(this).find('img').attr('src');
 		var srcReplacePattern = /.png$/;
-		jQuery(this).attr('src',rtw_src.replace(srcReplacePattern,"_hover.png"));
+		jQuery(this).find('img').attr('src',rtw_src.replace(srcReplacePattern,"_hover.png"));
 	},function() {
-		var rtw_src = jQuery(this).attr('src');
+		var rtw_src = jQuery(this).find('img').attr('src');
 		var clearOutHovers = /_hover.png/;
-		jQuery(this).attr('src',rtw_src.replace(clearOutHovers,".png"));
+		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
 	});
-	jQuery('.rtw_wide .rtw_meta').hide();
+	jQuery('.rtw_wide .rtw_intents').hide();
+	jQuery('.rtw_expand').show();
 	jQuery('.rotatingtweets').has('.rtw_wide').hover(function() {
-		jQuery(this).find('.rtw_meta').show();
+		jQuery(this).find('.rtw_intents').show();
+		jQuery(this).find('.rtw_expand').css('blue');
 	},function() {
-		jQuery(this).find('.rtw_meta').hide();
+		jQuery(this).find('.rtw_intents').hide();
+		jQuery(this).find('.rtw_expand').css('red');
 	});
 });
 /*

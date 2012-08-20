@@ -260,7 +260,7 @@ function rotatingtweets_contextualtime_short($small_ts, $large_ts=false) {
   return date(_x('j M Y','slightly longer date format as per http://uk.php.net/manual/en/function.date.php','rotatingtweets'),$small_ts);
 }
 # Get intents - either visual or graphic
-function rotatingtweets_intents($twitter_object,$lang, $icons = TRUE) {
+function rotatingtweets_intents($twitter_object,$lang, $icons = 1) {
 	$addstring = array();
 	$types = array (
 		array ( 'link'=>'https://twitter.com/intent/tweet?in_reply_to=', 'icon'=>'images/reply.png', 'text' => __('reply', 'rotatingtweets')),
@@ -268,14 +268,22 @@ function rotatingtweets_intents($twitter_object,$lang, $icons = TRUE) {
 		array ( 'link'=>'https://twitter.com/intent/favorite?tweet_id=', 'icon'=>'images/favorite.png', 'text' => __('favorite', 'rotatingtweets'))
 	);
 	foreach($types as $type) {
-		$string = "\n<a href='".$type['link'].$twitter_object->id_str."' title='{$type['text']}' lang='{$lang}'>";
-		if($icons):
+		$string = "\n\t\t\t<a href='".$type['link'].$twitter_object->id_str."' title='{$type['text']}' lang='{$lang}'>";
+		switch($icons) {
+		case 2:
+			$addstring[] = $string."<img src='".plugins_url($type['icon'],__FILE__)."' width='16' height='16' alt='{$type['text']}' /> {$type['text']}</a>";
+			$glue = ' ';		
+			break;
+		case 1:
 			$addstring[] = $string."<img src='".plugins_url($type['icon'],__FILE__)."' width='16' height='16' alt='{$type['text']}' /></a>";
 			$glue = '';
-		else:
+			break;
+		case 0:
+		default:
 			$addstring[] = $string.$type['text'].'</a>';
 			$glue = ' &middot; ';
-		endif;
+			break;
+		}
 	}
 	$string = implode($glue,$addstring);
 	return($string);
@@ -621,7 +629,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						endif;
 						if($args['show_meta_reply_retweet_favorite']):
 							if(!empty($meta)) $meta .= ' &middot; ';
-							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, FALSE);
+							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0);
 						endif;
 						if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
 						break;
@@ -634,7 +642,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name')."</div>";
 						$result .= "\n\t</div>";
 						$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
-						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, TRUE).'</div>';
+						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1).'</div>';
 						$result .= rotatingtweets_timestamp_link($twitter_object,'long');
 						if($retweeter) {
 							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name));
@@ -645,16 +653,17 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						# This is a slightly adjusted version of the original tweet - designed for wide boxes - consistent with Twitter guidelines
 						$result .= "\n\t\t<div class='rtw_wide'>";
 						$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon')."</div>";
-						$result .= "\n\t<div class='rtw_wide_block'><div class='rtw_info'>";
-						$result .= "\n\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short').'</a></div>';
-						$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name')."</div>";
-						$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name')."</div>";
-						$result .= "\n\t</div>";
-						$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
-						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, TRUE).'</div>';
+						$result .= "\n\t\t<div class='rtw_wide_block'><div class='rtw_info'>";
+						$result .= "\n\t\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short').'</a></div>';
+						$result .= "\n\t\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name')."</div>";
+						$result .= "\n\t\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name')."</div>";
+						$result .= "\n\t\t</div>";
+						$result .= "\n\t\t<p class='rtw_main'>".$main_text."</p>";
+//						$result .= "\n\t\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1).'</div>';
 						if($retweeter) {
-							$result .= rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name)."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name));
+							$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name)."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name))."</div>";
 						}
+						$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2).'</span>';
 						$result .= "</div></div></div>";
 						break;
 					case 3:

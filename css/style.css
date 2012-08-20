@@ -2,7 +2,7 @@
 div.rotatingtweet {
 	font-size: 100%;
 }
-p.rtw_meta,div.rtw_meta,div.rtw_meta_wide,div.rtw_name,div.rtw_id,div.rtw_time_short {
+p.rtw_meta,div.rtw_meta,div.rtw_meta_wide,div.rtw_name,div.rtw_id,div.rtw_time_short,div.rtw_rt_meta {
 	font-size: 0.8em;
 	line-height: normal;
 }
@@ -26,7 +26,10 @@ div.rtw_wide_icon img {
 	padding-left: 0;
 	margin-left: 0;
 }
-
+div.rtw_meta img,
+div.rtw_rt_meta img {
+	vertical-align: middle;
+}
 /* The main positioning */
 .rtw_twitter_icon,
 .rtw_time_short {
@@ -76,6 +79,11 @@ div.rtw_intents {
 	margin-bottom: 0.6em;
 }
 
+#content .rtw_wide p.rtw_main {
+	margin-bottom: 0.35em;
+}
+
+
 p.rtw_meta,div.rtw_meta {
 	margin-bottom: 1em;
 }
@@ -90,6 +98,11 @@ p.rtw_meta,div.rtw_meta {
 #sidebar ul li div.rtw_intents {
 	margin-top: 0;
 	padding-top: 0;
+}
+div.rtw_rt_meta {
+	margin-top: 0.1em;
+	margin-bottom: 0.1em;
+	padding: 0;
 }
 /* Twitter fonts */
 
