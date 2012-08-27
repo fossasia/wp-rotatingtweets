@@ -43,15 +43,18 @@ jQuery(document).ready(function() {
 				fx: rotate_fx
 			});
 		}
-		/* Only do this if we're showing the official tweets */
+		/* Only do this if we're showing the official tweets - the first select is the size of the info box at the top of the tweet */
 		var rt_children_id = rotate_id + ' .rtw_info';
+		/* This shows the width of the icon on 'official version 2' - i.e. the one where the whole tweet is indented */
 		var rt_icon_id = rotate_id + ' .rtw_wide_icon a img';
+		/* This shows the width of the block containing the icon on 'official version 2' - i.e. the one where the whole tweet is indented */
 		var rt_block_id = rotate_id + ' .rtw_wide_block';
 		var rt_official_num = jQuery(rt_children_id).length;
 		if(rt_official_num > 0) {
 			/* Now run through and make sure all the boxes are the right size */
 			if(jQuery(rt_icon_id).length > 0) {
-				console.log(jQuery(rt_icon_id).show().width());
+//				console.log('Rotating Tweets container: ' + jQuery(this).width());
+//				console.log('Width of the icon container: ' + jQuery(rt_icon_id).show().width());
 				var rt_icon_width = 0;
 				jQuery(rt_icon_id).each( function() {
 					newiconsize = jQuery(this).width();
@@ -61,12 +64,21 @@ jQuery(document).ready(function() {
 				});
 				console.log('Iconsize: '+rt_icon_width);
 				if(rt_icon_width > 0) {
-					jQuery(rt_block_id).css('padding-left', ( rt_icon_width + 10 ) + 'px');
+					jQuery(rt_block_id).each( function() {
+						jQuery(this).css('padding-left', ( rt_icon_width + 10 ) + 'px');
+					});
 				}
 			}
 			/* Now get the padding-left dimension (if it exists) and subtract it from the max width	*/
-			var rt_max_width = jQuery(rotate_id).width() - parseInt(jQuery(rt_block_id).css('padding-left'));
-			console.log(rt_max_width);			
+			console.log ('leftpadding - text : '+ jQuery(rt_block_id).css('padding-left') + ' and value: ' +parseInt(jQuery(rt_block_id).css('padding-left')));
+			var rt_max_width = jQuery(rotate_id).width();
+			if( typeof jQuery(rt_block_id).css('padding-left') != 'undefined' ) {
+				rt_max_width = rt_max_width - parseInt(jQuery(rt_block_id).css('padding-left'));
+				console.log('Padding is not undefined');
+			} else {
+				console.log('Padding IS undefined - leave width unchanged');
+			}
+			console.log('Rotating Tweets container minus the indent: ' + rt_max_width);			
 			/* Go through the tweets - and set the minimum width */
 			jQuery(rt_children_id).each(function() {
 				jQuery(this).width(rt_max_width);
