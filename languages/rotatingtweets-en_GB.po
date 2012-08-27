@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 0.504\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
-"POT-Creation-Date: 2012-08-20 17:22:15+00:00\n"
-"PO-Revision-Date: 2012-08-20 18:25-0000\n"
+"POT-Creation-Date: 2012-08-27 11:43:52+00:00\n"
+"PO-Revision-Date: 2012-08-27 12:47-0000\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
 "Language-Team: Martin Tod <martin@martintod.org.uk>\n"
 "Language: en_GB\n"
@@ -252,11 +252,11 @@ msgstr "retweet"
 msgid "favorite"
 msgstr "favourite"
 
-#: rotatingtweets.php:517
+#: rotatingtweets.php:525
 msgid "Problem retrieving data from Twitter"
 msgstr "Problem retrieving data from Twitter"
 
-#: rotatingtweets.php:521
+#: rotatingtweets.php:529
 msgid ""
 "This website is currently <a href='https://dev.twitter.com/docs/rate-"
 "limiting/faq'>rate-limited by Twitter</a>."
@@ -264,49 +264,53 @@ msgstr ""
 "This website is currently <a href='https://dev.twitter.com/docs/rate-"
 "limiting/faq'>rate-limited by Twitter</a>."
 
-#: rotatingtweets.php:523
+#: rotatingtweets.php:531
 msgid "Next attempt to get data will be in %d minute"
 msgid_plural "Next attempt to get data will be in %d minutes"
 msgstr[0] "Next attempt to get data will be in %d minute"
 msgstr[1] "Next attempt to get data will be in %d minutes"
 
-#: rotatingtweets.php:524
+#: rotatingtweets.php:532
 msgid "Next attempt to get data will be in less than a minute"
 msgstr "Next attempt to get data will be in less than a minute"
 
-#: rotatingtweets.php:530
+#: rotatingtweets.php:538
 msgid "Wordpress error message"
 msgstr "Wordpress error message"
 
-#: rotatingtweets.php:533
+#: rotatingtweets.php:541
 msgid "Please check the Twitter name used in the settings."
 msgstr "Please check the Twitter name used in the settings."
 
-#: rotatingtweets.php:616
+#: rotatingtweets.php:624
 msgid "from <a href='%1$s' title='%2$s'>%2$s's Twitter</a>"
 msgstr "from <a href='%1$s' title='%2$s'>%2$s's Twitter</a>"
 
-#: rotatingtweets.php:620
+#: rotatingtweets.php:628
 msgid "via %s"
 msgstr "via %s"
 
-#: rotatingtweets.php:631
+#: rotatingtweets.php:639
 msgid "Twitter"
 msgstr "Twitter"
 
-#: rotatingtweets.php:640 rotatingtweets.php:656
+#: rotatingtweets.php:648 rotatingtweets.php:664
 msgid "Retweeted by %s"
 msgstr "Retweeted by %s"
 
-#: rotatingtweets.php:669
+#: rotatingtweets.php:666
+msgid "Expand"
+msgstr "Expand"
+
+#: rotatingtweets.php:678
 msgid "Problem retrieving data from Twitter."
 msgstr "Problem retrieving data from Twitter."
 
-#: rotatingtweets.php:671
+#: rotatingtweets.php:680
 msgid "Please check the comments on this page's HTML to understand more."
 msgstr "Please check the comments on this page's HTML to understand more."
 
-#: rotatingtweets.php:691
+#: rotatingtweets.php:700
 msgid "Follow @%s"
 msgstr "Follow @%s"
 
