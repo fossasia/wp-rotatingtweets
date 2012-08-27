@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
 						rt_icon_width = newiconsize;
 					}
 				});
-				console.log('Iconsize: '+rt_icon_width);
+//				console.log('Iconsize: '+rt_icon_width);
 				if(rt_icon_width > 0) {
 					jQuery(rt_block_id).each( function() {
 						jQuery(this).css('padding-left', ( rt_icon_width + 10 ) + 'px');
@@ -70,15 +70,15 @@ jQuery(document).ready(function() {
 				}
 			}
 			/* Now get the padding-left dimension (if it exists) and subtract it from the max width	*/
-			console.log ('leftpadding - text : '+ jQuery(rt_block_id).css('padding-left') + ' and value: ' +parseInt(jQuery(rt_block_id).css('padding-left')));
+//			console.log ('leftpadding - text : '+ jQuery(rt_block_id).css('padding-left') + ' and value: ' +parseInt(jQuery(rt_block_id).css('padding-left')));
 			var rt_max_width = jQuery(rotate_id).width();
 			if( typeof jQuery(rt_block_id).css('padding-left') != 'undefined' ) {
 				rt_max_width = rt_max_width - parseInt(jQuery(rt_block_id).css('padding-left'));
-				console.log('Padding is not undefined');
+//				console.log('Padding is not undefined');
 			} else {
-				console.log('Padding IS undefined - leave width unchanged');
+//				console.log('Padding IS undefined - leave width unchanged');
 			}
-			console.log('Rotating Tweets container minus the indent: ' + rt_max_width);			
+//			console.log('Rotating Tweets container minus the indent: ' + rt_max_width);			
 			/* Go through the tweets - and set the minimum width */
 			jQuery(rt_children_id).each(function() {
 				jQuery(this).width(rt_max_width);
