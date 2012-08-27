@@ -123,10 +123,10 @@ jQuery(document).ready(function() {
 	jQuery('.rtw_expand').show();
 	jQuery('.rotatingtweets').has('.rtw_wide').hover(function() {
 		jQuery(this).find('.rtw_intents').show();
-		jQuery(this).find('.rtw_expand').css('blue');
+//		jQuery(this).find('.rtw_expand').css('color','blue');
 	},function() {
 		jQuery(this).find('.rtw_intents').hide();
-		jQuery(this).find('.rtw_expand').css('red');
+//		jQuery(this).find('.rtw_expand').css('color','red');
 	});
 });
 /*
