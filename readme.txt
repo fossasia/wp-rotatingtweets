@@ -60,10 +60,16 @@ although the only one you *have* to have is `screen_name`.
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 == Upgrade notice ==
-= 0.600 =
+= 0.602 =
 Now includes options consistent with Twitter display options
 
 == Changelog ==
+= 0.602 =
+Fixes bug with Javascript
+
+= 0.601 =
+Fixes problem with stylesheet
+
 = 0.600 =
 Now includes options consistent with Twitter display options
 Tidied up code.
