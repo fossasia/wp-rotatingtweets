@@ -731,6 +731,9 @@ function rotatingtweets_enqueue_scripts() {
 			break;
 	endswitch;
 	wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
+	if(file_exists( plugin_dir_path(__FILE__).'css/yourstyle.css' )):
+		wp_enqueue_style( 'rotating_tweet_yourstyle', plugins_url('css/yourstyle.css', __FILE__));
+	endif;
 }
 
 function rotatingtweets_enqueue_admin_scripts($hook) {
