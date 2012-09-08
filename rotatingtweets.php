@@ -332,7 +332,7 @@ function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default') {
 }
 # Wraps the shortcode
 function rotatingtweets_display($atts) {
-	rotatingtweets_display($atts,null,'',TRUE);
+	rotatingtweets_display_shortcode($atts,null,'',TRUE);
 };
 # Processes the shortcode 
 function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $print=FALSE ) {
