@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.602
+Version: 0.603
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -264,7 +264,7 @@ function rotatingtweets_contextualtime_short($small_ts, $large_ts=false) {
   if($n < (60*60*24*364)) return date(_x('j M','short date format as per http://uk.php.net/manual/en/function.date.php','rotatingtweets'),$small_ts);
   return date(_x('j M Y','slightly longer date format as per http://uk.php.net/manual/en/function.date.php','rotatingtweets'),$small_ts);
 }
-# Get intents - either visual or graphic
+# Get reply,retweet,favorite intents - either words-only (option 0) or icons only (option 1) or both (option 2)
 function rotatingtweets_intents($twitter_object,$lang, $icons = 1) {
 	$addstring = array();
 	$types = array (
@@ -293,6 +293,7 @@ function rotatingtweets_intents($twitter_object,$lang, $icons = 1) {
 	$string = implode($glue,$addstring);
 	return($string);
 }
+// Produces a link to someone's name, icon or screen name (or to the text of your choice) using the 'intent' format for linking
 function rotatingtweets_user_intent($person,$lang,$linkcontent) {
 	$return = "<a href='https://twitter.com/intent/user?user_id={$person->id}' title='{$person->name}' lang='{$lang}'>";
 	switch($linkcontent){
@@ -311,7 +312,7 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent) {
 	}
 	return ($return);
 }
-
+// Produces a linked timestamp for including in the tweet
 function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default') {
 	$string = '<a target="_blank" href="https://twitter.com/twitterapi/status/'.$twitter_object->id_str.'">';
 	$tweettimestamp = strtotime($twitter_object->created_at);
@@ -329,9 +330,13 @@ function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default') {
 	$string .= '</a>';
 	return ($string);
 }
-
+# Wraps the shortcode
+function rotatingtweets_display($atts) {
+	rotatingtweets_display($atts,null,'',TRUE);
+};
 # Processes the shortcode 
-function rotatingtweets_display( $atts, $content=null, $code="" ) {
+function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $print=FALSE ) {
+// function rotatingtweets_display( $atts, $echo = TRUE ) {
 	// $atts    ::= twitter_id,include_rts,exclude_replies, $tweet_count,$show_follow
 /**
 	Possible values for get_cforms_entries()
@@ -366,10 +371,10 @@ function rotatingtweets_display( $atts, $content=null, $code="" ) {
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies);
-	$returnstring = rotating_tweets_display($tweets,$args,FALSE);
+	$returnstring = rotating_tweets_display($tweets,$args,$print);
 	return $returnstring;
 }
-add_shortcode( 'rotatingtweets', 'rotatingtweets_display' );
+add_shortcode( 'rotatingtweets', 'rotatingtweets_display_shortcode' );
 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies) {
