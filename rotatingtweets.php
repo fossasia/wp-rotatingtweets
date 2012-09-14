@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.603
+Version: 0.604
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -336,7 +336,6 @@ function rotatingtweets_display($atts) {
 };
 # Processes the shortcode 
 function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $print=FALSE ) {
-// function rotatingtweets_display( $atts, $echo = TRUE ) {
 	// $atts    ::= twitter_id,include_rts,exclude_replies, $tweet_count,$show_follow
 /**
 	Possible values for get_cforms_entries()
@@ -537,7 +536,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		# Check if the problem is rate limiting
 		if($rate && $rate->remaining_hits == 0):
 			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __("This website is currently <a href='https://dev.twitter.com/docs/rate-limiting/faq'>rate-limited by Twitter</a>.",'rotatingtweets')."</p></div>";
-			$waittimevalue = intval(($rate->reset_time_in_seconds-time - time())/60);
+			$waittimevalue = intval(($rate->reset_time_in_seconds - time())/60);
 			$waittime = sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue);
 			if($waittimevalue == 0) $waittime = __("Next attempt to get data will be in less than a minute",'rotatingtweets');
 			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>{$waittime}.</p></div>";
@@ -552,6 +551,13 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		endif;
 	else:
 		$tweet_counter = 0;
+		$rate = rotatingtweets_get_rate_data();
+		# Check if the problem is rate limiting
+		if($rate && $rate->remaining_hits == 0):
+			$waittimevalue = intval(($rate->reset_time_in_seconds - time())/60);
+			$result .= "<!-- Rate limited -- ";
+			$result .= sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue)." -->";
+		endif;
 		foreach($json as $twitter_object):
 			$tweet_counter++;
 			if($tweet_counter <= $tweet_count):
