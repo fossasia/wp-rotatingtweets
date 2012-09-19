@@ -393,7 +393,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	else:
 		# Clears the cache and forces a reload
 		$timegap = $cache_delay + 1;
-		unset($option);
+		$option=array();
 	endif;
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
