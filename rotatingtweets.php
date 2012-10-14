@@ -535,7 +535,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$rate = rotatingtweets_get_rate_data();
 		# Check if the problem is rate limiting
 		if($rate && $rate->remaining_hits == 0):
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __("This website is currently <a href='https://dev.twitter.com/docs/rate-limiting/faq'>rate-limited by Twitter</a>.",'rotatingtweets')."</p></div>";
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('This website is currently <a href=\'%s\'>rate-limited by Twitter</a>.','rotatingtweets'),'https://dev.twitter.com/docs/rate-limiting-faq') . "</p></div>";
 			$waittimevalue = intval(($rate->reset_time_in_seconds - time())/60);
 			$waittime = sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue);
 			if($waittimevalue == 0) $waittime = __("Next attempt to get data will be in less than a minute",'rotatingtweets');
@@ -609,7 +609,11 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						foreach($urls as $url):
 							$before[] = "*".$url->url."*";
 							$displayurl = $url->display_url;
-							if(strlen($displayurl)>29) $displayurl = substr($displayurl,0,29)."&hellip;";
+							if(strlen($displayurl)>29):
+								# PHP sometimes has a really hard time with unicode characters - this one removes the ellipsis
+								$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
+								$displayurl = substr($displayurl,0,29)."&hellip;";
+							endif;
 							$after[] = "<a href='".$url->url."' title='".$url->expanded_url."'>".esc_html($displayurl)."</a>";
 						endforeach;
 					endif;
