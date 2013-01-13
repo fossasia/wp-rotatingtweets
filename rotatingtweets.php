@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.604
+Version: 0.610
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -135,7 +135,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		<p><input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"> <?php _e('Exclude replies?','rotatingtweets'); ?></label></p>
 		<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?','rotatingtweets'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
 		<?php 
-		for ($i=1; $i<20; $i++) {
+		for ($i=1; $i<31; $i++) {
 			echo "\n\t<option value='$i' ";
 		if($tw_tweet_count==$i): ?>selected="selected" <?php endif; 
 			echo ">$i</option>";
@@ -147,7 +147,8 @@ class rotatingtweets_Widget extends WP_Widget {
 							"3000" => __("Faster (3 seconds)",'rotatingtweets'),
 							"4000" => __("Normal (4 seconds)",'rotatingtweets'),
 							"5000" => __("Slower (5 seconds)",'rotatingtweets'),
-							"6000" => __("Slowest (6 seconds)",'rotatingtweets')
+							"6000" => __("Slowest (6 seconds)",'rotatingtweets'),
+							"20000" => __("Ultra slow (20 seconds)",'rotatingtweets'),
 		);
 		foreach ($timeoutoptions as $val => $words) {
 			echo "\n\t<option value='$val' ";
@@ -362,6 +363,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'show_meta_reply_retweet_favorite' => FALSE,
 			'rotation_type' => 'scrollUp',
 			'official_format' => FALSE,
+			'url_length' => 29,
 			'ratelimit' => FALSE
 		), $atts ) ;
 	extract($args);
@@ -508,6 +510,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	unset($result);
 	$tweet_count = max(1,intval($args['tweet_count']));
 	$timeout = max(intval($args['timeout']),0);
+	$urllength = intval($args['url_length']);
+	if($urllength < 1) $urllength = 29;
 	# Check that the rotation type is valid. If not, leave it as 'scrollUp'
 	$rotation_type = 'scrollUp';
 	# Get Twitter language string
@@ -609,10 +613,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						foreach($urls as $url):
 							$before[] = "*".$url->url."*";
 							$displayurl = $url->display_url;
-							if(strlen($displayurl)>29):
+							if(strlen($displayurl)>$urllength):
 								# PHP sometimes has a really hard time with unicode characters - this one removes the ellipsis
 								$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
-								$displayurl = substr($displayurl,0,29)."&hellip;";
+								$displayurl = substr($displayurl,0,$urllength)."&hellip;";
 							endif;
 							$after[] = "<a href='".$url->url."' title='".$url->expanded_url."'>".esc_html($displayurl)."</a>";
 						endforeach;
@@ -736,6 +740,7 @@ function rotatingtweets_enqueue_scripts() {
 	$style = get_stylesheet();
 	switch ($style):
 		case 'zeebizzcard':
+//		case 'zeeStyle':
 			wp_dequeue_script( 'zee_jquery-cycle');
 			wp_enqueue_script( 'zee_jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),array('jquery'),FALSE,FALSE );
 			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
