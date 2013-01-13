@@ -3,8 +3,8 @@ Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
-Tested up to: 3.4.1
-Stable tag: 0.611
+Tested up to: 3.5
+Stable tag: 0.612
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,9 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `you
 Now includes options consistent with Twitter display options and options to allow for different length URLs
 
 == Changelog ==
+= 0.612 =
+Fixed error message caused by last fix causing tweets to repeat.
+
 = 0.611 =
 Finally ran with debug and removed all the error messages.
 
