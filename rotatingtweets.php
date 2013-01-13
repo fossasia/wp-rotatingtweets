@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.611
+Version: 0.612
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -591,6 +591,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					# First clean up the retweets
 					if(isset($twitter_object->retweeted_status)):
 						$rt_data = $twitter_object->retweeted_status;
+					else:
+						unset($rt_data);
 					endif;
 					if(!empty($rt_data)):
 						$rt_user = $rt_data->user;
@@ -608,6 +610,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					# First the user mentions
 					if(isset($entities->user_mentions)):
 						$user_mentions = $entities->user_mentions;
+					else:
+						unset($user_mentions);
 					endif;
 					if(!empty($user_mentions)):
 						foreach($user_mentions as $user_mention):
@@ -621,6 +625,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					# Now the URLs
 					if(isset($entities->urls)):
 						$urls = $entities->urls;
+					else:
+						unset($urls);
 					endif;
 					if(!empty($urls)):
 						foreach($urls as $url):
@@ -636,6 +642,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					endif;
 					if(isset($entities->media)):
 						$media = $entities->media;
+					else:
+						unset($media);
 					endif;
 					if(!empty($media)):
 						foreach($media as $medium):
