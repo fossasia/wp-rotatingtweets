@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets userid='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.610
+Version: 0.611
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -510,8 +510,15 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	unset($result);
 	$tweet_count = max(1,intval($args['tweet_count']));
 	$timeout = max(intval($args['timeout']),0);
-	$urllength = intval($args['url_length']);
-	if($urllength < 1) $urllength = 29;
+	$defaulturllength = 29;
+	if(isset($args['url_length'])):
+		$urllength = intval($args['url_length']);
+		if($urllength < 1):
+			$urllength = $defaulturllength;
+		endif;
+	else: 
+		$urllength = $defaulturllength;
+	endif;
 	# Check that the rotation type is valid. If not, leave it as 'scrollUp'
 	$rotation_type = 'scrollUp';
 	# Get Twitter language string
@@ -582,7 +589,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					unset($after);
 					unset($retweeter);
 					# First clean up the retweets
-					$rt_data = $twitter_object->retweeted_status;
+					if(isset($twitter_object->retweeted_status)):
+						$rt_data = $twitter_object->retweeted_status;
+					endif;
 					if(!empty($rt_data)):
 						$rt_user = $rt_data->user;
 						if($args['official_format']):
@@ -597,7 +606,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$entities = $rt_data->entities;
 					endif;
 					# First the user mentions
-					$user_mentions = $entities->user_mentions;
+					if(isset($entities->user_mentions)):
+						$user_mentions = $entities->user_mentions;
+					endif;
 					if(!empty($user_mentions)):
 						foreach($user_mentions as $user_mention):
 							$before[] = "*@".$user_mention->screen_name."*i";
@@ -608,7 +619,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$after = array_unique($after);
 					endif;
 					# Now the URLs
-					$urls = $entities->urls;
+					if(isset($entities->urls)):
+						$urls = $entities->urls;
+					endif;
 					if(!empty($urls)):
 						foreach($urls as $url):
 							$before[] = "*".$url->url."*";
@@ -621,7 +634,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$after[] = "<a href='".$url->url."' title='".$url->expanded_url."'>".esc_html($displayurl)."</a>";
 						endforeach;
 					endif;
-					$media = $entities->media;
+					if(isset($entities->media)):
+						$media = $entities->media;
+					endif;
 					if(!empty($media)):
 						foreach($media as $medium):
 							$before[] = "*".$medium->url."*";
@@ -668,7 +683,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
 						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1).'</div>';
 						$result .= rotatingtweets_timestamp_link($twitter_object,'long');
-						if($retweeter) {
+						if(isset($retweeter)) {
 							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name));
 						}
 						$result .= "\n</div>";
@@ -684,7 +699,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= "\n\t\t</div>";
 						$result .= "\n\t\t<p class='rtw_main'>".$main_text."</p>";
 //						$result .= "\n\t\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1).'</div>';
-						if($retweeter) {
+						if(isset($retweeter)) {
 							$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name)."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter->name))."</div>";
 						}
 						$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2).'</span>';
@@ -718,7 +733,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	endif;
 */
 	if($args['show_follow'] && !empty($user->screen_name)):
-		unset($shortenvariables);
+		$shortenvariables = '';
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
 		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
 		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),$user->screen_name);
