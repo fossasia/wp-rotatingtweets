@@ -63,10 +63,13 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 You can do this by going to the `rotatingtweets/css` directory and renaming `yourstyle-sample.css` to `yourstyle.css`.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `yourstyle.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 0.602 =
-Now includes options consistent with Twitter display options
+= 0.610 =
+Now includes options consistent with Twitter display options and options to allow for different length URLs
 
 == Changelog ==
+= 0.610 =
+Starts to add options to allow for different length URLs
+
 = 0.602 =
 Fixes bug with Javascript
 
