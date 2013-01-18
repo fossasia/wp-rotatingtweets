@@ -51,6 +51,7 @@ Possible variables for the shortcode include:
 * `show_meta_screen_name` = `'0'` or `'1'` - show who posted each tweet - optional - default is `'1'`
 * `show_meta_via` = `'0'` or `'1'` - show how each tweet was posted - optional - default is `'1'`
 * `show_meta_reply_retweet_favorite` = `'0'` or `'1'` - show 'reply', 'retweet' and 'favorite' buttons - optional - default is `'0'`
+* `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
 * `rotation_type` = any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'`
 * `url_length` = sets the length that the URL should be trimmed to...
 
@@ -65,9 +66,12 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `you
 
 == Upgrade notice ==
 = 0.613 =
-Fixed instructions in plug-ins list.
+Option to show links in a new window.
 
 == Changelog ==
+= 0.620 =
+Added option to show links in a new window
+
 = 0.613 =
 Fixed instructions in plug-ins list.
 
