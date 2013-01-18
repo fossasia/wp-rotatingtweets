@@ -105,7 +105,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance['tw_hide_meta_via'] = !$new_instance['tw_show_meta_via'];
 		$instance['tw_official_format'] = absint($new_instance['tw_official_format']);
 		$instance['tw_show_meta_reply_retweet_favorite'] = absint($new_instance['tw_show_meta_reply_retweet_favorite']);
-		$instance['tw_timeout'] = max(min(intval($new_instance['tw_timeout']/1000)*1000,6000),3000);
+		$instance['tw_timeout'] = max(min(intval($new_instance['tw_timeout']/1000)*1000,20000),3000);
 	return $instance;
     }
 	
