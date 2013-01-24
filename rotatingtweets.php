@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.620
+Version: 0.621
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -316,7 +316,8 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 // Produces a linked timestamp for including in the tweet
 function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default',$targetvalue='') {
 	$string = '<a '.$targetvalue.' href="https://twitter.com/twitterapi/status/'.$twitter_object->id_str.'">';
-	$tweettimestamp = strtotime($twitter_object->created_at);
+	$tweettimestamp = strtotime($twitter_object->created_at . " " .get_option('timezone_string') );
+	// echo "<!-- ".$twitter_object->created_at . " | " .get_option('timezone_string') ." | $tweettimestamp -->";
 	switch($timetype) {
 		case 'short':
 			$string .= rotatingtweets_contextualtime_short($tweettimestamp);
@@ -571,7 +572,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$result .= sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue)." -->";
 		endif;
 		# Set up the link treatment
-		if($arg['links_in_new_window'] == TRUE ) {
+		if(isset($arg['links_in_new_window']) && $arg['links_in_new_window'] == TRUE ) {
 			$targetvalue = ' target="_blank" ';
 		} else {
 			$targetvalue = '';
@@ -669,7 +670,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					case 0:
 						# This is the original Rotating Tweets display routine
 						$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
-						unset($meta);
+						$meta = '';
 						if($args['show_meta_timestamp']):
 							$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
 						endif;
