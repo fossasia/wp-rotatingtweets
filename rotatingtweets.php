@@ -316,14 +316,14 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 // Produces a linked timestamp for including in the tweet
 function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default',$targetvalue='') {
 	$string = '<a '.$targetvalue.' href="https://twitter.com/twitterapi/status/'.$twitter_object->id_str.'">';
-	$tweettimestamp = strtotime($twitter_object->created_at . " " .get_option('timezone_string') );
+	$tweettimestamp = strtotime($twitter_object->created_at );
 	// echo "<!-- ".$twitter_object->created_at . " | " .get_option('timezone_string') ." | $tweettimestamp -->";
 	switch($timetype) {
 		case 'short':
 			$string .= rotatingtweets_contextualtime_short($tweettimestamp);
 			break;
 		case 'long':
-			$string .= date_i18n(get_option('time_format'),$tweettimestamp)." &middot; ".date_i18n(get_option('date_format') ,$tweettimestamp);
+			$string .= date_i18n(get_option('time_format'),$tweettimestamp + ( get_option('gmt_offset') * 60 * 60 ) )." &middot; ".date_i18n(get_option('date_format') ,$tweettimestamp + ( get_option('gmt_offset') * 60 * 60 ) );
 			break;
 		default:
 			$string .= ucfirst(rotatingtweets_contextualtime($tweettimestamp));
