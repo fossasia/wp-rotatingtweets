@@ -274,14 +274,14 @@ function rotatingtweets_intents($twitter_object,$lang, $icons = 1,$targetvalue='
 		array ( 'link'=>'https://twitter.com/intent/favorite?tweet_id=', 'icon'=>'images/favorite.png', 'text' => __('favorite', 'rotatingtweets'))
 	);
 	foreach($types as $type) {
-		$string = "\n\t\t\t<a href='".$type['link'].$twitter_object->id_str."' title='{$type['text']}' lang='{$lang}'{$targetvalue}>";
+		$string = "\n\t\t\t<a href='".$type['link'].$twitter_object->id_str."' title='".esc_attr($type['text'])."' lang='{$lang}'{$targetvalue}>";
 		switch($icons) {
 		case 2:
-			$addstring[] = $string."<img src='".plugins_url($type['icon'],__FILE__)."' width='16' height='16' alt='{$type['text']}' /> {$type['text']}</a>";
+			$addstring[] = $string."<img src='".plugins_url($type['icon'],__FILE__)."' width='16' height='16' alt='".esc_attr($type['text'])."' /> {$type['text']}</a>";
 			$glue = ' ';		
 			break;
 		case 1:
-			$addstring[] = $string."<img src='".plugins_url($type['icon'],__FILE__)."' width='16' height='16' alt='{$type['text']}' /></a>";
+			$addstring[] = $string."<img src='".plugins_url($type['icon'],__FILE__)."' width='16' height='16' alt='".esc_attr($type['text'])."' /></a>";
 			$glue = '';
 			break;
 		case 0:
@@ -296,10 +296,10 @@ function rotatingtweets_intents($twitter_object,$lang, $icons = 1,$targetvalue='
 }
 // Produces a link to someone's name, icon or screen name (or to the text of your choice) using the 'intent' format for linking
 function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') {
-	$return = "<a href='https://twitter.com/intent/user?user_id={$person->id}' title='{$person->name}' lang='{$lang}'{$targetvalue}>";
+	$return = "<a href='https://twitter.com/intent/user?user_id={$person->id}' title='".esc_attr($person->name)."' lang='{$lang}'{$targetvalue}>";
 	switch($linkcontent){
 	case 'icon':
-		$return .= "<img src='{$person->profile_image_url}' alt='{$person->name}' /></a>";
+		$return .= "<img src='{$person->profile_image_url}' alt='".esc_attr($person->name)."' /></a>";
 		break;
 	case 'name':
 		$return .= $person->name."</a>";
@@ -661,7 +661,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$after[] = "<a href='".$medium->url."' title='".$medium->expanded_url."'".$targetvalue.">".esc_html($displayurl)."</a>";
 						endforeach;			
 					endif;
-					$before[]="%#(\w+)%";
+					$before[]="%#([0-9]*[a-zA-Z]+\w*)%";
 					$after[]='<a href="http://search.twitter.com/search?q=%23$1" title="#$1"'.$targetvalue.'>#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
 
