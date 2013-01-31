@@ -611,7 +611,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						else:
 							$main_text = "RT @".$rt_user->screen_name . " " . $rt_data->text;
 						endif;
-						$before[] = "*@".$rt_user->screen_name."*i";
+						$before[] = "*@".$rt_user->screen_name."\b*i";
 						$after[] = rotatingtweets_user_intent($rt_user,$twitterlocale,'screen_name',$targetvalue);
 						$entities = $rt_data->entities;
 					endif;
@@ -623,7 +623,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					endif;
 					if(!empty($user_mentions)):
 						foreach($user_mentions as $user_mention):
-							$before[] = "*@".$user_mention->screen_name."*i";
+							$before[] = "*@".$user_mention->screen_name."\b*i";
 							$after[] = rotatingtweets_user_intent($user_mention,$twitterlocale,'screen_name',$targetvalue);
 						endforeach;
 						# Clearing up duplicates to avoid strange result (possibly risky?)

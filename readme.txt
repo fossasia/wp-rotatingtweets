@@ -71,6 +71,9 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `you
 Option to show links in a new window. Fixed timezone problem. Escaped title tags.
 
 == Changelog ==
+= 0.623 =
+Fixed a problem where a short name fitted inside a long one - e.g. @rotary and @rotarycrocus
+
 = 0.622 =
 Escaped title tags
 
