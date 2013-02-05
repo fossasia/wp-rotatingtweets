@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 0.612
+Stable tag: 0.623
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -67,7 +67,7 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 You can do this by going to the `rotatingtweets/css` directory and renaming `yourstyle-sample.css` to `yourstyle.css`.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `yourstyle.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 0.622 =
+= 0.623 =
 Option to show links in a new window. Fixed timezone problem. Escaped title tags.
 
 == Changelog ==
