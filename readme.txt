@@ -46,6 +46,7 @@ Possible variables for the shortcode include:
 * `exclude_replies` = `'0'` or `'1'` - exclude replies - optional - default is `'0'`
 * `tweet_count` = number of tweets to show - optional - default is `5`
 * `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
+* `official_format` = `'1'` or `'2'` - show official format - optional - default is `'0'`
 * `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
 * `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
 * `no_show_screen_name` = `'0'` or `'1'` - remove the screen name from the Twitter follow button - optional - default is `'0'`
