@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.623
+Version: 0.624
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -770,6 +770,7 @@ function rotatingtweets_enqueue_scripts() {
 	# Get Stylesheet
 	$style = get_stylesheet();
 	switch ($style):
+		case 'bremen_theme':
 		case 'zeebizzcard':
 //		case 'zeeStyle':
 			wp_dequeue_script( 'zee_jquery-cycle');
