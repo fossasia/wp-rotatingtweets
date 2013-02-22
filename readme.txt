@@ -68,10 +68,13 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 You can do this by going to the `rotatingtweets/css` directory and renaming `yourstyle-sample.css` to `yourstyle.css`.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `yourstyle.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 0.623 =
-Option to show links in a new window. Fixed timezone problem. Escaped title tags.
+= 0.625 =
+Enables users to make all links open in a new tab or window
 
 == Changelog ==
+= 0.625 =
+Enabled users to make all links open in a new tab or window
+
 = 0.623 =
 Fixed a problem where a short name fitted inside a long one - e.g. @rotary and @rotarycrocus
 

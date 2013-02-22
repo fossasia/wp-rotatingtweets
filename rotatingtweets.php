@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.624
+Version: 0.625
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -50,6 +50,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$newargs['screen_name'] = $instance['tw_screen_name'];
 		$newargs['include_rts'] = $instance['tw_include_rts'];
 		$newargs['exclude_replies'] = $instance['tw_exclude_replies'];
+		$newargs['links_in_new_window'] = $instance['tw_links_in_new_window'];
 		$newargs['tweet_count'] = $instance['tw_tweet_count'];
 		$newargs['show_follow'] = $instance['tw_show_follow'];
 		$newargs['timeout'] = $instance['tw_timeout'];
@@ -96,6 +97,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance['tw_screen_name'] = strip_tags(trim($new_instance['tw_screen_name']));
 		$instance['tw_rotation_type'] = strip_tags(trim($new_instance['tw_rotation_type']));
 		$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
+		$instance['tw_links_in_new_window'] = absint($new_instance['tw_links_in_new_window']);
 		$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
 		$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
 		$instance['tw_show_follow'] = absint($new_instance['tw_show_follow']);
@@ -120,6 +122,7 @@ class rotatingtweets_Widget extends WP_Widget {
         $tw_tweet_count = intval($instance['tw_tweet_count']);
 		$tw_show_follow = absint($instance['tw_show_follow']);
 		$tw_official_format = absint($instance['tw_official_format']);
+		$tw_links_in_new_window = absint($instance['tw_links_in_new_window']);
 		$metaoption['tw_show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
 		$metaoption['tw_show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
 		$metaoption['tw_show_meta_via'] = !$instance['tw_hide_meta_via'];
@@ -133,6 +136,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
 		<p><input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"> <?php _e('Include retweets?','rotatingtweets'); ?></label></p>
 		<p><input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"> <?php _e('Exclude replies?','rotatingtweets'); ?></label></p>
+		<p><input id="<?php echo $this->get_field_id('tw_links_in_new_window'); ?>" name="<?php echo $this->get_field_name('tw_links_in_new_window'); ?>" type="checkbox" value="1" <?php if($tw_links_in_new_window==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_links_in_new_window'); ?>"> <?php _e('Open all links in new window or tab?','rotatingtweets'); ?></label></p>
 		<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?','rotatingtweets'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
 		<?php 
 		for ($i=1; $i<31; $i++) {
@@ -572,7 +576,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$result .= sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue)." -->";
 		endif;
 		# Set up the link treatment
-		if(isset($arg['links_in_new_window']) && $arg['links_in_new_window'] == TRUE ) {
+		if(isset($args['links_in_new_window']) && !empty($args['links_in_new_window']) ) {
 			$targetvalue = ' target="_blank" ';
 		} else {
 			$targetvalue = '';
@@ -691,7 +695,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					case 1:
 						# This is an attempt to replicate the original Tweet
 						$result .= "\n\t<div class='rtw_info'>";
-						$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></a></div>";
+						$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></div>";
 						$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
 						$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
 						$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
