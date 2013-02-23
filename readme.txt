@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 0.700
+Stable tag: 0.625
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,6 +12,7 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 
 == Description ==
 * **Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets**
+* **Supports v 1.1 of the API** - yes! it will keep working after March 2013
 * **Space efficient** - instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
 * **Reliable** - keeps showing your latest Tweets even if the Twitter website is down.
 * **Customisable** - you decide whose tweets to show, how many to show, whether to include retweets and replies, and whether to show a follow button. You can also decide how quickly the tweets rotate and what type of animation to use.
@@ -32,6 +33,13 @@ If you'd like to see what the plug-in looks like in action, you can [see the plu
 1. Go to https://dev.twitter.com/apps to set up your website as a new Twitter application.
 1. Copy the Consumer key, Consumer secret, Access token and Access token secret from your Twitter application page into the Rotating Tweets settings page. Hit save. If there is a problem, you will see an error message.
 1. Place a shortcode such `[rotatingtweets screen_name='mpntod']` in your post or page, or use a widget
+= Credits =
+Most of this is my own, but special thanks are owed to:
+* The jQuery team
+* xxx xxx for jQuery.cycle
+* xxx xxx for OAuth
+* Abraham Williams http://abrah.am for TwitterOAuth
+* Liam Gaddy for updating TwitterOAuth
 
 = Set-up =
 Options include:
