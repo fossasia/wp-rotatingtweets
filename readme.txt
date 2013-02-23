@@ -30,15 +30,18 @@ If you'd like to see what the plug-in looks like in action, you can [see the plu
 = Installation =
 1. Upload the contents of `rotatingtweets.zip` to the `/wp-content/plugins/` directory or use the Wordpress installer
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Go to https://dev.twitter.com/apps to set up your website as a new Twitter application.
-1. Copy the Consumer key, Consumer secret, Access token and Access token secret from your Twitter application page into the Rotating Tweets settings page. Hit save. If there is a problem, you will see an error message.
+1. Go to the [My applications page](https://dev.twitter.com/apps) on the Twitter website to set up your website as a new Twitter 'application'. You may need to log-in using your Twitter user name and password.
+1. If you don't already have a suitable 'application' to use for your website, set one up on the [Create an Application page](https://dev.twitter.com/apps/new). It's normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets. You don't need a Callback URL.
+1. After clicking **Create your Twitter application**, on the following page, click on **Create my access token**.
+1. Copy the **Consumer key**, **Consumer secret**, **Access token** and **Access token secret** from your Twitter application page into the Rotating Tweets settings page. Hit save. If there is a problem, you will see an error message.
 1. Place a shortcode such `[rotatingtweets screen_name='mpntod']` in your post or page, or use a widget
 = Credits =
 Most of this is my own work, but special thanks are owed to:
+
 * The [jQuery](http://jquery.com/) team
 * [Mike Alsup](http://jquery.malsup.com/cycle/) for [jQuery.Cycle](http://jquery.malsup.com/cycle/)
-* [Abraham Williams](http://abrah.am) for TwitterOAuth(https://github.com/abraham/twitteroauth)
-* [Liam Gaddy](http://profiles.wordpress.org/lgladdy/) at [Storm Consultancy](http://www.stormconsultancy.co.uk/) for [their work](http://www.stormconsultancy.co.uk/blog/development/tools-plugins/oauth-twitter-feed-for-developers-library-and-wordpress-plugin/) on [oAuth Twitter Feed for Developers](http://wordpress.org/extend/plugins/oauth-twitter-feed-for-developers/) (although I ended up using it for inspiration rather than plugging it in directly).
+* [Abraham Williams](http://abrah.am) for [TwitterOAuth](https://github.com/abraham/twitteroauth)
+* [Liam Gaddy](http://profiles.wordpress.org/lgladdy/) at [Storm Consultancy](http://www.stormconsultancy.co.uk/) for [his work](http://www.stormconsultancy.co.uk/blog/development/tools-plugins/oauth-twitter-feed-for-developers-library-and-wordpress-plugin/) on [oAuth Twitter Feed for Developers](http://wordpress.org/extend/plugins/oauth-twitter-feed-for-developers/) (although I ended up using it for inspiration rather than plugging it in directly).
 * All the people who have given advice and suggested improvements
 
 = Set-up =
