@@ -12,7 +12,7 @@ jQuery(document).ready(function() {
 		if(rotate_fx == null){rotate_fx = 'scrollUp'};
 		var rt_height_px = 'auto';
 		/* Now find the widget container width */
-		var rt_target_width = jQuery(this).closest('.widget_rotatingtweets_widget').width();
+		var rt_target_width = jQuery(this).closest('.widget').width();
 		var rt_fit = 1;
 		if( rt_target_width == 0 ) {
 			rt_target_width = 'auto';
