@@ -49,7 +49,7 @@ class rotatingtweets_Widget extends WP_Widget {
         $title = apply_filters('widget_title', $instance['title']);
 		$positive_variables = array('screen_name','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format');
 		foreach($positive_variables as $var) {
-			$newargs[$var] = $instance['tw_'.$var];
+			$newargs[$var] = @$instance['tw_'.$var];
 		}
 		$negative_variables = array('meta_timestamp','meta_screen_name','meta_via');
 		foreach($negative_variables as $var) {
@@ -494,7 +494,9 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 	if(!empty($api)):
 		$connection = new wp_TwitterOAuth($api['key'], $api['secret'], $api['token'], $api['token_secret'] );
 		//    $result = $connection->get('statuses/user_timeline', $options);
-		if(WP_DEBUG) echo "\n<!-- Using OAuth - version 1.1 of API -->\n";
+		if(WP_DEBUG):
+			echo "\n<!-- Using OAuth - version 1.1 of API -- $command -->\n";
+		endif;
 		$result = $connection->get($command , $options);
 	else:
 		// Construct old style API command
@@ -549,9 +551,14 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$twitterdata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apioptions);
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body'],TRUE);
+			if(WP_DEBUG):
+				echo "<!-- Rotating Tweets - got new data -->";
+			endif;
 		else:
 			set_transient('rotatingtweets_wp_error',$twitterdata->get_error_messages(), 120);
 		endif;
+	elseif(WP_DEBUG):
+		echo "<!-- Rotating Tweets - used cache -->";
 	endif;
 	# Checks for errors in the reply
 	if(!empty($twitterjson['errors'])):
@@ -651,6 +658,11 @@ function rotatingtweets_get_twitter_language() {
 		endif;
 	endif;
 	if(empty($latest_languages)) $latest_languages = $fallback;
+	if(WP_DEBUG):
+		echo "<!-- \n";
+		print_r($option);
+		echo "\n-->";
+	endif;
 	return($latest_languages);
 }
 
@@ -721,6 +733,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		endif;
 	else:
 		$tweet_counter = 0;
+		/*
 		$rate = rotatingtweets_get_rate_data();
 		# Check if the problem is rate limiting
 		if($rate['hourly_limit']>0 && $rate['remaining_hits'] == 0):
@@ -728,6 +741,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$result .= "<!-- Rate limited -- ";
 			$result .= sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue)." -->";
 		endif;
+		*/
 		# Set up the link treatment
 		if(isset($args['links_in_new_window']) && !empty($args['links_in_new_window']) ) {
 			$targetvalue = ' target="_blank" ';
