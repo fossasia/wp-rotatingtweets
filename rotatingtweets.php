@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.700
+Version: 0.701
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -45,35 +45,17 @@ class rotatingtweets_Widget extends WP_Widget {
 
     /** @see WP_Widget::widget */
     function widget($args, $instance) {		
-        extract( $args );
+        echo "<!-- \n\n";print_r($args);print_r($instance);echo "\n\n -->";
+		extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
 		$positive_variables = array('screen_name','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format');
 		foreach($positive_variables as $var) {
-			if(isset($instance['tw_'.$var])) $newargs[$var] = $instance['tw_'.$var];
+			$newargs[$var] = $instance['tw_'.$var];
 		}
-/*		
-		$newargs['screen_name'] = $instance['tw_screen_name'];
-		$newargs['include_rts'] = $instance['tw_include_rts'];
-		$newargs['exclude_replies'] = $instance['tw_exclude_replies'];
-		$newargs['links_in_new_window'] = $instance['tw_links_in_new_window'];
-		$newargs['tweet_count'] = $instance['tw_tweet_count'];
-		$newargs['show_follow'] = $instance['tw_show_follow'];
-		$newargs['timeout'] = $instance['tw_timeout'];
-*/
 		$negative_variables = array('meta_timestamp','meta_screen_name','meta_via');
 		foreach($negative_variables as $var) {
-			if(isset($instance['tw_hide_'.$var])) $newargs['show_'.$var] = !$instance['tw_hide_'.$var];
+			$newargs['show_'.$var] = !$instance['tw_hide_'.$var];
 		}
-/*
-		$newargs['show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
-		$newargs['show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
-		$newargs['show_meta_via'] = !$instance['tw_hide_meta_via'];
-*/
-/*
-		$newargs['rotation_type'] = $instance['tw_rotation_type'];
-		$newargs['show_meta_reply_retweet_favorite'] = $instance['tw_show_meta_reply_retweet_favorite'];
-		$newargs['official_format'] = $instance['tw_official_format'];
-*/
 		switch($newargs['show_follow']) {
 		case 2: 
 			$newargs['no_show_count'] = TRUE;
@@ -396,29 +378,6 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display_shortcode' );
 
 /*
-# Created to work with the API version 1.1, this one tries to use other people's libraries before using RT's own! :-)
-function rotatingtweets_fetch_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies) {
-	if(function_exists('getTweets')):
-		$return = getTweets($count = 70, $tw_screen_name , array('include_rts' => $tw_include_rts, 'exclude_replies' => $tw_exclude_replies, "trim_user" => FALSE) );
-		if( WP_DEBUG ):
-			echo "<!-- data function used: getTweets -- API version 1.1 \n\n ";
-			$showprint = array_slice($return,0,1);
-			print_r($showprint);
-			echo "\n\n-->";
-		endif;
-	else:
-		$return = rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies);
-		if( WP_DEBUG ):
-			echo "<!-- data function used: original Rotating Tweets -- API version 1.0 \n\n ";
-			$showprint = array_slice($return,0,1);
-			print_r($showprint);
-			echo "\n\n-->";
-		endif;
-	endif;
-	return $return;
-}
-*/
-/*
 
 Management page for the Twitter API options
 
@@ -598,7 +557,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	# Checks for errors in the reply
 	if(!empty($twitterjson['errors'])):
 		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited.
-		print_r($twitterjson);
+//		print_r($twitterjson);
 		$option[$stringname]['datetime']=time();
 		update_option($optionname,$option);
 	elseif(!empty($twitterjson['error'])):
@@ -620,6 +579,9 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			update_option($optionname,$option);
 		endif;
 	endif;
+	echo "<!--\n\n";
+	print_r($latest_json);	
+	echo "\n\n-->";
 	return($latest_json);
 }
 
@@ -831,7 +793,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$after = array_unique($after);
 					endif;
 					# Now the URLs
-					if(isset($entities->urls)):
+					if(isset($entities['urls'])):
 						$urls = $entities['urls'];
 					else:
 						unset($urls);
