@@ -10,8 +10,16 @@ jQuery(document).ready(function() {
 		var rotate_fx = rotate_id_split[2];
 		/* If the rotation type has not been set - then set it to scrollUp */
 		if(rotate_fx == null){rotate_fx = 'scrollUp'};
-		/* If we're displaying an 'official' tweet, reset all the heights */
 		var rt_height_px = 'auto';
+		/* Now find the widget container width */
+		var rt_target_width = jQuery(this).closest('.widget_rotatingtweets_widget').width();
+		var rt_fit = 1;
+		if( rt_target_width == 0 ) {
+			rt_target_width = 'auto';
+			rt_fit = 0;
+		}
+		console.log('rt_target_width = '+rt_target_width);
+		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
 //		var rt_official_num = jQuery(rt_official_child).length;
 //		if (rt_official_num > 0) rt_height_px = '211px';
@@ -20,7 +28,9 @@ jQuery(document).ready(function() {
 			pause: 1,
 			height: rt_height_px,
 			timeout: rotate_timeout,
-			fx: rotate_fx
+			width: rt_target_width,
+			fx: rotate_fx,
+			fit: rt_fit
 		});
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
@@ -40,6 +50,8 @@ jQuery(document).ready(function() {
 				pause: 1,
 				height: rt_height_px,
 				timeout: rotate_timeout,
+				width: rt_target_width,
+				fit: rt_fit,
 				fx: rotate_fx
 			});
 		}
