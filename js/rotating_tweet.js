@@ -18,7 +18,6 @@ jQuery(document).ready(function() {
 		}
 		var rt_fit = 1;
 		if( rt_target_width == null ) {
-			rt_target_width = 'auto';
 			rt_fit = 0;
 		}
 		console.log('rt_target_width = '+rt_target_width);
