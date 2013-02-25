@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 0.703
+Stable tag: 0.704
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,10 +82,13 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 You can do this by going to the `rotatingtweets/css` directory and renaming `yourstyle-sample.css` to `yourstyle.css`.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `yourstyle.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 0.703 =
-Important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. 
+= 0.704 =
+Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. 
 
 == Changelog ==
+= 0.704 =
+Change to JavaScript to improve width handling for tweets.
+
 = 0.703 =
 Minor code tidying to improve debugging and increase speed!
 
@@ -96,7 +99,7 @@ Adjustment to javascript and CSS to cope with long links or long words
 Very minor mistake in rendering code
 
 = 0.700 =
-Supports version 1.1 of the Twitter API 
+**Important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. **
 
 = 0.625 =
 Enabled users to make all links open in a new tab or window
