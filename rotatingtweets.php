@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.706
+Version: 0.707
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -515,11 +515,13 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		if(WP_DEBUG) echo "<!-- Using version 1 of API - calling string $apicall -->";
 		$result = wp_remote_request($apicall);
 	endif;
-	$data = json_decode($result['body'],true);
-	if(!empty($data['errors'])):
-		update_option('rotatingtweets_api_error',$data['errors']);
-	else:
-		delete_option('rotatingtweets_api_error');
+	if(!is_wp_error($result)):
+		$data = json_decode($result['body'],true);
+		if(!empty($data['errors'])):
+			update_option('rotatingtweets_api_error',$data['errors']);
+		else:
+			delete_option('rotatingtweets_api_error');
+		endif;
 	endif;
 	return($result);
 }
