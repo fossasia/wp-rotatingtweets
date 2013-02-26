@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.708
+Version: 0.709
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -395,10 +395,10 @@ function rotatingtweets_settings_check() {
 			$msgString = __('Please update <a href="%2$s">your settings for Rotating Tweets</a>. The Twitter API will <a href="%1$s">be changing in March 2013</a> and new settings are needed for Rotating Tweets to continue working after the API changes.','rotatingtweets');
 		endif;
 		// add_settings_error( 'rotatingtweets_settings_needed', esc_attr('rotatingtweets_settings_needed'), sprintf($msgString,'https://dev.twitter.com/calendar',$optionslink), 'error');
-		echo "<div class='error'><p>".sprintf($msgString,'https://dev.twitter.com/calendar',$optionslink)."</p></div>";
+		echo "<div class='error'><p><strong>".sprintf($msgString,'https://dev.twitter.com/calendar',$optionslink)."</strong></p></div>";
 	elseif($error[0]['code'] == 32 ):
 		// add_settings_error( 'rotatingtweets_settings_needed', esc_attr('rotatingtweets_settings_needed'), sprintf(__('Please update <a href="%1$s">your settings for Rotating Tweets</a>. Currently Twitter cannot authenticate you with the details you have given.','rotatingtweets'),$optionslink), 'error');
-		echo "<div class='error'><p>".sprintf(__('Please update <a href="%1$s">your settings for Rotating Tweets</a>. Currently Twitter cannot authenticate you with the details you have given.','rotatingtweets'),$optionslink)."</p></div>";
+		echo "<div class='error'><p><strong>".sprintf(__('Please update <a href="%1$s">your settings for Rotating Tweets</a>. Currently Rotating Tweets cannot authenticate you with Twitter using the details you have given.','rotatingtweets'),$optionslink)."</strong></p></div>";
 	endif;
 };
 add_action( 'admin_notices', 'rotatingtweets_settings_check' );
@@ -416,7 +416,13 @@ function rotatingtweets_call_twitter_API_options() {
 	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.','rotatingtweets' ) );
 	}
-	echo sprintf(__('<p>Twitter <a href="%3$s">recently announced</a> that they will be changing the way that they allow people to use the information in their tweets.</p><p>Please take the following steps to make sure that Rotating Tweets continues working:</p><h3>Step 1:</h3><p>Go to the <a href="%1$s">My applications page</a> on the Twitter website to set up your website as a new Twitter \'application\'. You may need to log-in using your Twitter user name and password.</p><h3>Step 2:</h3><p>If you don\'t already have a suitable \'application\' that you can use for your website, set one up on the <a href="%2$s">Create an Application page</a>.</p> <p>It\'s normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets.</p><p>You don\'t need a Callback URL.</p><h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</strong>, on the following page, click on <strong>Create my access token</strong>.</p><h3>Step 4:</h3><p>Copy the <strong>Consumer key</strong>, <strong>Consumer secret</strong>, <strong>Access token</strong> and <strong>Access token secret</strong> from your Twitter application page into the settings below.</p><h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>. If there are any problems, you will get an error message from Twitter which should help diagnose the problem.</p>','rotatingtweets'),'https://dev.twitter.com/apps','https://dev.twitter.com/apps/new','https://dev.twitter.com/blog/changes-coming-to-twitter-api');
+	echo sprintf(__('<p>Twitter <a href="%s">recently announced</a> that they will be changing the way that they allow people to use the information in their tweets.</p><p>Please take the following steps to make sure that Rotating Tweets continues working:</p>','rotatingtweets'),'https://dev.twitter.com/blog/changes-coming-to-twitter-api');
+	echo sprintf(__('<h3>Step 1:</h3><p>Go to the <a href="%s">My applications page</a> on the Twitter website to set up your website as a new Twitter \'application\'. You may need to log-in using your Twitter user name and password.</p>','rotatingtweets'),'https://dev.twitter.com/apps');
+	echo sprintf(__('<h3>Step 2:</h3><p>If you don\'t already have a suitable \'application\' that you can use for your website, set one up on the <a href="%s">Create an Application page</a>.</p> <p>It\'s normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets.</p><p>You don\'t need a Callback URL.</p>','rotatingtweets'),'https://dev.twitter.com/apps/new');
+	_e('<h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</strong>, on the following page, click on <strong>Create my access token</strong>.</p>','rotatingtweets');
+	_e('<h3>Step 4:</h3><p>Copy the <strong>Consumer key</strong>, <strong>Consumer secret</strong>, <strong>Access token</strong> and <strong>Access token secret</strong> from your Twitter application page into the settings below.</p>','rotatingtweets');
+	_e('<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>. If there are any problems, you will get an error message from Twitter which should help diagnose the problem.</p>','rotatingtweets');
+	_e('<p><em>Even though you are only entering one set of Twitter API data, Rotating Tweets will continue to support multiple widgets and shortcodes pulling from a variety of different Twitter accounts.</em></p>','rotatingtweets');
 	echo '<form method="post" action="options.php">';
 	settings_fields( 'rotatingtweets_options' );
 	do_settings_sections('rotatingtweets_api_settings');
@@ -462,28 +468,28 @@ function rotatingtweets_api_validate($input) {
 	if(!preg_match('/^[a-z0-9]+$/i', $options['key'])) {
 		$options['key'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-key'), __('Error: Twitter Application Key not correctly formatted.','rotatingtweets'));
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-key'), __('Error: Twitter API Consumer Key not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'secret'
 	$options['secret'] = trim($input['secret']);
 	if(!preg_match('/^[a-z0-9]+$/i', $options['secret'])) {
 		$options['secret'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-secret'), __('Error: Twitter Application Secret not correctly formatted.','rotatingtweets'));
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-secret'), __('Error: Twitter API Consumer Secret not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'token'
 	$options['token'] = trim($input['token']);
 	if(!preg_match('/^[0-9]+\-[a-z0-9]+$/i', $options['token'])) {
 		$options['token'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token'), __('Error: Twitter Application Token not correctly formatted.','rotatingtweets'));
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token'), __('Error: Twitter API Access Token not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'token_secret'
 	$options['token_secret'] = trim($input['token_secret']);
 	if(!preg_match('/^[a-z0-9]+$/i', $options['token_secret'])) {
 		$options['token_secret'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token-secret'), __('Error: Twitter Application Token Secret not correctly formatted.','rotatingtweets'));
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token-secret'), __('Error: Twitter API Access Token Secret not correctly formatted.','rotatingtweets'));
 	}
 	// Now a proper test
 	if(empty($error)):
@@ -532,6 +538,11 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		else:
 			delete_option('rotatingtweets_api_error');
 		endif;
+	else:
+		$errorstring = array();
+		$errorstring[0]['code']= $result->get_error_code();
+		$errorstring[0]['message']= $result->get_error_message();
+		update_option('rotatingtweets_api_error',$errorstring);
 	endif;
 	return($result);
 }
@@ -612,7 +623,7 @@ function rotatingtweets_get_rate_data() {
 			$newrate['hourly_limit']=$rate['resources']['statuses']['/statuses/user_timeline']['limit'];
 			$newrate['remaining_hits']=$rate['resources']['statuses']['/statuses/user_timeline']['remaining'];
 			$newrate['reset_time_in_seconds']=$rate['resources']['statuses']['/statuses/user_timeline']['reset'];
-		return($newrate);
+			return($newrate);
 		else:
 			return($rate);
 		endif;
@@ -724,6 +735,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	# Create an ID that has all the relevant info in - rotation type and speed of rotation
 	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
 	$result = "\n<div class='rotatingtweets' id='$id'>";
+	$error = get_option('rotatingtweets_api_error');
+	if(!empty($error)):
+		$result .= "\n<!-- Error: ".$error[0]['code']." - ".$error[0]['message']." -->";
+	endif;
 	if(empty($json)):
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>". __('Problem retrieving data from Twitter','rotatingtweets'). "</p></div>";
 		$rate = rotatingtweets_get_rate_data();
