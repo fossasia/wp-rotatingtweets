@@ -462,28 +462,28 @@ function rotatingtweets_api_validate($input) {
 	if(!preg_match('/^[a-z0-9]+$/i', $options['key'])) {
 		$options['key'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-key'), __('Error: Twitter Application Key not correctly formatted.','rotatingtweets');
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-key'), __('Error: Twitter Application Key not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'secret'
 	$options['secret'] = trim($input['secret']);
 	if(!preg_match('/^[a-z0-9]+$/i', $options['secret'])) {
 		$options['secret'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-secret'), __('Error: Twitter Application Secret not correctly formatted.','rotatingtweets');
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-secret'), __('Error: Twitter Application Secret not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'token'
 	$options['token'] = trim($input['token']);
 	if(!preg_match('/^[0-9]+\-[a-z0-9]+$/i', $options['token'])) {
 		$options['token'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token'), __('Error: Twitter Application Token not correctly formatted.','rotatingtweets');
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token'), __('Error: Twitter Application Token not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'token_secret'
 	$options['token_secret'] = trim($input['token_secret']);
 	if(!preg_match('/^[a-z0-9]+$/i', $options['token_secret'])) {
 		$options['token_secret'] = '';
 		$error = 1;
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token-secret'), __('Error: Twitter Application Token Secret not correctly formatted.','rotatingtweets');
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token-secret'), __('Error: Twitter Application Token Secret not correctly formatted.','rotatingtweets'));
 	}
 	// Now a proper test
 	if(empty($error)):
