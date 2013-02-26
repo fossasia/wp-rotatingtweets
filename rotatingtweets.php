@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.707
+Version: 0.708
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -456,33 +456,43 @@ function rotatingtweets_api_explanation() {
 // validate our options
 function rotatingtweets_api_validate($input) {
 	$options = get_option('rotatingtweets-api-settings');
+	$error = 0;
 	// Check 'key'
 	$options['key'] = trim($input['key']);
 	if(!preg_match('/^[a-z0-9]+$/i', $options['key'])) {
 		$options['key'] = '';
+		$error = 1;
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-key'), __('Error: Twitter Application Key not correctly formatted.','rotatingtweets');
 	}
 	// Check 'secret'
 	$options['secret'] = trim($input['secret']);
 	if(!preg_match('/^[a-z0-9]+$/i', $options['secret'])) {
 		$options['secret'] = '';
+		$error = 1;
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-secret'), __('Error: Twitter Application Secret not correctly formatted.','rotatingtweets');
 	}
 	// Check 'token'
 	$options['token'] = trim($input['token']);
 	if(!preg_match('/^[0-9]+\-[a-z0-9]+$/i', $options['token'])) {
 		$options['token'] = '';
+		$error = 1;
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token'), __('Error: Twitter Application Token not correctly formatted.','rotatingtweets');
 	}
 	// Check 'token_secret'
 	$options['token_secret'] = trim($input['token_secret']);
 	if(!preg_match('/^[a-z0-9]+$/i', $options['token_secret'])) {
 		$options['token_secret'] = '';
+		$error = 1;
+		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token-secret'), __('Error: Twitter Application Token Secret not correctly formatted.','rotatingtweets');
 	}
 	// Now a proper test
-	$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
-	$error = get_option('rotatingtweets_api_error');
-	if(!empty($error)):
-		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Twitter: %1$s. <a href="%2$s">Please check your API key, secret, token and secret token on the Twitter website</a>.','rotatingtweets'),$error[0]['message'],'https://dev.twitter.com/apps'), 'error' );
+	if(empty($error)):
+		$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
+		$error = get_option('rotatingtweets_api_error');
+		if(!empty($error)):
+			add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Twitter: %1$s. <a href="%2$s">Please check your API key, secret, token and secret token on the Twitter website</a>.','rotatingtweets'),$error[0]['message'],'https://dev.twitter.com/apps'), 'error' );
+		endif;
 	endif;
-
 	return $options;
 }
 /*
