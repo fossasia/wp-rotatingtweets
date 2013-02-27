@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.709
+Version: 0.710
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -511,7 +511,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		$connection = new wp_TwitterOAuth($api['key'], $api['secret'], $api['token'], $api['token_secret'] );
 		//    $result = $connection->get('statuses/user_timeline', $options);
 		if(WP_DEBUG):
-			echo "\n<!-- Using OAuth - version 1.1 of API -- $command -->\n";
+			echo "\n<!-- Using OAuth - version 1.1 of API -- ".esc_attr($command)." -->\n";
 		endif;
 		$result = $connection->get($command , $options);
 	else:
@@ -528,7 +528,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		endif;
 		$apicall = "http://api.twitter.com/1/".$command.".json";
 		if(!empty($string)) $apicall .= "?".implode('&',$string);
-		if(WP_DEBUG) echo "<!-- Using version 1 of API - calling string $apicall -->";
+		if(WP_DEBUG) echo "<!-- Using version 1 of API - calling string ".esc_attr($apicall)." -->";
 		$result = wp_remote_request($apicall);
 	endif;
 	if(!is_wp_error($result)):
@@ -681,11 +681,6 @@ function rotatingtweets_get_twitter_language() {
 		endif;
 	endif;
 	if(empty($latest_languages)) $latest_languages = $fallback;
-	if(WP_DEBUG):
-		echo "<!-- \n";
-		print_r($option);
-		echo "\n-->";
-	endif;
 	return($latest_languages);
 }
 
@@ -737,7 +732,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	$result = "\n<div class='rotatingtweets' id='$id'>";
 	$error = get_option('rotatingtweets_api_error');
 	if(!empty($error)):
-		$result .= "\n<!-- Error: ".$error[0]['code']." - ".$error[0]['message']." -->";
+		$result .= "\n<!-- Error: ".esc_attr($error[0]['code'])." - ".esc_attr($error[0]['message'])." -->";
 	endif;
 	if(empty($json)):
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>". __('Problem retrieving data from Twitter','rotatingtweets'). "</p></div>";
