@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.710
+Version: 0.711
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -335,6 +335,15 @@ function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default',$ta
 function rotatingtweets_display($atts) {
 	rotatingtweets_display_shortcode($atts,null,'',TRUE);
 };
+#
+function rotatingtweets_link_to_screenname($link) {
+	$match = '%(http://|https://|)(www\.|)twitter\.com/(#!\/|)([0-9a-z\_]+)%i';
+	if(preg_match($match,$link,$result)):
+		return($result[4]);
+	else:
+		return FALSE;
+	endif;
+}
 # Processes the shortcode 
 function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $print=FALSE ) {
 	// $atts    ::= twitter_id,include_rts,exclude_replies, $tweet_count,$show_follow
@@ -349,7 +358,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	$no_show_screen_name :: [boolean] remove screen name from follow button
 */
 	$args = shortcode_atts( array(
-			'screen_name' => 'twitter',
+			'screen_name' => '',
+			'url' => 'http://twitter.com/twitter',
 			'include_rts' => FALSE,
 			'exclude_replies' => FALSE,
 			'tweet_count' => 5,
@@ -368,6 +378,14 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'ratelimit' => FALSE
 		), $atts ) ;
 	extract($args);
+	if(empty($screen_name) && !empty($url)):
+		$screen_name = rotatingtweets_link_to_screenname($url);
+		$args['screen_name'] = $screen_name;
+		if(WP_DEBUG) {
+			echo "<!-- $url => $screen_name -->";
+		}
+	endif;
+	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies);
@@ -558,15 +576,28 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$optionname = "rotatingtweets-cache";
 	$option = get_option($optionname);
 	# Attempt to deal with 'Cannot use string offset as an array' error
-	if(is_array($option) && is_array($option[$stringname]['json'][0])):
-		$latest_json = $option[$stringname]['json'];
-		$latest_json_date = $option[$stringname]['datetime'];
-		$timegap = time()-$latest_json_date;
-		# Now check that it's got arrays and not objects
+	$timegap = $cache_delay + 1;
+	if(is_array($option)):
+		if(WP_DEBUG):
+			echo "<!-- var option is an array -->";
+		endif;
+		if(isset($option[$stringname])):
+			if(WP_DEBUG) echo "<!-- option[$stringname] exists -->";
+			if(is_array($option[$stringname]['json'][0])):
+				if(WP_DEBUG) echo "<!-- option[$stringname]['json'][0] is an array -->";
+				$latest_json = $option[$stringname]['json'];
+				$latest_json_date = $option[$stringname]['datetime'];
+				$timegap = time()-$latest_json_date;
+			elseif(is_object($option[$stringname]['json'][0])):
+				if(WP_DEBUG) echo "<!-- option[$stringname]['json'][0] is an object -->";
+				unset($option[$stringname]);
+			else:
+				if(WP_DEBUG) echo "<!-- option[$stringname]['json'][0] is neither an object nor an array! -->";
+				unset($option[$stringname]);
+			endif;
+		endif;
 	else:
-		# Clears the cache and forces a reload
-		$timegap = $cache_delay + 1;
-		$option=array();
+		unset($option);
 	endif;
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
@@ -602,6 +633,9 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		unset($firstentry);
 		if(is_array($twitterjson)) $firstentry = $twitterjson[0];
 		if(!empty($firstentry['text'])):
+			if(WP_DEBUG):
+				echo "<!-- Storing cache entry for $stringname in $optionname -->";
+			endif;
 			$latest_json = $twitterjson;
 			$option[$stringname]['json']=$latest_json;
 			$option[$stringname]['datetime']=time();
@@ -751,7 +785,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Wordpress error message','rotatingtweets').": ".$error_message.".</p></div>";
 				endforeach;
 			endif;
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Please check the Twitter name used in the settings.','rotatingtweets')."</p></div>";
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check the Rotating Tweets settings or the <a href=\'%s\'>Twitter API status</a>.','rotatingtweets'),'https://dev.twitter.com/status')."</p></div>";
 		endif;
 	else:
 		$tweet_counter = 0;
