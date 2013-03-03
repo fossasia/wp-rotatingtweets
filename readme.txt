@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 0.712
+Stable tag: 1.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -90,138 +90,141 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 You can do this by going to the `rotatingtweets/css` directory and renaming `yourstyle-sample.css` to `yourstyle.css`.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `yourstyle.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 0.712 =
+= 1.3.9 =
 Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. Fixed problem with cacheing.
 
 == Changelog ==
-= 0.712 =
+= 1.3.9 =
+Moved to [Semantic Versioning](http://semver.org/)
+
+= 0.712 (1.3.8) =
 Fixed bug with `console.log` javascript on IE.
 
-= 0.711 =
+= 0.711 (1.3.7) =
 Fixed up a significant problem with cacheing.
 
-= 0.709 =
+= 0.709 (1.3.6) =
 Tidying up error reporting.
 
-= 0.707 =
+= 0.707 (1.3.5) =
 Fixes major bug resulting from upgrade to handle Twitter API v 1.1
 
-= 0.706 =
+= 0.706 (1.3.4) =
 Change to JavaScript to improve width handling for tweets.
 
-= 0.703 =
+= 0.703 (1.3.3) =
 Minor code tidying to improve debugging and increase speed!
 
-= 0.702 =
+= 0.702 (1.3.2) =
 Adjustment to javascript and CSS to cope with long links or long words
 
-= 0.701 =
+= 0.701 (1.3.1) =
 Very minor mistake in rendering code
 
-= 0.700 =
+= 0.700 (1.3.0) =
 **Important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API.**
 
-= 0.625 =
+= 0.625 (1.2.4) =
 Enabled users to make all links open in a new tab or window
 
-= 0.623 =
+= 0.623 (1.2.3) =
 Fixed a problem where a short name fitted inside a long one - e.g. @rotary and @rotarycrocus
 
-= 0.622 =
+= 0.622 (1.2.2) =
 Escaped title tags
 
-= 0.621 =
+= 0.621 (1.2.1) =
 Fixed timezone problem.
 
-= 0.620 =
+= 0.620 (1.2.0) =
 Added option to show links in a new window
 Fix problem with selection of 20 second rotating speed.
 
-= 0.613 =
+= 0.613 (1.1.6) =
 Fixed instructions in plug-ins list.
 
-= 0.612 =
+= 0.612 (1.1.5) =
 Fixed error message caused by last fix causing tweets to repeat.
 
-= 0.611 =
+= 0.611 (1.1.4) =
 Finally ran with debug and removed all the error messages.
 
-= 0.610 =
+= 0.610 (1.1.3) =
 Starts to add options to allow for different length URLs
 
-= 0.602 =
+= 0.602 (1.1.2) =
 Fixes bug with Javascript
 
-= 0.601 =
+= 0.601 (1.1.1) =
 Fixes problem with stylesheet
 
-= 0.600 =
+= 0.600 (1.1.0) =
 Now includes options consistent with Twitter display options
 Tidied up code.
 
-= 0.505 =
+= 0.505 (1.0.0) =
 Minimised Javascript. Set-up for I18n.
 
-= 0.502 =
+= 0.502 (0.4.1) =
 Javascript fix for zero height tweets problem
 
-= 0.500 =
+= 0.500 (0.4.0) =
 Adds options for how tweet information is displayed and how the tweet rotates.
 
-= 0.492 =
+= 0.492 (0.3.1) =
 Solves `Cannot use string offset as an array` error on line 232
 
-= 0.491 =
+= 0.491 (0.3.0) =
 Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.
 
-= 0.48 =
+= 0.48 (0.2.6) =
 More detailed error messages for Wordpress installations unable to access Twitter.
 Fixes problem on the zeeBizzCard template and sets up fix for other templates that use their own install of the `jquery-cycle` javascript.
 
-= 0.471 = 
+= 0.471 (0.2.5) = 
 Making sure that cache never gets overwritten unless new, valid twitter data has been downloaded.
 Dealing with the problem that someone in a long conversation may not get enough valid tweets to show by asking for only 20 tweets from Twitter.
 
-= 0.46 = 
+= 0.46 (0.2.4) = 
 Properly handles rate-limiting by Twitter
 
-= 0.44 = 
+= 0.44 (0.2.3) = 
 Removes follow button if Twitter has returned an empty value
 
-= 0.43 = 
+= 0.43 (0.2.2) = 
 Improved error checking if Twitter has returned an empty value
 
-= 0.42 =
+= 0.42 (0.2.1) =
 Fixed major bug causing crashes when Twitter goes down
 
-= 0.40 =
+= 0.40 (0.2.0) =
 Added ability to alter speed of rotation
 
-= 0.30 =
+= 0.30 (0.1.8) =
 Fixes bug - problem with `get_object_vars()` on line 193
 
-= 0.29 =
+= 0.29 (0.1.7) =
 Better handling of retweets. No longer cuts off the end of the text on longer RTs.
 
-= 0.28 =
+= 0.28 (0.1.6) =
 Properly fixes flaw in how flags are handled.
 
-= 0.27 =
+= 0.27 (0.1.5) =
 Fixed flaw in how flags are handled.
 
-= 0.26 =
+= 0.26 (0.1.4) =
 Stops display and cacheing of non-existent twitter feeds
 
-= 0.25 =
+= 0.25 (0.1.3) =
 Stops display and cacheing of faulty twitter feeds
 
-= 0.21 =
+= 0.21 (0.1.2) =
 Replaced a missing `</div>` in the follow-button code (with thanks to [jacobp](http://wordpress.org/support/profile/jacobp) for spotting it and suggesting a fix)
 
-= 0.2 =
+= 0.2 (0.1.1) =
 Fixed a problem with cacheing
 
-= 0.1 =
+= 0.1 (0.1.0) =
 First published version
 
 == Screenshots ==
