@@ -8,6 +8,10 @@ jQuery(document).ready(function() {
 		var rotate_id_split = rotate_id.split('_');
 		var rotate_timeout = rotate_id_split[1];
 		var rotate_fx = rotate_id_split[2];
+		var rotate_wp_debug = jQuery(this).hasClass('wp_debug');
+		if( typeof console == "undefined" || typeof console.log == "undefined" ) {
+			rotate_wp_debug = false;
+		}
 		/* If the rotation type has not been set - then set it to scrollUp */
 		if(rotate_fx == null){rotate_fx = 'scrollUp'};
 		var rt_height_px = 'auto';
@@ -20,7 +24,9 @@ jQuery(document).ready(function() {
 		if( rt_target_width == null ) {
 			rt_fit = 0;
 		}
-		console.log('rt_target_width = '+rt_target_width);
+		if(rotate_wp_debug) {
+			console.log('rt_target_width = '+rt_target_width);
+		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
 //		var rt_official_num = jQuery(rt_official_child).length;
@@ -36,7 +42,7 @@ jQuery(document).ready(function() {
 		});
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
-		if(rt_height == 0) {
+		if(rt_height == 0) {	
 			var rt_children_id = rotate_id + ' .rotatingtweet';
 			var rt_height = 0;
 			/* Go through the tweets - get their height - and set the minimum height */
@@ -47,6 +53,9 @@ jQuery(document).ready(function() {
 				}
 			});
 			var rt_height_px = rt_height + 'px';
+			if(rotate_wp_debug) {
+				console.log('Resetting height to rt_height_px '+rt_height_px);
+			};
 			jQuery(rotate_id).cycle('destroy');
 			jQuery(rotate_id).cycle({
 				pause: 1,
@@ -67,8 +76,11 @@ jQuery(document).ready(function() {
 		if(rt_official_num > 0) {
 			/* Now run through and make sure all the boxes are the right size */
 			if(jQuery(rt_icon_id).length > 0) {
-//				console.log('Rotating Tweets container: ' + jQuery(this).width());
-//				console.log('Width of the icon container: ' + jQuery(rt_icon_id).show().width());
+				if(rotate_wp_debug) {
+					console.log('Adjusting widths for \'Official Twitter Version 2\'');
+					console.log('- Width of Rotating Tweets container: ' + jQuery(this).width());
+					console.log('- Width of the icon container: ' + jQuery(rt_icon_id).show().width());
+				};
 				var rt_icon_width = 0;
 				jQuery(rt_icon_id).each( function() {
 					newiconsize = jQuery(this).width();
@@ -76,7 +88,9 @@ jQuery(document).ready(function() {
 						rt_icon_width = newiconsize;
 					}
 				});
-//				console.log('Iconsize: '+rt_icon_width);
+				if(rotate_wp_debug) {
+					console.log('- Width of the icon: '+rt_icon_width);
+				};
 				if(rt_icon_width > 0) {
 					jQuery(rt_block_id).each( function() {
 						jQuery(this).css('padding-left', ( rt_icon_width + 10 ) + 'px');
@@ -84,15 +98,22 @@ jQuery(document).ready(function() {
 				}
 			}
 			/* Now get the padding-left dimension (if it exists) and subtract it from the max width	*/
-//			console.log ('leftpadding - text : '+ jQuery(rt_block_id).css('padding-left') + ' and value: ' +parseInt(jQuery(rt_block_id).css('padding-left')));
+			if(rotate_wp_debug) {
+				console.log ('Now check for \'padding-left\'');
+				console.log ('- leftpadding - text : '+ jQuery(rt_block_id).css('padding-left') + ' and value: ' +parseInt(jQuery(rt_block_id).css('padding-left')));
+			};
 			var rt_max_width = jQuery(rotate_id).width();
 			if( typeof jQuery(rt_block_id).css('padding-left') != 'undefined' ) {
 				rt_max_width = rt_max_width - parseInt(jQuery(rt_block_id).css('padding-left'));
-//				console.log('Padding is not undefined');
-			} else {
-//				console.log('Padding IS undefined - leave width unchanged');
+				if(rotate_wp_debug) {
+					console.log('- Padding is not undefined');
+				};
+			} else if(rotate_wp_debug) {
+ 				console.log('- Padding IS undefined - leave width unchanged');
 			}
-//			console.log('Rotating Tweets container minus the indent: ' + rt_max_width);			
+			if(rotate_wp_debug) {
+				console.log('- rt_max_width: ' + rt_max_width);
+			};
 			/* Go through the tweets - and set the minimum width */
 			jQuery(rt_children_id).each(function() {
 				jQuery(this).width(rt_max_width);

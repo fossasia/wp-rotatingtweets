@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 0.711
+Version: 0.712
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -497,7 +497,7 @@ function rotatingtweets_api_validate($input) {
 	}
 	// Check 'token'
 	$options['token'] = trim($input['token']);
-	if(!preg_match('/^[0-9]+\-[a-z0-9]+$/i', $options['token'])) {
+	if(!preg_match('/^[a-z0-9]+\-[a-z0-9]+$/i', $options['token'])) {
 		$options['token'] = '';
 		$error = 1;
 		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token'), __('Error: Twitter API Access Token not correctly formatted.','rotatingtweets'));
@@ -763,7 +763,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	endforeach;
 	# Create an ID that has all the relevant info in - rotation type and speed of rotation
 	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
-	$result = "\n<div class='rotatingtweets' id='$id'>";
+	if(WP_DEBUG):
+		$result = "\n<div class='rotatingtweets wp_debug' id='$id'>";
+		
+	else:
+		$result = "\n<div class='rotatingtweets' id='$id'>";
+	endif;
 	$error = get_option('rotatingtweets_api_error');
 	if(!empty($error)):
 		$result .= "\n<!-- Error: ".esc_attr($error[0]['code'])." - ".esc_attr($error[0]['message'])." -->";

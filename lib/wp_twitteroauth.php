@@ -204,6 +204,8 @@ class wp_TwitterOAuth {
 	if(!empty($args)):
 		$args['body'] = $postfields;
 	endif;
+	$args['timeout'] = $this->timeout;
+	$args['sslverify'] = $this->ssl_verifypeer;
 	$response = wp_remote_request($url,$args);
 	return($response);
 /*
