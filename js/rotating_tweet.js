@@ -124,22 +124,6 @@ jQuery(document).ready(function() {
 				jQuery(this).width(rt_max_width);
 			});
 		};
-
-/*
-		jQuery(rotate_id).cycle({
-			pause: 1,
-			height: rotate_height,
-			timeout: rotate_timeout,
-			prev: jQuery(rotate_id).find('.rtw_prev'),
-			next: jQuery(rotate_id).find('.rtw_next'),
-			pager: rotate_id + '_nav',
-	        pagerAnchorBuilder: function(idx, slide) {
-				// return sel string for existing anchor
-				return rotate_id + '_nav a:eq(' + (idx) + ')';
-			},
-			fx: rotate_fx
-		});
-*/
 	});
 	// Script to show mouseover effects when going over the Twitter intents
 	jQuery('.rtw_intents a').hover(function() {
@@ -158,23 +142,10 @@ jQuery(document).ready(function() {
 	jQuery('.rtw_expand').show();
 	jQuery('.rotatingtweets').has('.rtw_wide').hover(function() {
 		jQuery(this).find('.rtw_intents').show();
-//		jQuery(this).find('.rtw_expand').css('color','blue');
 	},function() {
 		jQuery(this).find('.rtw_intents').hide();
-//		jQuery(this).find('.rtw_expand').css('color','red');
 	});
 });
-/*
-jQuery(window).ready(function() {
-	// Experimenting with resizing the size of the box when using displayed tweets
-	twttr.ready(function(twttr) {
-		jQuery('blockquote').each( function() {
-			console.log(jQuery(this).prop('class'));
-			console.log(jQuery(this).height());			
-		});
-	});
-});
-*/
 /* And call the Twitter script while we're at it! */
 /* Standard script to call Twitter */
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");

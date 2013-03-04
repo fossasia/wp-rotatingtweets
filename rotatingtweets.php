@@ -898,7 +898,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						endforeach;			
 					endif;
 					$before[]="%#([0-9]*[a-zA-Z]+\w*)%";
-					$after[]='<a href="http://search.twitter.com/search?q=%23$1" title="#$1"'.$targetvalue.'>#$1</a>';
+					$after[]='<a href="http://twitter.com/search?q=%23$1&src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
 
 					# Now for the meta text
