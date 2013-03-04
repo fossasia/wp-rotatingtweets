@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 1.3.10
+Stable tag: 1.3.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,15 +91,21 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `you
 
 = The Rotating Tweets are not rotating. What can I do? =
 This normally happens if there is more than one copy of jQuery installed on a page - or more than one copy of jQuery.cycle.
+
 To see if this is the case, you can search the HTML on your website to see if either script is called more than once.  The quickest way is to search the page for `jquery` and look out for lines that contain `jquery.min.js` or `jquery.cycle.all.min.js`.
+
 The problem is that the second (or third) copy of the script overwrites all previous versions and the scripts that go with them.  This is particularly likely to happen with old templates or plug-ins.
+
 If this is the case, the first thing to check is that you have upgraded your template or your plug-in to the latest version.
 
 == Upgrade notice ==
-= 1.3.10 =
+= 1.3.11 =
 Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. Fixed problem with hashtags.
 
 == Changelog ==
+= 1.3.11 =
+Supports cyrillic hashtags!
+
 = 1.3.10 =
 Fixed hashtag links
 
