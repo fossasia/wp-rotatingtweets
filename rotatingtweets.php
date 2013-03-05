@@ -389,7 +389,6 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
-	echo "<!-- get_favorites $get_favorites -->";
 	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites);
 	$returnstring = rotating_tweets_display($tweets,$args,$print);
 	return $returnstring;
