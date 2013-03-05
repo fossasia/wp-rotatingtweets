@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.3.11
+Version: 1.3.12
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -375,6 +375,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'official_format' => FALSE,
 			'links_in_new_window' => FALSE,
 			'url_length' => 29,
+			'get_favorites' => FALSE,
 			'ratelimit' => FALSE
 		), $atts ) ;
 	extract($args);
@@ -388,7 +389,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
-	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies);
+	echo "<!-- get_favorites $get_favorites -->";
+	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites);
 	$returnstring = rotating_tweets_display($tweets,$args,$print);
 	return $returnstring;
 }
@@ -566,13 +568,19 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 }
 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
-function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies) {
+function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE) {
 	# Clear up variables
+	$tw_screen_name = urlencode(trim(remove_accents($tw_screen_name)));
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
+	
 	# Get the option strong
-	$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
+	if($tw_get_favorites) {
+		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies.'favorites';
+	} else {
+		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
+	}
 	$optionname = "rotatingtweets-cache";
 	$option = get_option($optionname);
 	# Attempt to deal with 'Cannot use string offset as an array' error
@@ -602,7 +610,11 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
 		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>70,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
-		$twitterdata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apioptions);
+		if($tw_get_favorites) {
+			$twitterdata = rotatingtweets_call_twitter_API('favorites/list',$apioptions);
+		} else {
+			$twitterdata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apioptions);
+		}
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body'],TRUE);
 			if(WP_DEBUG):
@@ -765,7 +777,6 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
 	if(WP_DEBUG):
 		$result = "\n<div class='rotatingtweets wp_debug' id='$id'>";
-		
 	else:
 		$result = "\n<div class='rotatingtweets' id='$id'>";
 	endif;

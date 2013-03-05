@@ -99,10 +99,13 @@ The problem is that the second (or third) copy of the script overwrites all prev
 If this is the case, the first thing to check is that you have upgraded your template or your plug-in to the latest version.
 
 == Upgrade notice ==
-= 1.3.11 =
+= 1.3.12 =
 Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. Fixed problem with hashtags.
 
 == Changelog ==
+= 1.3.12 =
+Removes accents from screen names (and otherwise cleans them up). Add test option (currently for shortcodes only) to access favorites.
+
 = 1.3.11 =
 Supports cyrillic hashtags!
 
