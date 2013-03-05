@@ -69,6 +69,7 @@ Possible variables for the shortcode include:
 * `show_meta_reply_retweet_favorite` = `'0'` or `'1'` - show 'reply', 'retweet' and 'favorite' buttons - optional - default is `'0'`
 * `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
 * `rotation_type` = any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'`
+* `get_favorites` = `'0'` or `'1'` - show someone's favorites rather than their timeline - default is `'0'`
 * `url_length` = sets the length that the URL should be trimmed to...
 
 although the only one you *have* to have is `screen_name`.
