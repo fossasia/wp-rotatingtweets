@@ -994,12 +994,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$result .= "</div>";
 	endif;
 */
-	if($args['show_follow'] && !empty($user['screen_name'])):
+	if($args['show_follow'] && !empty($args['screen_name'])):
 		$shortenvariables = '';
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
 		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
-		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),$user['screen_name']);
-		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$user['screen_name']."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
+		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),$args['screen_name']);
+		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$args['screen_name']."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
 	rotatingtweets_enqueue_scripts();
 	if($print) echo $result;

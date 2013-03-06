@@ -71,6 +71,7 @@ Possible variables for the shortcode include:
 * `rotation_type` = any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'`
 * `get_favorites` = `'0'` or `'1'` - show someone's favorites rather than their timeline - default is `'0'`
 * `url_length` = sets the length that the URL should be trimmed to...
+* `url` = Twitter user URL. If `screen_name` is empty and this link is valid, `screen_name` will be set to the user name included in `url`
 
 although the only one you *have* to have is `screen_name`.
 

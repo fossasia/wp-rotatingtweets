@@ -36,6 +36,7 @@ jQuery(document).ready(function() {
 			pause: 1,
 			height: rt_height_px,
 			timeout: rotate_timeout,
+			cleartypeNoBg: true,
 			width: rt_target_width,
 			fx: rotate_fx,
 			fit: rt_fit
@@ -62,6 +63,7 @@ jQuery(document).ready(function() {
 				height: rt_height_px,
 				timeout: rotate_timeout,
 				width: rt_target_width,
+				cleartypeNoBg: true,
 				fit: rt_fit,
 				fx: rotate_fx
 			});
