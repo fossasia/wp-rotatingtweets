@@ -18,7 +18,7 @@ class WP_OAuthConsumer {
   }
 
   function __toString() {
-    return "OAuthConsumer[key=$this->key,secret=$this->secret]";
+    return "WP_OAuthConsumer[key=$this->key,secret=$this->secret]";
   }
 }
 
@@ -419,10 +419,10 @@ class WP_OAuthRequest {
   public function to_header($realm=null) {
     $first = true;
 	if($realm) {
-      $out = 'Authorization: WP_OAuth realm="' . WP_OAuthUtil::urlencode_rfc3986($realm) . '"';
+      $out = 'Authorization: OAuth realm="' . WP_OAuthUtil::urlencode_rfc3986($realm) . '"';
       $first = false;
     } else
-      $out = 'Authorization: WP_OAuth';
+      $out = 'Authorization: OAuth';
 
     $total = array();
     foreach ($this->parameters as $k => $v) {
