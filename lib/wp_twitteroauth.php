@@ -12,7 +12,7 @@
  */
 
 /* Load WP_OAuth lib. You can find it at http://oauth.net */
-if(!class_exists('WP_OAuthException')) require_once('OAuth.php');
+if(!class_exists('WP_OAuthException')) require_once('WP_OAuth.php');
 
 /**
  * Twitter WP_OAuth class
