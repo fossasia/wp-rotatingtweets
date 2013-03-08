@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 1.3.11
+Stable tag: 1.3.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,14 +23,15 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 * **Multi-lingual** - now set up to be multi-lingual. The Twitter 'follow' button is automatically translated to match your site's language setting [if Twitter has made the appropriate language available](https://dev.twitter.com/docs/api/1.1/get/help/languages). Also uses [Wordpress's multi-lingual capability](http://codex.wordpress.org/I18n_for_WordPress_Developers) to enable translation of all the other text used by the plug-in via language packs.
 
 Currently the following languages are available:
+
 * US English *(complete)*
 * British English *(complete - mainly changing 'favorite' to 'favourite'!)*
 * German *(basic tweet display only)*
-* Spanish *(tweet display only)*
-* Italian *(tweet display only)*
-* Dutch *(tweet display only)*
+* Spanish *(basic tweet display only)*
+* Italian *(basic tweet display only)*
+* Dutch *(basic tweet display only)*
 
-If you have made the plug-in work in your language, please send the [gettext PO and MO files](http://codex.wordpress.org/I18n_for_WordPress_Developers) to [me](http://www.martintod.org.uk/contact-martin/) and I will then share them with everyone else. You can download [the latest POT file](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/rotatingtweets.pot), and [PO files in each language](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/) from this site. You may find [Poedit](http://www.poedit.net/) rather useful for translation and creation of PO and MO files.
+If you have made the plug-in work in your language, please send the translations you'd like to see or, even better, the relevant [gettext PO and MO files](http://codex.wordpress.org/I18n_for_WordPress_Developers) to [me](http://www.martintod.org.uk/contact-martin/) and I will then share them with everyone else. You can download [the latest POT file](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/rotatingtweets.pot), and [PO files in each language](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/) from this site. You may find [Poedit](http://www.poedit.net/) rather useful for translation and creation of PO and MO files.
 
 If you'd like to see what the plug-in looks like in action, you can [see the plug-in working here](http://www.martintod.org.uk/2012/05/29/new-twitter-plugin-to-show-tweets-in-rotation/).
 
@@ -92,7 +93,7 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 You can do this by going to the `rotatingtweets/css` directory and renaming `yourstyle-sample.css` to `yourstyle.css`.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `yourstyle.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 = The Rotating Tweets are not rotating. What can I do? =
-This normally happens if there is more than one copy of jQuery installed on a page - or more than one copy of jQuery.cycle.
+This normally happens if there is more than one copy of `jQuery` installed on a page - or more than one copy of `jQuery.cycle`.
 
 To see if this is the case, you can search the HTML on your website to see if either script is called more than once.  The quickest way is to search the page for `jquery` and look out for lines that contain `jquery.min.js` or `jquery.cycle.all.min.js`.
 
@@ -100,13 +101,14 @@ The problem is that the second (or third) copy of the script overwrites all prev
 
 If this is the case, the first thing to check is that you have upgraded your template or your plug-in to the latest version.
 
+If this still doesn't work, please let me know which plug-in or template is causing the problem and I'll see if I can build a fix into the next version of Rotating Tweets.
 == Upgrade notice ==
 = 1.3.12 =
 Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. Fixed problem with hashtags.
 
 == Changelog ==
 = 1.3.12 =
-Removes accents from screen names (and otherwise cleans them up). Add test option (currently for shortcodes only) to access favorites.
+Removes accents from screen names (and otherwise cleans them up). Add test option (currently for shortcodes only) to access favorites. Solves clash between PECL OAuth library and the Rotating Tweets OAuth library.
 
 = 1.3.11 =
 Supports cyrillic hashtags!
