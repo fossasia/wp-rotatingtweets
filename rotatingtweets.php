@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.3.12
+Version: 1.3.13
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -569,7 +569,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE) {
 	# Clear up variables
-	$tw_screen_name = urlencode(trim(remove_accents($tw_screen_name)));
+	$tw_screen_name = urlencode(trim(remove_accents(str_replace('@','',$tw_screen_name))));
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;

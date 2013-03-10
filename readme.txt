@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 1.3.12
+Stable tag: 1.3.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -95,18 +95,35 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `you
 = The Rotating Tweets are not rotating. What can I do? =
 This normally happens if there is more than one copy of `jQuery` installed on a page - or more than one copy of `jQuery.cycle`.
 
-To see if this is the case, you can search the HTML on your website to see if either script is called more than once.  The quickest way is to search the page for `jquery` and look out for lines that contain `jquery.min.js` or `jquery.cycle.all.min.js`.
+To see if this is the case, search the HTML on your website to see if either script is called more than once.  To do this:
+
+1. Open the page.
+1. Right click and select 'View Page Source' or 'View Source'
+1. Hit `[CTRL]+F` and search for `jquery`
+1. Look out for lines that contain `jquery.min.js` or `jquery.cycle.all.min.js`.  Neither script should appear more than once.
 
 The problem is that the second (or third) copy of the script overwrites all previous versions and the scripts that go with them.  This is particularly likely to happen with old templates or plug-ins.
 
-If this is the case, the first thing to check is that you have upgraded your template or your plug-in to the latest version.
+If this is the case:
 
-If this still doesn't work, please let me know which plug-in or template is causing the problem and I'll see if I can build a fix into the next version of Rotating Tweets.
+1. Check is that you have upgraded your template or your plug-in to the latest version.
+1. If this still doesn't work, please let me know which plug-in or template is causing the problem and I'll see if I can build a fix into the next version of Rotating Tweets.
+
+If there is only one copy of `jquery` and of `jquery.cycle` on your page, the best way to look for the problem is to open the 'console'. To do this:
+
+1. Press `[F12]` (in Chrome or IE) or `[CTRL]+[SHIFT]+K` (in Firefox)
+1. Load the page where you have a problem
+1. In Chrome or IE, select the tab marked 'console'.
+1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
+
 == Upgrade notice ==
-= 1.3.12 =
+= 1.3.13 =
 Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. Fixed problem with hashtags.
 
 == Changelog ==
+= 1.3.13 =
+Strips `@` from screen names to avoid API problems.
+
 = 1.3.12 =
 Removes accents from screen names (and otherwise cleans them up). Add test option (currently for shortcodes only) to access favorites. Solves clash between PECL OAuth library and the Rotating Tweets OAuth library.
 
