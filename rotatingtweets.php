@@ -974,7 +974,6 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= '&mdash; '.$user['name'].' (@'.$user['screen_name'].') <a href="https://twitter.com/twitterapi/status/'.$twitter_object['id_str'].'" data-datetime="'.date('c',strtotime($twitter_object['created_at'])).'"'.$targetvalue.'>'.date_i18n(get_option('date_format') ,strtotime($twitter_object['created_at'])).'</a>';
 						$result .= '</blockquote>';
 						break;
-					}
 					case 4:
 						$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
 						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
@@ -984,6 +983,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
 						$result .= "\n</div>";
 						break;
+					}
 				else:
 					$result .= "\n\t\t<p class='rtw_main'>".__("Problem retrieving data from Twitter.",'rotatingtweets')."</p></div>";
 					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
