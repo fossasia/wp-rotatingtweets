@@ -976,7 +976,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						break;
 					case 4:
 						$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
-						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
+						$result .= "\n\t<div class='rtw_meta rtw_info'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
 						if($args['show_meta_screen_name']):
 							$result .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']).' &middot; ';
 						endif;
