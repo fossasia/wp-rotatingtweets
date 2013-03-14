@@ -123,7 +123,7 @@ Includes an important upgrade needed for Rotating Tweets to keep working after M
 
 == Changelog ==
 = 1.3.14 =
-Fixes accents in hashtags (hopefully).
+Fixes accents in hashtags (hopefully). Adds beta of search to the API. Adds new format of Tweet display.
 
 = 1.3.13 =
 Strips `@` from screen names to avoid API problems.
