@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.3.14
+Version: 1.3.15
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -924,7 +924,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						endforeach;			
 					endif;
 //					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
-					$before[]="%#(\d*[^\d\s[:punct:]]+[^\s[:punct:]]+)%";
+					$before[]="%#(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
 					$after[]='<a href="http://twitter.com/search?q=%23$1&src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
 
