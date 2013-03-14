@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 1.3.13
+Stable tag: 1.3.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,10 +118,13 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
 
 == Upgrade notice ==
-= 1.3.13 =
-Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API. Fixed problem with hashtags.
+= 1.3.14 =
+Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Fixed problem with hashtags.
 
 == Changelog ==
+= 1.3.14 =
+Fixes accents in hashtags (hopefully).
+
 = 1.3.13 =
 Strips `@` from screen names to avoid API problems.
 

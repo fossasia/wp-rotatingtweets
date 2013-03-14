@@ -923,7 +923,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$after[] = "<a href='".$medium['url']."' title='".$medium['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
 						endforeach;			
 					endif;
-					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
+//					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
+					$before[]="%#(\d*[^\d\s[:punct:]]+[^\s[:punct:]]+)%";
 					$after[]='<a href="http://twitter.com/search?q=%23$1&src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
 
