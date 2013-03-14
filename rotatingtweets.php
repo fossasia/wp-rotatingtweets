@@ -375,6 +375,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'official_format' => FALSE,
 			'links_in_new_window' => FALSE,
 			'url_length' => 29,
+			'search' => FALSE,
 			'get_favorites' => FALSE,
 			'ratelimit' => FALSE
 		), $atts ) ;
@@ -389,7 +390,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
-	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites);
+	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search);
 	$returnstring = rotating_tweets_display($tweets,$args,$print);
 	return $returnstring;
 }
@@ -545,7 +546,11 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 				$string[] = $name . "=" . urlencode($val);
 			}
 		endif;
-		$apicall = "http://api.twitter.com/1/".$command.".json";
+		if($command != 'search/tweets'):
+			$apicall = "http://api.twitter.com/1/".$command.".json";
+		else:
+			$apicall = "http://search.twitter.com/search.json";
+		endif;
 		if(!empty($string)) $apicall .= "?".implode('&',$string);
 		if(WP_DEBUG) echo "<!-- Using version 1 of API - calling string ".esc_attr($apicall)." -->";
 		$result = wp_remote_request($apicall);
@@ -567,15 +572,20 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 }
 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
-function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE) {
+function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE ) {
 	# Clear up variables
 	$tw_screen_name = urlencode(trim(remove_accents(str_replace('@','',$tw_screen_name))));
+	if($tw_search) {
+		$tw_search = urlencode(trim($tw_search));
+	}
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
 	
 	# Get the option strong
-	if($tw_get_favorites) {
+	if($tw_search) {
+		$stringname = 'search-'.$tw_include_rts.$tw_exclude_replies.$tw_search;
+	}elseif($tw_get_favorites) {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies.'favorites';
 	} else {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
@@ -609,7 +619,10 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
 		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>70,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
-		if($tw_get_favorites) {
+		if($tw_search) {
+			$apioptions['q']=$tw_search;
+			$twitterdata = rotatingtweets_call_twitter_API('search/tweets',$apioptions);
+		} elseif($tw_get_favorites) {
 			$twitterdata = rotatingtweets_call_twitter_API('favorites/list',$apioptions);
 		} else {
 			$twitterdata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apioptions);
@@ -642,6 +655,9 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	elseif(!empty($twitterjson)):
 		# If there's regular data, then update the cache and return the data
 		unset($firstentry);
+		if(isset($twitterjson['statuses'])):
+			$twitterjson = $twitterjson['statuses'];
+		endif;
 		if(is_array($twitterjson)) $firstentry = $twitterjson[0];
 		if(!empty($firstentry['text'])):
 			if(WP_DEBUG):

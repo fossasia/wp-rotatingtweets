@@ -73,8 +73,9 @@ Possible variables for the shortcode include:
 * `get_favorites` = `'0'` or `'1'` - show someone's favorites rather than their timeline - default is `'0'`
 * `url_length` = sets the length that the URL should be trimmed to...
 * `url` = Twitter user URL. If `screen_name` is empty and this link is valid, `screen_name` will be set to the user name included in `url`
+* `search` = a term to search for
 
-although the only one you *have* to have is `screen_name`.
+although, unless you are using `search`, the only one you *have* to have is `screen_name`.
 
 == Credits ==
 Most of this is my own work, but special thanks are owed to:
