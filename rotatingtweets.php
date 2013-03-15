@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.3.15
+Version: 1.3.16
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -188,7 +188,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			if($tw_official_format==$val): ?> checked="checked" <?php endif; 
 			echo " class='rtw_ad_official'><label for='".$this->get_field_id('tw_official_format_'.$val)."'> $html</label><br />";
 		};
-		unset($hideStr);
+		$hideStr='';
 		if($tw_official_format > 0) $hideStr = ' style = "display:none;" ';
 		?>
 		<p /><div class='rtw_ad_tw_det' <?=$hideStr;?>><p><?php _e('Show tweet details?','rotatingtweets'); ?></p><p>
@@ -598,7 +598,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		if(WP_DEBUG):
 			echo "<!-- var option is an array -->";
 		endif;
-		if(isset($option[$stringname])):
+		if(isset($option[$stringname]['json'][0])):
 			if(WP_DEBUG) echo "<!-- option[$stringname] exists -->";
 			if(is_array($option[$stringname]['json'][0])):
 				if(WP_DEBUG) echo "<!-- option[$stringname]['json'][0] is an array -->";
@@ -669,7 +669,11 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			update_option($optionname,$option);
 		endif;
 	endif;
-	return($latest_json);
+	if(isset($latest_json)):
+		return($latest_json);
+	else:
+		return;
+	endif;
 }
 
 # Gets the rate limiting data to see how long it will be before we can tweet again
@@ -924,7 +928,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						endforeach;			
 					endif;
 //					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
-					$before[]="%#(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
+					# This is designed to find hashtags and turn them into links...
+					$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
 					$after[]='<a href="http://twitter.com/search?q=%23$1&src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
 
