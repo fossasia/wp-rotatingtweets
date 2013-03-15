@@ -636,7 +636,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			set_transient('rotatingtweets_wp_error',$twitterdata->get_error_messages(), 120);
 		endif;
 	elseif(WP_DEBUG):
-		echo "<!-- Rotating Tweets - used cache -->";
+		echo "<!-- Rotating Tweets - used cache - ".($cache_delay - $timegap)." seconds remaining -->";
 	endif;
 	# Checks for errors in the reply
 	if(!empty($twitterjson['errors'])):
@@ -805,6 +805,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	endif;
 	if(empty($json)):
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>". __('Problem retrieving data from Twitter','rotatingtweets'). "</p></div>";
+		if(!empty($error)):
+			$result .= "\n<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".sprintf(__('Error code: %1$s - %2$s','rotatingtweets'), esc_attr($error[0]['code']), esc_attr($error[0]['message'])). "</p></div>";
+		endif;
 		$rate = rotatingtweets_get_rate_data();
 		# Check if the problem is rate limiting
 		if($rate['hourly_limit']>0 && $rate['remaining_hits'] == 0):
@@ -817,10 +820,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$error_messages = get_transient('rotatingtweets_wp_error');
 			if($error_messages):
 				foreach($error_messages as $error_message):
-					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Wordpress error message','rotatingtweets').": ".$error_message.".</p></div>";
+					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Wordpress error message','rotatingtweets').": ".$error_message['message'].".</p></div>";
 				endforeach;
 			endif;
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check the Rotating Tweets settings or the <a href=\'%s\'>Twitter API status</a>.','rotatingtweets'),'https://dev.twitter.com/status')."</p></div>";
+			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check the Twitter name in the widget or shortcode, <a href=\'%2$s\'>Rotating Tweets settings</a> or the <a href=\'%1$s\'>Twitter API status</a>.','rotatingtweets'),'https://dev.twitter.com/status',admin_url().'options-general.php?page=rotatingtweets')."</p></div>";
 		endif;
 	else:
 		$tweet_counter = 0;
