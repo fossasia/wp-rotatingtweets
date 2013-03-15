@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 0.600\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
 "POT-Creation-Date: 2013-03-02 20:25:59+00:00\n"
-"PO-Revision-Date: 2013-03-15 08:40-0000\n"
+"PO-Revision-Date: 2013-03-15 08:43-0000\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -247,15 +247,15 @@ msgstr ""
 
 #: rotatingtweets.php:271
 msgid "reply"
-msgstr "Responder"
+msgstr "Répondre"
 
 #: rotatingtweets.php:272
 msgid "retweet"
-msgstr "Retwittear"
+msgstr "Retweeter"
 
 #: rotatingtweets.php:273
 msgid "favorite"
-msgstr "Favorito"
+msgstr "Favori"
 
 #: rotatingtweets.php:411
 msgid ""
@@ -428,11 +428,11 @@ msgstr ""
 
 #: rotatingtweets.php:934 rotatingtweets.php:950
 msgid "Retweeted by %s"
-msgstr "Retwitteado por %s"
+msgstr "Retweeté par %s"
 
 #: rotatingtweets.php:952
 msgid "Expand"
-msgstr "Abrir"
+msgstr "Ouvrir"
 
 #: rotatingtweets.php:964
 msgid "Problem retrieving data from Twitter."
@@ -444,7 +444,7 @@ msgstr ""
 
 #: rotatingtweets.php:986
 msgid "Follow @%s"
-msgstr "Seguir a @%s"
+msgstr "Suivre @%s"
 
 #. Plugin Name of the plugin/theme
 msgid "Rotating Tweets (Twitter widget & shortcode)"

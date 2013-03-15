@@ -8,11 +8,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-03-02 20:39-0000\n"
+"PO-Revision-Date: 2013-03-15 08:38-0000\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
 "Language-Team: \n"
 "X-Generator: Poedit 1.5.5\n"
 "Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: rotatingtweets.php:41
 msgid "A widget to show tweets for a particular user in rotation."
@@ -442,7 +444,7 @@ msgstr ""
 
 #: rotatingtweets.php:986
 msgid "Follow @%s"
-msgstr ""
+msgstr "Folgen @%s"
 
 #. Plugin Name of the plugin/theme
 msgid "Rotating Tweets (Twitter widget & shortcode)"

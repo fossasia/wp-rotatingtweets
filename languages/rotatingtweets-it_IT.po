@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 0.600\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
 "POT-Creation-Date: 2013-03-02 20:25:59+00:00\n"
-"PO-Revision-Date: 2013-03-02 20:29-0000\n"
+"PO-Revision-Date: 2013-03-15 08:35-0000\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
 "Language-Team: \n"
 "Language: Italian\n"
@@ -428,7 +428,7 @@ msgstr ""
 
 #: rotatingtweets.php:934 rotatingtweets.php:950
 msgid "Retweeted by %s"
-msgstr ""
+msgstr "Ritwittato da %s"
 
 #: rotatingtweets.php:952
 msgid "Expand"
