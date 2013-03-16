@@ -576,7 +576,9 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
 	# Clear up variables
 	$tw_screen_name = urlencode(trim(remove_accents(str_replace('@','',$tw_screen_name))));
-	$tw_list = urlencode(sanitize_file_name( $tw_list ));
+	if($tw_list):
+		$tw_list = urlencode(strtolower(sanitize_file_name( $tw_list )));
+	endif;
 	if($tw_search) {
 		$tw_search = urlencode(trim($tw_search));
 	}
