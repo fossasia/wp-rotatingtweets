@@ -376,6 +376,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'links_in_new_window' => FALSE,
 			'url_length' => 29,
 			'search' => FALSE,
+			'list' => FALSE,
 			'get_favorites' => FALSE,
 			'ratelimit' => FALSE
 		), $atts ) ;
@@ -390,7 +391,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
-	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search);
+	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list);
 	$returnstring = rotating_tweets_display($tweets,$args,$print);
 	return $returnstring;
 }
@@ -572,9 +573,10 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 }
 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
-function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE ) {
+function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
 	# Clear up variables
 	$tw_screen_name = urlencode(trim(remove_accents(str_replace('@','',$tw_screen_name))));
+	$tw_list = urlencode(sanitize_file_name( $tw_list ));
 	if($tw_search) {
 		$tw_search = urlencode(trim($tw_search));
 	}
@@ -585,8 +587,10 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	# Get the option strong
 	if($tw_search) {
 		$stringname = 'search-'.$tw_include_rts.$tw_exclude_replies.$tw_search;
-	}elseif($tw_get_favorites) {
+	} elseif ($tw_get_favorites) {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies.'favorites';
+	} elseif ($tw_list) {
+		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies.'list-'.$tw_list;
 	} else {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	}
@@ -624,6 +628,11 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			$twitterdata = rotatingtweets_call_twitter_API('search/tweets',$apioptions);
 		} elseif($tw_get_favorites) {
 			$twitterdata = rotatingtweets_call_twitter_API('favorites/list',$apioptions);
+		} elseif($tw_list) {
+			unset($apioptions['screen_name'];
+			$apioptions['slug']=$tw_list;
+			$apioptions['owner_screen_name']=$tw_screen_name;
+			$twitterdata = rotatingtweets_call_twitter_API('lists/statuses',$apioptions);
 		} else {
 			$twitterdata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apioptions);
 		}
