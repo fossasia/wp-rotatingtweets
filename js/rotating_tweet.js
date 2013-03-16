@@ -43,7 +43,10 @@ jQuery(document).ready(function() {
 		});
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
-		if(rt_height == 0) {	
+		if(rotate_wp_debug) {
+			console.log('Initial height: '+rt_height );
+		};
+		if( rt_height < 1 ) {	
 			var rt_children_id = rotate_id + ' .rotatingtweet';
 			var rt_height = 0;
 			/* Go through the tweets - get their height - and set the minimum height */
@@ -53,6 +56,7 @@ jQuery(document).ready(function() {
 					rt_height = rt_tweet_height;
 				}
 			});
+			rt_height = rt_height + 20;
 			var rt_height_px = rt_height + 'px';
 			if(rotate_wp_debug) {
 				console.log('Resetting height to rt_height_px '+rt_height_px);
