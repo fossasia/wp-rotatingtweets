@@ -629,7 +629,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		} elseif($tw_get_favorites) {
 			$twitterdata = rotatingtweets_call_twitter_API('favorites/list',$apioptions);
 		} elseif($tw_list) {
-			unset($apioptions['screen_name'];
+			unset($apioptions['screen_name']);
 			$apioptions['slug']=$tw_list;
 			$apioptions['owner_screen_name']=$tw_screen_name;
 			$twitterdata = rotatingtweets_call_twitter_API('lists/statuses',$apioptions);
