@@ -1,4 +1,7 @@
 /* First - sort out the fonts */
+div.li.widget_rotatingtweets_widget,li.widget_rotatingtweets_widget {
+	width: 100%;
+}
 div.rotatingtweet {
 	font-size: 100%;
 }
