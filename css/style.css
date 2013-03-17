@@ -4,6 +4,7 @@
 }
 div.rotatingtweet {
 	font-size: 100%;
+	word-wrap: break-word;
 }
 p.rtw_meta,div.rtw_meta,div.rtw_meta_wide,div.rtw_name,div.rtw_id,div.rtw_time_short,div.rtw_rt_meta {
 	font-size: 0.8em;
