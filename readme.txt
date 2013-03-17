@@ -74,8 +74,9 @@ Possible variables for the shortcode include:
 * `url_length` = sets the length that the URL should be trimmed to...
 * `url` = Twitter user URL. If `screen_name` is empty and this link is valid, `screen_name` will be set to the user name included in `url`
 * `search` = a term to search for
+* `list` = `'list-slug'` - the 'slug' used by someone's list (something like `my-list`)
 
-although, unless you are using `search`, the only one you *have* to have is `screen_name`.
+although, except when using `search`, the only one you *have* to have is `screen_name`.
 
 == Credits ==
 Most of this is my own work, but special thanks are owed to:
@@ -91,7 +92,7 @@ Most of this is my own work, but special thanks are owed to:
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 = How can I add a Twitter bird to the left of my tweets? =
-You can do this by going to the `rotatingtweets/css` directory and renaming `yourstyle-sample.css` to `yourstyle.css`.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `yourstyle.css` won't be overwritten when the plug-in is upgraded to the latest version.
+You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 = The Rotating Tweets are not rotating. What can I do? =
 This normally happens if there is more than one copy of `jQuery` installed on a page - or more than one copy of `jQuery.cycle`.

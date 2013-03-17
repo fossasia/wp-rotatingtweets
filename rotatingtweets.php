@@ -559,6 +559,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 	if(!is_wp_error($result)):
 		$data = json_decode($result['body'],true);
 		if(!empty($data['errors'])):
+			$data['errors'][0]['type'] = 'Twitter';
 			update_option('rotatingtweets_api_error',$data['errors']);
 		else:
 			delete_option('rotatingtweets_api_error');
@@ -567,6 +568,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		$errorstring = array();
 		$errorstring[0]['code']= $result->get_error_code();
 		$errorstring[0]['message']= $result->get_error_message();
+		$errorstring[0]['type'] = 'Wordpress';
 		update_option('rotatingtweets_api_error',$errorstring);
 	endif;
 	return($result);
@@ -695,7 +697,7 @@ function rotatingtweets_get_rate_data() {
 //	$ratedata = wp_remote_request($callstring);
 	if(!is_wp_error($ratedata)):
 		$rate = json_decode($ratedata['body'],TRUE);
-		if($rate['resources']['statuses']['/statuses/user_timeline']['limit']>0):
+		if(isset($rate['resources']['statuses']['/statuses/user_timeline']['limit']) && $rate['resources']['statuses']['/statuses/user_timeline']['limit']>0):
 			$newrate['hourly_limit']=$rate['resources']['statuses']['/statuses/user_timeline']['limit'];
 			$newrate['remaining_hits']=$rate['resources']['statuses']['/statuses/user_timeline']['remaining'];
 			$newrate['reset_time_in_seconds']=$rate['resources']['statuses']['/statuses/user_timeline']['reset'];
@@ -806,35 +808,50 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	# Create an ID that has all the relevant info in - rotation type and speed of rotation
 	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
 	if(WP_DEBUG):
-		$result = "\n<div class='rotatingtweets wp_debug' id='$id'>";
+		$result = "\n<div class='rotatingtweets wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
 	else:
-		$result = "\n<div class='rotatingtweets' id='$id'>";
+		$result = "\n<div class='rotatingtweets rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
 	endif;
 	$error = get_option('rotatingtweets_api_error');
 	if(!empty($error)):
-		$result .= "\n<!-- Error: ".esc_attr($error[0]['code'])." - ".esc_attr($error[0]['message'])." -->";
+		$result .= "\n<!-- ".esc_html($error[0]['type'])." error: ".esc_html($error[0]['code'])." - ".esc_html($error[0]['message'])." -->";
 	endif;
 	if(empty($json)):
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>". __('Problem retrieving data from Twitter','rotatingtweets'). "</p></div>";
 		if(!empty($error)):
-			$result .= "\n<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".sprintf(__('Error code: %1$s - %2$s','rotatingtweets'), esc_attr($error[0]['code']), esc_attr($error[0]['message'])). "</p></div>";
-		endif;
-		$rate = rotatingtweets_get_rate_data();
-		# Check if the problem is rate limiting
-		if($rate['hourly_limit']>0 && $rate['remaining_hits'] == 0):
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('This website is currently <a href=\'%s\'>rate-limited by Twitter</a>.','rotatingtweets'),'https://dev.twitter.com/docs/rate-limiting-faq') . "</p></div>";
-			$waittimevalue = intval(($rate['reset_time_in_seconds'] - time())/60);
-			$waittime = sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue);
-			if($waittimevalue == 0) $waittime = __("Next attempt to get data will be in less than a minute",'rotatingtweets');
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>{$waittime}.</p></div>";
-		else:
-			$error_messages = get_transient('rotatingtweets_wp_error');
-			if($error_messages):
-				foreach($error_messages as $error_message):
-					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Wordpress error message','rotatingtweets').": ".$error_message['message'].".</p></div>";
-				endforeach;
-			endif;
-			$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check the Twitter name in the widget or shortcode, <a href=\'%2$s\'>Rotating Tweets settings</a> or the <a href=\'%1$s\'>Twitter API status</a>.','rotatingtweets'),'https://dev.twitter.com/status',admin_url().'options-general.php?page=rotatingtweets')."</p></div>";
+			$result .= "\n<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".sprintf(__('%3$s error code: %1$s - %2$s','rotatingtweets'), esc_html($error[0]['code']), esc_html($error[0]['message']),esc_html($error[0]['type'])). "</p></div>";
+			switch($error[0]['code']) {
+				case 88:
+					$rate = rotatingtweets_get_rate_data();
+					# Check if the problem is rate limiting
+					if(isset($rate['hourly_limit']) && $rate['hourly_limit']>0 && $rate['remaining_hits'] == 0):
+						$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('This website is currently <a href=\'%s\'>rate-limited by Twitter</a>.','rotatingtweets'),'https://dev.twitter.com/docs/rate-limiting-faq') . "</p></div>";
+						$waittimevalue = intval(($rate['reset_time_in_seconds'] - time())/60);
+						$waittime = sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue);
+						if($waittimevalue == 0) $waittime = __("Next attempt to get data will be in less than a minute",'rotatingtweets');
+						$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>{$waittime}.</p></div>";
+					endif;
+					break;
+				case 32:
+					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check your <a href=\'%s\'>Rotating Tweets settings</a>.','rotatingtweets'),admin_url().'options-general.php?page=rotatingtweets')."</p></div>";
+					break;
+				case 34:
+					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". __('Please check the Twitter screen name or list slug in the widget or shortcode.','rotatingtweets')."</p></div>";
+					break;
+				default:
+					switch($error[0]['type']) {
+						case 'Twitter':
+							$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check the Twitter name in the widget or shortcode, <a href=\'%2$s\'>Rotating Tweets settings</a> or the <a href=\'%1$s\'>Twitter API status</a>.','rotatingtweets'),'https://dev.twitter.com/status',admin_url().'options-general.php?page=rotatingtweets')."</p></div>";
+							break;
+						case 'Wordpress':
+							$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check your PHP and server settings.','rotatingtweets'),'https://dev.twitter.com/status',admin_url().'options-general.php?page=rotatingtweets')."</p></div>";
+							break;
+						default:
+							$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('Please check the Twitter name in the widget or shortcode, <a href=\'%2$s\'>Rotating Tweets settings</a> or the <a href=\'%1$s\'>Twitter API status</a>.','rotatingtweets'),'https://dev.twitter.com/status',admin_url().'options-general.php?page=rotatingtweets')."</p></div>";
+							break;
+					}
+				break;
+			}
 		endif;
 	else:
 		$tweet_counter = 0;
@@ -1073,10 +1090,21 @@ function rotatingtweets_enqueue_scripts() {
 			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
 			break;
 	endswitch;
-	wp_enqueue_style( 'rotating_tweet', plugins_url('css/style.css', __FILE__));
-	if(file_exists( plugin_dir_path(__FILE__).'css/yourstyle.css' )):
-		wp_enqueue_style( 'rotating_tweet_yourstyle', plugins_url('css/yourstyle.css', __FILE__));
-	endif;
+	wp_enqueue_style( 'rotatingtweets', plugins_url('css/style.css', __FILE__));
+	$uploads = wp_upload_dir();
+	$personalstyle = array(
+		plugin_dir_path(__FILE__).'css/yourstyle.css' => plugins_url('css/yourstyle.css', __FILE__),
+		$uploads['basedir'].'/rotatingtweets.css' => $uploads['baseurl'].'/rotatingtweets.css'
+	);
+	$scriptname = 'rotatingtweet-yourstyle';
+	$scriptcounter = '';
+	foreach($personalstyle as $dir => $url):
+		if(file_exists( $dir )):
+			wp_enqueue_style( $scriptname, $url);
+			$scriptname = 'rotating-tweet-yourstyle-';
+			$scriptcounter ++;
+		endif;
+	endforeach;
 }
 
 function rotatingtweets_enqueue_admin_scripts($hook) {
