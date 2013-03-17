@@ -1036,6 +1036,27 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
 						$result .= "\n</div>";
 						break;
+					case 5:
+						# This is an adjuster Rotating Tweets display routine
+						$result .= "\n\t\t<p class='rtw_main'><img src='".plugins_url('images/bird_16_black.png', __FILE__)."' alt='Twitter' />&nbsp;&nbsp; $main_text ";
+						$meta = '';
+						if($args['show_meta_timestamp']):
+							$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
+						endif;
+						if($args['show_meta_screen_name']):
+							if(!empty($meta)) $meta .= ' ';
+							$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+						endif;
+						if($args['show_meta_via']):
+							if(!empty($meta)) $meta .= ' ';
+							$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
+						endif;
+						if($args['show_meta_reply_retweet_favorite']):
+							if(!empty($meta)) $meta .= ' &middot; ';
+							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
+						endif;
+						if(!empty($meta)) $result .= "\n\t\t<span class='rtw_meta'>".ucfirst($meta)."</span></p>";
+						break;
 					}
 				else:
 					$result .= "\n\t\t<p class='rtw_main'>".__("Problem retrieving data from Twitter.",'rotatingtweets')."</p></div>";
