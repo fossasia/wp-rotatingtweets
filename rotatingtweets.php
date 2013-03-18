@@ -900,7 +900,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$rt_user = $rt_data['user'];
 						// These versions remove RT and use the original text
 						$rt_replace_array = array(1,2,3);
-						if(in_array($args['official_format'],$rt_replace_array):
+						if(in_array($args['official_format'],$rt_replace_array)):
 							$main_text = $rt_data['text'];
 							$retweeter = $user;
 							$tweetuser = $rt_user;
