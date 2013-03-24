@@ -577,12 +577,12 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
 	# Clear up variables
-	$tw_screen_name = urlencode(trim(remove_accents(str_replace('@','',$tw_screen_name))));
+	$tw_screen_name = trim(remove_accents(str_replace('@','',$tw_screen_name)));
 	if($tw_list):
-		$tw_list = urlencode(strtolower(sanitize_file_name( $tw_list )));
+		$tw_list = strtolower(sanitize_file_name( $tw_list ));
 	endif;
 	if($tw_search) {
-		$tw_search = urlencode(trim($tw_search));
+		$tw_search = trim($tw_search);
 	}
 	$cache_delay = 120;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
@@ -670,8 +670,10 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		unset($firstentry);
 		if(isset($twitterjson['statuses'])):
 			$twitterjson = $twitterjson['statuses'];
+		elseif(isset($twitterjson['results'])):
+			$twitterjson = $twitterjson['results'];
 		endif;
-		if(is_array($twitterjson)) $firstentry = $twitterjson[0];
+		if(is_array($twitterjson) && isset($twitterjson[0] )) $firstentry = $twitterjson[0];
 		if(!empty($firstentry['text'])):
 			if(WP_DEBUG):
 				echo "<!-- Storing cache entry for $stringname in $optionname -->";
