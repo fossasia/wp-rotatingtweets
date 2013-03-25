@@ -371,6 +371,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'show_meta_screen_name' => TRUE,
 			'show_meta_via' => TRUE,
 			'show_meta_reply_retweet_favorite' => FALSE,
+			'show_meta_prev_next' => FALSE,
 			'rotation_type' => 'scrollUp',
 			'official_format' => FALSE,
 			'links_in_new_window' => FALSE,
@@ -988,6 +989,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if($args['show_meta_reply_retweet_favorite']):
 							if(!empty($meta)) $meta .= ' &middot; ';
 							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
+						endif;
+						if($args['show_meta_prev_next']):
+							if(!empty($meta)) $meta .= ' &middot; ';
+							$meta .= '<a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
 						endif;
 						if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
 						break;
