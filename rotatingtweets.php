@@ -990,7 +990,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							if(!empty($meta)) $meta .= ' &middot; ';
 							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
 						endif;
-						if($args['show_meta_prev_next']):
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 							if(!empty($meta)) $meta .= ' &middot; ';
 							$meta .= '<a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
 						endif;
@@ -1010,6 +1010,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(isset($retweeter)) {
 							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
 						}
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
+							$result .= ' &middot; <a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
+						endif;
 						$result .= "\n</div>";
 						break;
 					case 2:
@@ -1026,8 +1029,11 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(isset($retweeter)) {
 							$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
 						}
-						$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue).'</span>';
-						$result .= "</div></div></div>";
+						$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
+							$result .= ' &middot; <a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
+						endif;
+						$result .= "</span></div></div></div>";
 						break;
 					case 3:
 						# This one uses the twitter standard approach for embedding via their javascript API - unfortunately I can't work out how to make it work with the rotating tweet javascript!  If anyone can work out how to calculate the height of a oEmbed Twitter tweet, I will be very grateful! :-)
