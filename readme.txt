@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual
 Requires at least: 2.6
 Tested up to: 3.5
-Stable tag: 1.3.17
+Stable tag: 1.3.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,7 +76,7 @@ Possible variables for the shortcode include:
 * `search` = a term to search for
 * `list` = `'list-slug'` - the 'slug' used by someone's list (something like `my-list`)
 
-although, except when using `search`, the only one you *have* to have is `screen_name`.
+although, except when using `search`, the only variable you *have* to have is `screen_name`.
 
 == Credits ==
 Most of this is my own work, but special thanks are owed to:
@@ -119,10 +119,13 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
 
 == Upgrade notice ==
-= 1.3.17 =
-Includes an important upgrade needed for Rotating Tweets to keep working after March 2013. Fixed problem display in Chrome.
+= 1.3.18 =
+Improved and clearer error messages - plus fix for search problems. If your version of Rotating Tweets < 0.700, includes important upgrade needed for Rotating Tweets to keep working after March 2013. 
 
 == Changelog ==
+= 1.3.18 =
+Improved and clearer error messages. Removed search bug. 'Next' and 'Prev' buttons. 
+
 = 1.3.17 =
 Adds the opportunity to show lists. Tackles a very odd box height problem that has just appeared in Chrome (but not Firefox or IE).
 
