@@ -382,7 +382,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'ratelimit' => FALSE
 		), $atts ) ;
 	extract($args);
-	if(empty($screen_name) && !empty($url)):
+	if(empty($screen_name) && empty($search) && !empty($url)):
 		$screen_name = rotatingtweets_link_to_screenname($url);
 		$args['screen_name'] = $screen_name;
 		if(WP_DEBUG) {
@@ -591,7 +591,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	
 	# Get the option strong
 	if($tw_search) {
-		$stringname = 'search-'.$tw_include_rts.$tw_exclude_replies.$tw_search;
+		$stringname = 'search-'.$tw_include_rts.$tw_exclude_replies.'-'.sanitize_file_name($tw_search);
 	} elseif ($tw_get_favorites) {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies.'favorites';
 	} elseif ($tw_list) {
@@ -605,7 +605,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$timegap = $cache_delay + 1;
 	if(is_array($option)):
 		if(WP_DEBUG):
-			echo "<!-- var option is an array -->";
+			echo "\n<!-- var option is an array -->";
 		endif;
 		if(isset($option[$stringname]['json'][0])):
 			if(WP_DEBUG) echo "<!-- option[$stringname] exists -->";
@@ -621,6 +621,8 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 				if(WP_DEBUG) echo "<!-- option[$stringname]['json'][0] is neither an object nor an array! -->";
 				unset($option[$stringname]);
 			endif;
+		elseif(WP_DEBUG):
+			echo "<!-- option[$stringname] does not exist -->";
 		endif;
 	else:
 		unset($option);
@@ -670,8 +672,18 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		# If there's regular data, then update the cache and return the data
 		unset($firstentry);
 		if(isset($twitterjson['statuses'])):
+			if(WP_DEBUG):
+				echo "<!-- using [statuses] --><!--";
+				print_r($twitterjson);
+				echo "\n-->";
+			endif;
 			$twitterjson = $twitterjson['statuses'];
 		elseif(isset($twitterjson['results'])):
+			if(WP_DEBUG):
+				echo "<!-- using [results] --><!-- ";
+				print_r($twitterjson);
+				echo "\n-->";
+			endif;
 			$twitterjson = $twitterjson['results'];
 		endif;
 		if(is_array($twitterjson) && isset($twitterjson[0] )) $firstentry = $twitterjson[0];
@@ -855,6 +867,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					}
 				break;
 			}
+		elseif(!empty($args['search'])):
+			$result .= "\n<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".sprintf(__('No Tweet results for search <a href="%2$s"><strong>%1$s</strong></a>','rotatingtweets'),esc_html($args['search']),esc_url('https://twitter.com/search?q='.urlencode($args['search']))). "</p></div>";
 		endif;
 	else:
 		$tweet_counter = 0;
