@@ -673,16 +673,12 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		unset($firstentry);
 		if(isset($twitterjson['statuses'])):
 			if(WP_DEBUG):
-				echo "<!-- using [statuses] --><!--";
-				print_r($twitterjson);
-				echo "\n-->";
+				echo "<!-- using [statuses] -->";
 			endif;
 			$twitterjson = $twitterjson['statuses'];
 		elseif(isset($twitterjson['results'])):
 			if(WP_DEBUG):
-				echo "<!-- using [results] --><!-- ";
-				print_r($twitterjson);
-				echo "\n-->";
+				echo "<!-- using [results] -->";
 			endif;
 			$twitterjson = $twitterjson['results'];
 		endif;
