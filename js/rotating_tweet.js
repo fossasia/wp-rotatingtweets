@@ -35,8 +35,8 @@ jQuery(document).ready(function() {
 			timeout: rotate_timeout,
 			cleartypeNoBg: true,
 			width: rt_target_width,
-			prev: jQuery(rotate_id).find('.rtw_prev'),
-			next: jQuery(rotate_id).find('.rtw_next'),
+			prev: rotate_id + '_rtw_prev',
+			next: rotate_id + '_rtw_next',
 			fx: rotate_fx,
 			fit: rt_fit
 		});
@@ -68,8 +68,8 @@ jQuery(document).ready(function() {
 				width: rt_target_width,
 				cleartypeNoBg: true,
 				fit: rt_fit,
-				prev: jQuery(rotate_id).find('.rtw_prev'),
-				next: jQuery(rotate_id).find('.rtw_next'),
+				prev: rotate_id + '_rtw_prev',
+				next: rotate_id + '_rtw_next',
 				fx: rotate_fx
 			});
 		}

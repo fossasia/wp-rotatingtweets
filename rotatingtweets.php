@@ -818,10 +818,15 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	endforeach;
 	# Create an ID that has all the relevant info in - rotation type and speed of rotation
 	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
+	$result = '';
+	# Put in the 'next / prev' buttons - although not very styled!
+	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
+		$result .= '<a id="'.$id.'_rtw_prev" href="#" class="rtw_prev">prev</a> &middot; <a href="#" id="'.$id.'_rtw_next" class="rtw_next">next</a>';
+	endif;
 	if(WP_DEBUG):
-		$result = "\n<div class='rotatingtweets wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
+		$result .= "\n<div class='rotatingtweets wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
 	else:
-		$result = "\n<div class='rotatingtweets rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
+		$result .= "\n<div class='rotatingtweets rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
 	endif;
 	$error = get_option('rotatingtweets_api_error');
 	if(!empty($error)):
@@ -1000,10 +1005,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							if(!empty($meta)) $meta .= ' &middot; ';
 							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
 						endif;
+/*
 						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 							if(!empty($meta)) $meta .= ' &middot; ';
 							$meta .= '<a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
 						endif;
+*/
 						if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
 						break;
 					case 1:
@@ -1020,9 +1027,11 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(isset($retweeter)) {
 							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
 						}
+/*
 						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 							$result .= ' &middot; <a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
 						endif;
+*/
 						$result .= "\n</div>";
 						break;
 					case 2:
@@ -1040,9 +1049,11 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
 						}
 						$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
+/*
 						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 							$result .= ' &middot; <a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
 						endif;
+*/
 						$result .= "</span></div></div></div>";
 						break;
 					case 3:
@@ -1062,7 +1073,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$result .= "\n</div>";
 						break;
 					case 5:
-						# This is an adjuster Rotating Tweets display routine
+						# This is an adjusted Rotating Tweets display routine
 						$result .= "\n\t\t<p class='rtw_main'><img src='".plugins_url('images/bird_16_black.png', __FILE__)."' alt='Twitter' />&nbsp;&nbsp; $main_text ";
 						$meta = '';
 						if($args['show_meta_timestamp']):
