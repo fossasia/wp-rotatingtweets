@@ -16,9 +16,8 @@ jQuery(document).ready(function() {
 		if(rotate_fx == null){rotate_fx = 'scrollUp'};
 		var rt_height_px = 'auto';
 		/* Now find the widget container width */
-//		var rt_target_padding = jQuery(this).css('padding-left') + jQuery(this).css('padding-right');
-		var rt_target_width = jQuery(this).parent().width() - ( jQuery(this).outerWidth(true) - jQuery(this).width() );	
-//		var rt_target_width = jQuery(this).parent().width() ;	
+		// Get the size of the parent box and subtract any padding
+		var rt_target_width = jQuery(this).parent().innerWidth() - jQuery(this).parent().css('padding-left') - jQuery(this).parent().css('padding-right');
 		var rt_fit = 1;
 		if( rt_target_width == null ) {
 			rt_fit = 0;
@@ -113,7 +112,7 @@ jQuery(document).ready(function() {
 			};
 			var rt_max_width = jQuery(rotate_id).width();
 			if( typeof jQuery(rt_block_id).css('padding-left') != 'undefined' ) {
-				rt_max_width = rt_max_width - parseInt(jQuery(rt_block_id).css('padding-left'));
+				rt_max_width = rt_max_width - parseInt(jQuery(rt_block_id).css('padding-left')) - 1 ;
 				if(rotate_wp_debug) {
 					console.log('- Padding is not undefined');
 				};

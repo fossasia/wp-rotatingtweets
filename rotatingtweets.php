@@ -47,7 +47,7 @@ class rotatingtweets_Widget extends WP_Widget {
     function widget($args, $instance) {		
 		extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-		$positive_variables = array('screen_name','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag');
+		$positive_variables = array('screen_name','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag','search');
 		foreach($positive_variables as $var) {
 			$newargs[$var] = @$instance['tw_'.$var];
 		}
@@ -79,7 +79,7 @@ class rotatingtweets_Widget extends WP_Widget {
 				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],true);
 				break;
 			case 2:
-				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['screen_name']);
+				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['search']);
 				$newargs['screen_name'] = '';
 				break;
 			case 3:
@@ -106,6 +106,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['tw_screen_name'] = strip_tags(trim($new_instance['tw_screen_name']));
 		$instance['tw_list_tag'] = strip_tags(trim($new_instance['tw_list_tag']));
+		$instance['tw_search'] = strip_tags(trim($new_instance['tw_search']));
 		$instance['tw_rotation_type'] = strip_tags(trim($new_instance['tw_rotation_type']));
 		$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
 		$instance['tw_links_in_new_window'] = absint($new_instance['tw_links_in_new_window']);
@@ -141,7 +142,8 @@ class rotatingtweets_Widget extends WP_Widget {
 			'tw_hide_meta_via'=> array('tw_show_meta_via',true,'notboolean',true),
 			'tw_show_meta_reply_retweet_favorite' => array('tw_show_meta_reply_retweet_favorite',false,'boolean',true),
 			'tw_timeout' => array('tw_timeout',4000,'number'),
-			'tw_list_tag' => array('tw_list_tag','','string')
+			'tw_list_tag' => array('tw_list_tag','','string'),
+			'tw_search' => array('tw_search','','string')
 		);
 		foreach($variables as $var => $val) {
 			if(isset($instance[$var])):
@@ -199,7 +201,8 @@ class rotatingtweets_Widget extends WP_Widget {
 			$hidesearch = '';
 		endif;
 		?>
-		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><span class='rtw_ad_not_search'<?php echo $hideuser;?>><?php _e('Twitter name:','rotatingtweets'); ?></span><span class='rtw_ad_search'<?php echo $hidesearch;?>><?php _e('Search:','rotatingtweets'); ?></span><input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
+		<p class='rtw_ad_not_search' <?php echo $hideuser;?>><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:','rotatingtweets'); ?><input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
+		<p class='rtw_ad_search'<?php echo $hidesearch;?>><label for="<?php echo $this->get_field_id('tw_search'); ?>"><?php _e('Search:','rotatingtweets'); ?><input class="widefat" id="<?php echo $this->get_field_id('tw_search'); ?>" name="<?php echo $this->get_field_name('tw_search'); ?>"  value="<?php echo $tw_search; ?>" /></label></p>
 		<p class='rtw_ad_list_tag' <?=$hidestr;?>><label for="<?php echo $this->get_field_id('tw_list_tag'); ?>"><?php _e('List Tag:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_list_tag'); ?>" name="<?php echo $this->get_field_name('tw_list_tag'); ?>"  value="<?php echo $tw_list_tag; ?>" /></label></p>
 		<p><?php _e('Type of Tweets?','rotatingtweets'); ?></p><p>
 		<?php
@@ -293,7 +296,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		<?php 
 		$tw_br = "<br />";
 		endforeach; ?></p></div>
-		<div class='rtw_ad_sf'<?php echo $hideuser;?>>
+		<div class='rtw_ad_sf'>
 		<p><?php _e('Show follow button?','rotatingtweets'); ?></p>
 <?php
 		$showfollowoptions = array (
@@ -1207,7 +1210,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$shortenvariables = '';
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
 		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
-		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),$args['screen_name']);
+		$followUserText = sprintf(__('Follow @%s','rotatingtweets'),remove_accents($args['screen_name']));
 		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$args['screen_name']."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
 	rotatingtweets_enqueue_scripts();
