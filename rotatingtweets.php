@@ -80,6 +80,7 @@ class rotatingtweets_Widget extends WP_Widget {
 				break;
 			case 2:
 				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['screen_name']);
+				$newargs['screen_name'] = '';
 				break;
 			case 3:
 				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,false,$newargs['list_tag']);
@@ -135,10 +136,10 @@ class rotatingtweets_Widget extends WP_Widget {
 			'tw_official_format' => array('tw_official_format',0,'number'),
 			'tw_show_type' => array('tw_show_type',0,'number'),
 			'tw_links_in_new_window' => array('tw_links_in_new_window',false, 'boolean'),
-			'tw_hide_meta_timestamp' => array('tw_show_meta_timestamp',true, 'notboolean'),
-			'tw_hide_meta_screen_name' => array('tw_show_meta_screen_name',true, 'notboolean'),
-			'tw_hide_meta_via'=> array('tw_show_meta_via',true,'notboolean'),
-			'tw_show_meta_reply_retweet_favorite' => array('tw_show_meta_reply_retweet_favorite',false,'boolean'),
+			'tw_hide_meta_timestamp' => array('tw_show_meta_timestamp',true, 'notboolean',true),
+			'tw_hide_meta_screen_name' => array('tw_show_meta_screen_name',true, 'notboolean',true),
+			'tw_hide_meta_via'=> array('tw_show_meta_via',true,'notboolean',true),
+			'tw_show_meta_reply_retweet_favorite' => array('tw_show_meta_reply_retweet_favorite',false,'boolean',true),
 			'tw_timeout' => array('tw_timeout',4000,'number'),
 			'tw_list_tag' => array('tw_list_tag','','string')
 		);
@@ -158,6 +159,10 @@ class rotatingtweets_Widget extends WP_Widget {
 				endswitch;
 			else:
 				$$val[0] = $val[1];
+			endif;
+			if(isset($val[3])):
+				$metaoption[$val[0]]=$$val[0];
+				unset($$val[0]);
 			endif;
 		}
 /*			
