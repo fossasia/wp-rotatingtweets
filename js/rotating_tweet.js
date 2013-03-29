@@ -17,13 +17,15 @@ jQuery(document).ready(function() {
 		var rt_height_px = 'auto';
 		/* Now find the widget container width */
 		// Get the size of the parent box and subtract any padding
-		var rt_target_width = jQuery(this).parent().innerWidth() - jQuery(this).parent().css('padding-left') - jQuery(this).parent().css('padding-right');
+		var rt_target_width = jQuery(this).parent().innerWidth() - parseFloat(jQuery(this).parent().css('padding-left')) - parseFloat(jQuery(this).parent().css('padding-right'));
 		var rt_fit = 1;
 		if( rt_target_width == null ) {
 			rt_fit = 0;
 		}
 		if(rotate_wp_debug) {
 			console.log('rt_target_width = '+rt_target_width);
+			console.log('rt_parent_padding = '+rt_parent_padding);
+			console.log('- left padding = '+rt_parent_padding);
 		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
