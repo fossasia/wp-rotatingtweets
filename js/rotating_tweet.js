@@ -108,11 +108,11 @@ jQuery(document).ready(function() {
 			/* Now get the padding-left dimension (if it exists) and subtract it from the max width	*/
 			if(rotate_wp_debug) {
 				console.log ('Now check for \'padding-left\'');
-				console.log ('- leftpadding - text : '+ jQuery(rt_block_id).css('padding-left') + ' and value: ' +parseInt(jQuery(rt_block_id).css('padding-left')));
+				console.log ('- leftpadding - text : '+ jQuery(rt_block_id).css('padding-left') + ' and value: ' +parseFloat(jQuery(rt_block_id).css('padding-left')));
 			};
 			var rt_max_width = jQuery(rotate_id).width();
 			if( typeof jQuery(rt_block_id).css('padding-left') != 'undefined' ) {
-				rt_max_width = rt_max_width - parseInt(jQuery(rt_block_id).css('padding-left')) - 1 ;
+				rt_max_width = rt_max_width - parseFloat(jQuery(rt_block_id).css('padding-left'))  ;
 				if(rotate_wp_debug) {
 					console.log('- Padding is not undefined');
 				};
