@@ -37,5 +37,14 @@ jQuery(document).ready(function() {
 		} else {
 			jQuery(this).closest('.widget-content').find('.rtw_ad_list_tag').hide('fast');			
 		}
+		if( response == 2) {
+			jQuery(this).closest('.widget-content').find('.rtw_ad_search').show();
+			jQuery(this).closest('.widget-content').find('.rtw_ad_not_search').hide();			
+			jQuery(this).closest('.widget-content').find('.rtw_ad_sf').hide('fast');
+		} else {
+			jQuery(this).closest('.widget-content').find('.rtw_ad_search').hide();
+			jQuery(this).closest('.widget-content').find('.rtw_ad_not_search').show();			
+			jQuery(this).closest('.widget-content').find('.rtw_ad_sf').show('fast');
+		}
 	});
 });

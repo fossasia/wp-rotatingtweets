@@ -188,11 +188,18 @@ class rotatingtweets_Widget extends WP_Widget {
 */
         ?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
-		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name / search term:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
 		<?php
 		$hidestr ='';
 		if($tw_show_type < 3) $hidestr = ' style="display:none;"';
+		if($tw_show_type != 2):
+			$hidesearch = ' style="display:none;"';
+			$hideuser = '';
+		else:
+			$hideuser =  ' style="display:none;"';
+			$hidesearch = '';
+		endif;
 		?>
+		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><span class='rtw_ad_not_search'<?php echo $hideuser;?>><?php _e('Twitter name:','rotatingtweets'); ?></span><span class='rtw_ad_search'<?php echo $hidesearch;?>><?php _e('Search:','rotatingtweets'); ?></span><input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
 		<p class='rtw_ad_list_tag' <?=$hidestr;?>><label for="<?php echo $this->get_field_id('tw_list_tag'); ?>"><?php _e('List Tag:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_list_tag'); ?>" name="<?php echo $this->get_field_name('tw_list_tag'); ?>"  value="<?php echo $tw_list_tag; ?>" /></label></p>
 		<p><?php _e('Type of Tweets?','rotatingtweets'); ?></p><p>
 		<?php
@@ -286,6 +293,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		<?php 
 		$tw_br = "<br />";
 		endforeach; ?></p></div>
+		<div class='rtw_ad_sf'<?php echo $hideuser;?>>
 		<p><?php _e('Show follow button?','rotatingtweets'); ?></p>
 <?php
 		$showfollowoptions = array (
@@ -303,7 +311,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		}
 		# This is an appalling hack to deal with the problem that jQuery gets broken when people hit save - as per http://lists.automattic.com/pipermail/wp-hackers/2011-March/037997.html - but it works!
 //		echo "<script type='text/javascript' src='".plugins_url('js/rotating_tweet_admin.js', __FILE__)."'></script>";
-		echo "\n<script type='text/javascript'>\n";
+		echo "</div>\n<script type='text/javascript'>\n";
 		$rtw_admin_script_original = file_get_contents(plugin_dir_path(__FILE__).'js/rotating_tweet_admin.js');
 		$rtw_admin_script_final = str_replace(
 			array('.rtw_ad_official','.rtw_ad_type'),
