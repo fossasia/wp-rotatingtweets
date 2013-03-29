@@ -12,7 +12,7 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 
 == Description ==
 * **Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets**
-* **Supports v 1.1 of the Twitter API** - yes! it will keep working after March 2013
+* **Supports v 1.1 of the Twitter API** - yes! it will keep working after [May 2013](https://dev.twitter.com/calendar)
 * **Space efficient** - instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
 * **Reliable** - keeps showing your latest Tweets even if the Twitter website is down.
 * **Customisable** - you decide whose tweets to show, how many to show, whether to include retweets and replies, and whether to show a follow button. You can also decide how quickly the tweets rotate and what type of animation to use.
@@ -91,6 +91,9 @@ Most of this is my own work, but special thanks are owed to:
 = How often does the plug-in call Twitter =
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
+= How can I pull information from two accounts into one widget =
+The easiest way is to use a search term like 'from:account1 OR from:account2'.
+
 = How can I add a Twitter bird to the left of my tweets? =
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
@@ -119,10 +122,13 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
 
 == Upgrade notice ==
-= 1.3.18 =
-Improved and clearer error messages - plus fix for search problems. If your version of Rotating Tweets < 0.700, includes important upgrade needed for Rotating Tweets to keep working after March 2013. 
+= 1.4.0 =
+You can now access search, favorites and lists through Rotating Tweets widgets. If your version of Rotating Tweets < 0.700, includes important upgrade needed for Rotating Tweets to keep working after March 2013. 
 
 == Changelog ==
+= 1.4.0 =
+Support for search, favorites and lists voa Rotating Tweets widgets.
+
 = 1.3.18 =
 Improved and clearer error messages. Removed search bug. 'Next' and 'Prev' buttons. 
 
