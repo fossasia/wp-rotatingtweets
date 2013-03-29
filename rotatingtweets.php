@@ -47,7 +47,7 @@ class rotatingtweets_Widget extends WP_Widget {
     function widget($args, $instance) {		
 		extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-		$positive_variables = array('screen_name','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format');
+		$positive_variables = array('screen_name','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag');
 		foreach($positive_variables as $var) {
 			$newargs[$var] = @$instance['tw_'.$var];
 		}
@@ -74,7 +74,21 @@ class rotatingtweets_Widget extends WP_Widget {
 			break;
 		}
 		if(empty($newargs['timeout'])) $newargs['timeout'] = 4000;
-		$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
+		switch($newargs['show_type']) {
+			case 1:
+				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],true);
+				break;
+			case 2:
+				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['screen_name']);
+				break;
+			case 3:
+				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,false,$newargs['list_tag']);
+				break;			
+			case 0:
+			default:
+				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
+				break;
+		}
         ?>
               <?php echo $before_widget; 
 						if ( $title )
@@ -90,12 +104,14 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['tw_screen_name'] = strip_tags(trim($new_instance['tw_screen_name']));
+		$instance['tw_list_tag'] = strip_tags(trim($new_instance['tw_list_tag']));
 		$instance['tw_rotation_type'] = strip_tags(trim($new_instance['tw_rotation_type']));
 		$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
 		$instance['tw_links_in_new_window'] = absint($new_instance['tw_links_in_new_window']);
 		$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
 		$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
 		$instance['tw_show_follow'] = absint($new_instance['tw_show_follow']);
+		$instance['tw_show_type'] = absint($new_instance['tw_show_type']);
 		# Complicated way to ensure the defaults remain as they were before the 0.500 upgrade - i.e. showing meta timestamp, screen name and via, but not reply, retweet, favorite
 		$instance['tw_hide_meta_timestamp'] = !$new_instance['tw_show_meta_timestamp'];
 		$instance['tw_hide_meta_screen_name'] = !$new_instance['tw_show_meta_screen_name'];
@@ -108,27 +124,85 @@ class rotatingtweets_Widget extends WP_Widget {
 	
     /** @see WP_Widget::form */
     function form($instance) {				
-		$title = esc_attr($instance['title']);
-        $tw_screen_name = esc_attr(trim($instance['tw_screen_name']));
-		$tw_rotation_type = $instance['tw_rotation_type'];
-		if(empty($tw_rotation_type)) $tw_rotation_type = 'scrollUp';
-        $tw_include_rts = absint($instance['tw_include_rts']);
-		$tw_exclude_replies = absint($instance['tw_exclude_replies']);
-        $tw_tweet_count = intval($instance['tw_tweet_count']);
-		$tw_show_follow = absint($instance['tw_show_follow']);
-		$tw_official_format = absint($instance['tw_official_format']);
-		$tw_links_in_new_window = absint($instance['tw_links_in_new_window']);
-		$metaoption['tw_show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
-		$metaoption['tw_show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
-		$metaoption['tw_show_meta_via'] = !$instance['tw_hide_meta_via'];
-		$metaoption['tw_show_meta_reply_retweet_favorite'] = absint($instance['tw_show_meta_reply_retweet_favorite']);
-		$tw_timeout = intval($instance['tw_timeout']);
+		$variables = array( 
+			'title' => array('title','','string'),
+			'tw_screen_name' => array ('tw_screen_name','', 'string'),
+			'tw_rotation_type' => array('tw_rotation_type','scrollUp', 'string'),
+			'tw_include_rts' => array('tw_include_rts', false, 'boolean'),
+			'tw_exclude_replies' => array('tw_exclude_replies', false, 'boolean'),
+			'tw_tweet_count' => array('tw_tweet_count',5,'number'),
+			'tw_show_follow' => array('tw_show_follow',false, 'boolean'),
+			'tw_official_format' => array('tw_official_format',0,'number'),
+			'tw_show_type' => array('tw_show_type',0,'number'),
+			'tw_links_in_new_window' => array('tw_links_in_new_window',false, 'boolean'),
+			'tw_hide_meta_timestamp' => array('tw_show_meta_timestamp',true, 'notboolean'),
+			'tw_hide_meta_screen_name' => array('tw_show_meta_screen_name',true, 'notboolean'),
+			'tw_hide_meta_via'=> array('tw_show_meta_via',true,'notboolean'),
+			'tw_show_meta_reply_retweet_favorite' => array('tw_show_meta_reply_retweet_favorite',false,'boolean'),
+			'tw_timeout' => array('tw_timeout',4000,'number'),
+			'tw_list_tag' => array('tw_list_tag','','string')
+		);
+		foreach($variables as $var => $val) {
+			if(isset($instance[$var])):
+				switch($val[2]):
+					case "string":
+						$$val[0] = esc_attr(trim($instance[$var]));
+						break;
+					case "number":
+					case "boolean":
+						$$val[0] = absint($instance[$var]);
+						break;
+					case "notboolean":
+						$$val[0] = !$instance[$var];
+						break;
+				endswitch;
+			else:
+				$$val[0] = $val[1];
+			endif;
+		}
+/*			
+		if(isset($instance['title'])) $title = esc_attr($instance['title']);
+		if(isset($instance['tw_screen_name'])) $tw_screen_name = esc_attr(trim($instance['tw_screen_name']));
+		if(isset($instance['tw_rotation_type'])) $tw_rotation_type = $instance['tw_rotation_type'];
+		if(isset($instance['tw_include_rts'])) $tw_include_rts = absint($instance['tw_include_rts']);
+		if(isset($instance['tw_exclude_replies'])) $tw_exclude_replies = absint($instance['tw_exclude_replies']);
+		if(isset($instance['tw_tweet_count'])) $tw_tweet_count = intval($instance['tw_tweet_count']);
+		if(isset($instance['tw_show_follow'])) $tw_show_follow = absint($instance['tw_show_follow']);
+		if(isset($instance['tw_official_format'])) $tw_official_format = absint($instance['tw_official_format']);
+		if(isset($instance['tw_show_type'])) $tw_show_type = absint($instance['tw_show_type']);
+		if(isset($instance['tw_links_in_new_window'])) $tw_links_in_new_window = absint($instance['tw_links_in_new_window']);
+		if(isset($instance['tw_hide_meta_timestamp'])) $metaoption['tw_show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
+		if(isset($instance['tw_hide_meta_screen_name'])) $metaoption['tw_show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
+		if(isset($instance['tw_hide_meta_via'])) $metaoption['tw_show_meta_via'] = !$instance['tw_hide_meta_via'];
+		if(isset($instance['tw_show_meta_reply_retweet_favorite'])) $metaoption['tw_show_meta_reply_retweet_favorite'] = absint($instance['tw_show_meta_reply_retweet_favorite']);
+		if(isset($instance['tw_timeout'])) $tw_timeout = intval($instance['tw_timeout']);
 # If values not set, set default values
+		if(empty($tw_rotation_type)) $tw_rotation_type = 'scrollUp';
 		if(empty($tw_timeout)) $tw_timeout = 4000;
 		if(empty($tw_tweet_count)) $tw_tweet_count = 5;
+*/
         ?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
-		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
+		<p><label for="<?php echo $this->get_field_id('tw_screen_name'); ?>"><?php _e('Twitter name / search term:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_screen_name'); ?>" name="<?php echo $this->get_field_name('tw_screen_name'); ?>"  value="<?php echo $tw_screen_name; ?>" /></label></p>
+		<?php
+		$hidestr ='';
+		if($tw_show_type < 3) $hidestr = ' style="display:none;"';
+		?>
+		<p class='rtw_ad_list_tag' <?=$hidestr;?>><label for="<?php echo $this->get_field_id('tw_list_tag'); ?>"><?php _e('List Tag:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('tw_list_tag'); ?>" name="<?php echo $this->get_field_name('tw_list_tag'); ?>"  value="<?php echo $tw_list_tag; ?>" /></label></p>
+		<p><?php _e('Type of Tweets?','rotatingtweets'); ?></p><p>
+		<?php
+		$typeoptions = array (
+							"0" => __("User timeline (default)",'rotatingtweets'),
+							"1" => __("Favorites",'rotatingtweets'),
+							"2" => __("Search",'rotatingtweets'),
+							"3" => __("List",'rotatingtweets')
+		);
+		foreach ($typeoptions as $val => $html) {
+			echo "<input type='radio' value='$val' id='".$this->get_field_id('tw_show_type_'.$val)."' name= '".$this->get_field_name('tw_show_type')."'";
+			if($tw_show_type==$val): ?> checked="checked" <?php endif; 
+			echo " class='rtw_ad_type'><label for='".$this->get_field_id('tw_show_type_'.$val)."'> $html</label><br />";
+		};
+		?></p>
 		<p><input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"> <?php _e('Include retweets?','rotatingtweets'); ?></label></p>
 		<p><input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"> <?php _e('Exclude replies?','rotatingtweets'); ?></label></p>
 		<p><input id="<?php echo $this->get_field_id('tw_links_in_new_window'); ?>" name="<?php echo $this->get_field_name('tw_links_in_new_window'); ?>" type="checkbox" value="1" <?php if($tw_links_in_new_window==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_links_in_new_window'); ?>"> <?php _e('Open all links in new window or tab?','rotatingtweets'); ?></label></p>
@@ -226,7 +300,10 @@ class rotatingtweets_Widget extends WP_Widget {
 //		echo "<script type='text/javascript' src='".plugins_url('js/rotating_tweet_admin.js', __FILE__)."'></script>";
 		echo "\n<script type='text/javascript'>\n";
 		$rtw_admin_script_original = file_get_contents(plugin_dir_path(__FILE__).'js/rotating_tweet_admin.js');
-		$rtw_admin_script_final = str_replace('.rtw_ad_official','[name="'.$this->get_field_name('tw_official_format').'"]',$rtw_admin_script_original);
+		$rtw_admin_script_final = str_replace(
+			array('.rtw_ad_official','.rtw_ad_type'),
+			array('[name="'.$this->get_field_name('tw_official_format').'"]','[name="'.$this->get_field_name('tw_show_type').'"]'),
+			$rtw_admin_script_original);
 		echo $rtw_admin_script_final;
 		echo "\n</script>";
 	}
