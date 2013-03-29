@@ -112,7 +112,7 @@ jQuery(document).ready(function() {
 			};
 			var rt_max_width = jQuery(rotate_id).width();
 			if( typeof jQuery(rt_block_id).css('padding-left') != 'undefined' ) {
-				rt_max_width = rt_max_width - parseFloat(jQuery(rt_block_id).css('padding-left'))  ;
+				rt_max_width = rt_max_width - parseFloat(jQuery(rt_block_id).css('padding-left')) - 1 ;
 				if(rotate_wp_debug) {
 					console.log('- Padding is not undefined');
 				};
