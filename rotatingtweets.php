@@ -1225,6 +1225,14 @@ add_action('plugins_loaded', 'rotatingtweets_init');
 
 function rotatingtweets_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' ); 
+	# Check for evil plug-ins
+	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	if (is_plugin_active('wsi/wp-splash-image.php')) {
+		//plugin is activated
+		$dependence = array('jquery','jquery.tools.front');
+	} else {
+		$dependence = array('jquery');
+	}
 	# Get Stylesheet
 	$style = get_stylesheet();
 	switch ($style):
@@ -1232,11 +1240,13 @@ function rotatingtweets_enqueue_scripts() {
 		case 'zeebizzcard':
 //		case 'zeeStyle':
 			wp_dequeue_script( 'zee_jquery-cycle');
-			wp_enqueue_script( 'zee_jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),array('jquery'),FALSE,FALSE );
-			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','zee_jquery-cycle'),FALSE,FALSE );
+			wp_enqueue_script( 'zee_jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
+			$dependence[]='zee_jquery-cycle';
+			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
 			break;
 		default:
-			wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),array('jquery'),FALSE,FALSE );
+			wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
+			$dependence[]='jquery-cycle';
 			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
 			break;
 	endswitch;
