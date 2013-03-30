@@ -1226,7 +1226,9 @@ add_action('plugins_loaded', 'rotatingtweets_init');
 function rotatingtweets_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' ); 
 	# Check for evil plug-ins
-	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	if ( ! function_exists( 'is_plugin_active' ) )
+		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+//		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 	if (is_plugin_active('wsi/wp-splash-image.php')) {
 		//plugin is activated
 		$dependence = array('jquery','jquery.tools.front');
