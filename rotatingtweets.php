@@ -1204,7 +1204,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		endforeach;
 	endif;
 	$result .= "\n</div>";
-	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos'])=='bottom'):
+	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='bottom'):
 		$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
 	endif;
 /*
