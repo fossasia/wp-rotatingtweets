@@ -917,48 +917,6 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	$result = '';
 	# Put in the 'next / prev' buttons - although not very styled!
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
-/*
-		$allowed_html = array (
-			'a' => array(
-				'href' => array(),
-				'title' => array(),
-				'style' => array(),
-				'class' => array()
-			),
-			'img' => array (
-				'src' => array(),
-				'height' => array(),
-				'width' => array(),
-				'alt' => array(),
-				'title' => array(),
-				'style' => array(),
-				'class' => array()
-			),
-			'br' => array(),
-			'em' => array(),
-			'strong' => array(),
-			'p' => array(
-				'style' => array(),
-				'class' => array()
-			),
-			'h1' => array(
-				'style' => array(),
-				'class' => array()
-			),
-			'h2' => array(
-				'style' => array(),
-				'class' => array()
-			),
-			'h3' => array(
-				'style' => array(),
-				'class' => array()
-			),
-			'h4' => array(
-				'style' => array(),
-				'class' => array()
-			)
-		);
-*/
 		$nextprev = '<a id="'.$id.'_rtw_prev" href="#" class="rtw_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" id="'.$id.'_rtw_next" class="rtw_next">'.wp_kses_post($args['next']).'</a>';
 		$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
 	endif;
