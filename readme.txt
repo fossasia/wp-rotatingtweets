@@ -55,31 +55,40 @@ Options include:
 = Variables =
 Possible variables for the shortcode include:
 
-* `screen_name` = Twitter user name - required
+= Required settings =
+At least one of the following three settings is required for the short-code to function:
+
+* `screen_name` = Twitter user name
+* `url` = Twitter user URL. If `screen_name` is empty and this link is valid, `screen_name` will be set to the user name included in `url`
+* `search` = a term to search for
+
+= Twitter options =
 * `include_rts` = `'0'` or `'1'` - include retweets - optional - default is `'0'`
 * `exclude_replies` = `'0'` or `'1'` - exclude replies - optional - default is `'0'`
 * `tweet_count` = number of tweets to show - optional - default is `5`
-* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
+* `get_favorites` = `'0'` or `'1'` - show someone's favorites rather than their timeline - default is `'0'`
+* `list` = `'list-slug'` - the 'slug' used by someone's list (something like `my-list`)
+= Display options =
 * `official_format` = `'1'` or `'2'` - show official format - optional - default is `'0'`
 * `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
-* `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
-* `no_show_screen_name` = `'0'` or `'1'` - remove the screen name from the Twitter follow button - optional - default is `'0'`
+* `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
+* `rotation_type` = any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'`
+* `url_length` = sets the length that the URL should be trimmed to...
 * `show_meta_timestamp` = `'0'` or `'1'` - show the time and date of each tweet - optional - default is `'1'`
 * `show_meta_screen_name` = `'0'` or `'1'` - show who posted each tweet - optional - default is `'1'`
 * `show_meta_via` = `'0'` or `'1'` - show how each tweet was posted - optional - default is `'1'`
 * `show_meta_reply_retweet_favorite` = `'0'` or `'1'` - show 'reply', 'retweet' and 'favorite' buttons - optional - default is `'0'`
-* `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
-* `rotation_type` = any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'`
-* `get_favorites` = `'0'` or `'1'` - show someone's favorites rather than their timeline - default is `'0'`
-* `url_length` = sets the length that the URL should be trimmed to...
-* `url` = Twitter user URL. If `screen_name` is empty and this link is valid, `screen_name` will be set to the user name included in `url`
-* `search` = a term to search for
-* `list` = `'list-slug'` - the 'slug' used by someone's list (something like `my-list`)
-* `next` = content for the next button (default 'next')
-* `prev` = content for the prev button (default 'prev')
-* `middot` = content for the space between the buttons (default ' &amp;middot; ')
+* `show_meta_next_prev` = `'0'` or `'1'` - show 'next', 'prev' links - optional - default is `'0'`
+	* `next` = content for the next button (default `'next'`)
+	* `prev` = content for the prev button (default `'prev'`)
+	* `middot` = content for the space between the buttons (default `' &amp;middot; '`)
+	* `np_pos` = position for 'next' and 'prev' buttons - `'top'` or `'bottom'` (default `'top'`)
+= Twitter follow button =
+* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
+* `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
+* `no_show_screen_name` = `'0'` or `'1'` - remove the screen name from the Twitter follow button - optional - default is `'0'`
 
-although, except when using `search`, the only variable you *have* to have is `screen_name`.
+
 
 == Credits ==
 Most of this is my own work, but special thanks are owed to:
@@ -126,171 +135,185 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 
 == Upgrade notice ==
 = 1.4.0 =
-You can now access search, favorites and lists through Rotating Tweets widgets. If your version of Rotating Tweets < 0.700, includes important upgrade needed for Rotating Tweets to keep working after March 2013. 
+* Access search, favorites and lists through Rotating Tweets widgets.
+
+= 0.700 (1.3.0) =
+* Upgrade needed for Rotating Tweets to keep working after May 2013. Supports version 1.1 of the Twitter API.
 
 == Changelog ==
 = 1.4.0 =
-Support for search, favorites and lists voa Rotating Tweets widgets.
+* Support for search, favorites and lists voa Rotating Tweets widgets.
 
 = 1.3.18 =
-Improved and clearer error messages. Removed search bug. 'Next' and 'Prev' buttons. 
+* Improved and clearer error messages. 
+* Removed search bug. 
+* 'Next' and 'Prev' buttons for shortcodes. 
 
 = 1.3.17 =
-Adds the opportunity to show lists. Tackles a very odd box height problem that has just appeared in Chrome (but not Firefox or IE).
+* Adds the opportunity to show lists. 
+* Tackles a very odd box height problem that has just appeared in Chrome (but not Firefox or IE).
 
 = 1.3.16 =
-Making sure hashtags have a space or the start of a line before them. Tidying up errors found when running plug-in with `wp_debug` set to `true`
+* Making sure hashtags have a space or the start of a line before them. 
+* Tidying up errors found when running plug-in with `wp_debug` set to `true`
 
 = 1.3.15 =
-Minor correction to hashtag code
+* Minor correction to hashtag code
 
 = 1.3.14 =
-Fixes accents in hashtags (hopefully). Adds beta of search to the API. Adds new format of Tweet display.
+* Fixes accents in hashtags (hopefully). 
+* Adds beta of search to the shortcode API. 
+* Adds new format of Tweet display.
 
 = 1.3.13 =
-Strips `@` from screen names to avoid API problems.
+* Strips `@` from screen names to avoid API problems.
 
 = 1.3.12 =
-Removes accents from screen names (and otherwise cleans them up). Add test option (currently for shortcodes only) to access favorites. Solves clash between PECL OAuth library and the Rotating Tweets OAuth library.
+* Removes accents from screen names (and otherwise cleans them up). 
+* Add test option (currently for shortcodes only) to access favorites. 
+* Solves clash between PECL OAuth library and the Rotating Tweets OAuth library.
 
 = 1.3.11 =
-Supports cyrillic hashtags!
+* Supports cyrillic hashtags!
 
 = 1.3.10 =
-Fixed hashtag links
+* Fixed hashtag links
 
 = 1.3.9 =
-Moved to [Semantic Versioning](http://semver.org/)
+* Moved to [Semantic Versioning](http://semver.org/)
 
 = 0.712 (1.3.8) =
-Fixed bug with `console.log` javascript on IE.
+* Fixed bug with `console.log` javascript on IE.
 
 = 0.711 (1.3.7) =
-Fixed up a significant problem with cacheing.
+* Fixed up a significant problem with cacheing.
 
 = 0.709 (1.3.6) =
-Tidying up error reporting.
+* Tidying up error reporting.
 
 = 0.707 (1.3.5) =
-Fixes major bug resulting from upgrade to handle Twitter API v 1.1
+* Fixes major bug resulting from upgrade to handle Twitter API v 1.1
 
 = 0.706 (1.3.4) =
-Change to JavaScript to improve width handling for tweets.
+* Change to JavaScript to improve width handling for tweets.
 
 = 0.703 (1.3.3) =
-Minor code tidying to improve debugging and increase speed!
+* Minor code tidying to improve debugging and increase speed!
 
 = 0.702 (1.3.2) =
-Adjustment to javascript and CSS to cope with long links or long words
+* Adjustment to javascript and CSS to cope with long links or long words
 
 = 0.701 (1.3.1) =
-Very minor mistake in rendering code
+* Very minor mistake in rendering code
 
 = 0.700 (1.3.0) =
-**Important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API.**
+* Important upgrade needed for Rotating Tweets to keep working after March 2013. Supports version 1.1 of the Twitter API.
 
 = 0.625 (1.2.4) =
-Enabled users to make all links open in a new tab or window
+* Enabled users to make all links open in a new tab or window
 
 = 0.623 (1.2.3) =
-Fixed a problem where a short name fitted inside a long one - e.g. @rotary and @rotarycrocus
+* Fixed a problem where a short name fitted inside a long one - e.g. @rotary and @rotarycrocus
 
 = 0.622 (1.2.2) =
-Escaped title tags
+* Escaped title tags
 
 = 0.621 (1.2.1) =
-Fixed timezone problem.
+* Fixed timezone problem.
 
 = 0.620 (1.2.0) =
-Added option to show links in a new window
-Fix problem with selection of 20 second rotating speed.
+* Added option to show links in a new window
+* Fix problem with selection of 20 second rotating speed.
 
 = 0.613 (1.1.6) =
-Fixed instructions in plug-ins list.
+* Fixed instructions in plug-ins list.
 
 = 0.612 (1.1.5) =
-Fixed error message caused by last fix causing tweets to repeat.
+* Fixed error message caused by last fix causing tweets to repeat.
 
 = 0.611 (1.1.4) =
-Finally ran with debug and removed all the error messages.
+* Finally ran with debug and removed all the error messages.
 
 = 0.610 (1.1.3) =
-Starts to add options to allow for different length URLs
+* Starts to add options to allow for different length URLs
 
 = 0.602 (1.1.2) =
-Fixes bug with Javascript
+* Fixes bug with Javascript
 
 = 0.601 (1.1.1) =
-Fixes problem with stylesheet
+* Fixes problem with stylesheet
 
 = 0.600 (1.1.0) =
-Now includes options consistent with Twitter display options
-Tidied up code.
+*Now includes options consistent with Twitter display options
+* Tidied up code.
 
 = 0.505 (1.0.0) =
-Minimised Javascript. Set-up for I18n.
+* Minimised Javascript. 
+* Set-up for I18n.
 
 = 0.502 (0.4.1) =
-Javascript fix for zero height tweets problem
+* Javascript fix for zero height tweets problem
 
 = 0.500 (0.4.0) =
-Adds options for how tweet information is displayed and how the tweet rotates.
+* Adds options for how tweet information is displayed and how the tweet rotates.
 
 = 0.492 (0.3.1) =
-Solves `Cannot use string offset as an array` error on line 232
+* Solves `Cannot use string offset as an array` error on line 232
 
 = 0.491 (0.3.0) =
-Lets you customise the Twitter 'follow' button. Fixes problem with media links. Sorts problem of overlong links reshaping widgets.
+* Lets you customise the Twitter 'follow' button. 
+* Fixes problem with media links. 
+* Sorts problem of overlong links reshaping widgets.
 
 = 0.48 (0.2.6) =
-More detailed error messages for Wordpress installations unable to access Twitter.
-Fixes problem on the zeeBizzCard template and sets up fix for other templates that use their own install of the `jquery-cycle` javascript.
+* More detailed error messages for Wordpress installations unable to access Twitter.
+* Fixes problem on the zeeBizzCard template and sets up fix for other templates that use their own install of the `jquery-cycle` javascript.
 
 = 0.471 (0.2.5) = 
-Making sure that cache never gets overwritten unless new, valid twitter data has been downloaded.
-Dealing with the problem that someone in a long conversation may not get enough valid tweets to show by asking for only 20 tweets from Twitter.
+* Making sure that cache never gets overwritten unless new, valid twitter data has been downloaded.
+* Dealing with the problem that someone in a long conversation may not get enough valid tweets to show by asking for only 20 tweets from Twitter.
 
 = 0.46 (0.2.4) = 
-Properly handles rate-limiting by Twitter
+* Properly handles rate-limiting by Twitter
 
 = 0.44 (0.2.3) = 
-Removes follow button if Twitter has returned an empty value
+* Removes follow button if Twitter has returned an empty value
 
 = 0.43 (0.2.2) = 
-Improved error checking if Twitter has returned an empty value
+* Improved error checking if Twitter has returned an empty value
 
 = 0.42 (0.2.1) =
-Fixed major bug causing crashes when Twitter goes down
+* Fixed major bug causing crashes when Twitter goes down
 
 = 0.40 (0.2.0) =
-Added ability to alter speed of rotation
+* Added ability to alter speed of rotation
 
 = 0.30 (0.1.8) =
-Fixes bug - problem with `get_object_vars()` on line 193
+* Fixes bug - problem with `get_object_vars()` on line 193
 
 = 0.29 (0.1.7) =
-Better handling of retweets. No longer cuts off the end of the text on longer RTs.
+* Better handling of retweets. No longer cuts off the end of the text on longer RTs.
 
 = 0.28 (0.1.6) =
-Properly fixes flaw in how flags are handled.
+* Properly fixes flaw in how flags are handled.
 
 = 0.27 (0.1.5) =
-Fixed flaw in how flags are handled.
+* Fixed flaw in how flags are handled.
 
 = 0.26 (0.1.4) =
-Stops display and cacheing of non-existent twitter feeds
+* Stops display and cacheing of non-existent twitter feeds
 
 = 0.25 (0.1.3) =
-Stops display and cacheing of faulty twitter feeds
+* Stops display and cacheing of faulty twitter feeds
 
 = 0.21 (0.1.2) =
-Replaced a missing `</div>` in the follow-button code (with thanks to [jacobp](http://wordpress.org/support/profile/jacobp) for spotting it and suggesting a fix)
+* Replaced a missing `</div>` in the follow-button code (with thanks to [jacobp](http://wordpress.org/support/profile/jacobp) for spotting it and suggesting a fix)
 
 = 0.2 (0.1.1) =
-Fixed a problem with cacheing
+* Fixed a problem with cacheing
 
 = 0.1 (0.1.0) =
-First published version
+* First published version
 
 == Screenshots ==
 1. This animation shows rotating tweets inserted into a blog-post via a short code. It is slightly faster than the default setting, but gives a sense of what you get.

@@ -475,7 +475,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'ratelimit' => FALSE,
 			'next' => __('next','rotatingtweets'),
 			'prev' => __('prev','rotatingtweets'),
-			'middot' => ' &middot; '
+			'middot' => ' &middot; ',
+			'np_pos' => 'top'
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -918,7 +919,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	# Put in the 'next / prev' buttons - although not very styled!
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 		$nextprev = '<a id="'.$id.'_rtw_prev" href="#" class="rtw_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" id="'.$id.'_rtw_next" class="rtw_next">'.wp_kses_post($args['next']).'</a>';
-		$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
+		if(strtolower($args['np_pos'])=='top'):
+			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
+		endif;
 	endif;
 	if(WP_DEBUG):
 		$result .= "\n<div class='rotatingtweets wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
@@ -1201,6 +1204,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		endforeach;
 	endif;
 	$result .= "\n</div>";
+	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos'])=='bottom'):
+		$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
+	endif;
 /*
 	if($args['show_meta_progress_blobs']):
 		$result .= "<div id='".$id."_nav' class='rtw_nav'>";
