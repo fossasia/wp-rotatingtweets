@@ -29,7 +29,7 @@ class wp_TwitterOAuth {
   /* Set connect timeout. */
   public $connecttimeout = 2; 
   /* Verify SSL Cert. */
-  public $ssl_verifypeer = FALSE;
+  public $ssl_verifypeer = TRUE;
   /* Respons format. */
   public $format = 'json';
   /* Decode returned json data. */
@@ -37,7 +37,7 @@ class wp_TwitterOAuth {
   /* Contains the last HTTP headers returned. */
   public $http_info;
   /* Set the useragnet. */
-  public $useragent = 'Twitter Feed for Wordpress Developers 1.0';
+  public $useragent = 'Twitter Feed for Wordpress Developers 1.1';
   /* Immediately retry the API call if the response was not successful. */
   //public $retry = TRUE;
 
