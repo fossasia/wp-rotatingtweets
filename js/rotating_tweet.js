@@ -4,8 +4,9 @@
 jQuery(document).ready(function() {
 	jQuery('.rotatingtweets').each(function() {
 		/* Get the ID of the rotating tweets div - and parse it to get rotation speed and rotation fx */
-		var rotate_id = "#"+this.id
+		var rotate_id = "#"+this.id;
 		var rotate_id_split = rotate_id.split('_');
+		var rotate_class = "."+this.id;
 		var rotate_timeout = rotate_id_split[1];
 		var rotate_fx = rotate_id_split[2];
 		var rotate_wp_debug = jQuery(this).hasClass('wp_debug');
@@ -37,8 +38,8 @@ jQuery(document).ready(function() {
 			timeout: rotate_timeout,
 			cleartypeNoBg: true,
 			width: rt_target_width,
-			prev: rotate_id + '_rtw_prev',
-			next: rotate_id + '_rtw_next',
+			prev: rotate_class + '_rtw_prev',
+			next: rotate_class + '_rtw_next',
 			fx: rotate_fx,
 			fit: rt_fit
 		});
@@ -70,8 +71,8 @@ jQuery(document).ready(function() {
 				width: rt_target_width,
 				cleartypeNoBg: true,
 				fit: rt_fit,
-				prev: rotate_id + '_rtw_prev',
-				next: rotate_id + '_rtw_next',
+				prev: rotate_class + '_rtw_prev',
+				next: rotate_class + '_rtw_next',
 				fx: rotate_fx
 			});
 		}
