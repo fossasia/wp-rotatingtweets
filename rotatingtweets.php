@@ -1127,11 +1127,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(isset($retweeter)) {
 							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
 						}
-/*
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
-							$result .= ' &middot; <a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+							$result .= ' &middot; '.$nextprev;
 						endif;
-*/
 						$result .= "\n</div>";
 						break;
 					case 2:
@@ -1149,11 +1147,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
 						}
 						$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
-/*
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
-							$result .= ' &middot; <a href="#" class="rtw_prev">prev</a> &middot; <a href="#" class="rtw_next">next</a>';
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+							$result .= wp_kses_post($args['middot']).$nextprev;
 						endif;
-*/
 						$result .= "</span></div></div></div>";
 						break;
 					case 3:
@@ -1170,6 +1166,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']).' &middot; ';
 						endif;
 						$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+							$result .= ' &middot; '.$nextprev;
+						endif;
 						$result .= "\n</div>";
 						break;
 					case 5:
@@ -1190,6 +1189,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if($args['show_meta_reply_retweet_favorite']):
 							if(!empty($meta)) $meta .= ' &middot; ';
 							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
+						endif;
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+							if(!empty($meta)) $meta .= ' &middot; ';
+							$meta .= $nextprev;
 						endif;
 						if(!empty($meta)) $result .= "\n\t\t<span class='rtw_meta'>".ucfirst($meta)."</span></p>";
 						break;
