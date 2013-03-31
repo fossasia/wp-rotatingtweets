@@ -1,11 +1,10 @@
-# Copyright (C) 2012 Rotating Tweets (Twitter widget & shortcode)
-# This file is distributed under the same license as the Rotating Tweets (Twitter widget & shortcode) package.
+# This file is distributed under the same license as the Rotating Tweets (Twitter widget &amp; shortcode) package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 0.600\n"
+"Project-Id-Version: Rotating Tweets (Twitter widget &amp; shortcode) 0.600\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
-"POT-Creation-Date: 2013-03-02 20:25:59+00:00\n"
-"PO-Revision-Date: 2013-03-15 08:43-0000\n"
+"POT-Creation-Date: 2013-03-31 17:27:05+00:00\n"
+"PO-Revision-Date: 2013-03-31 18:52-0000\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -19,252 +18,290 @@ msgstr ""
 #: rotatingtweets.php:41
 msgid "A widget to show tweets for a particular user in rotation."
 msgstr ""
+"Un widget pour montrer les tweets pour un usager particulier en rotation."
 
-#: rotatingtweets.php:130
+#: rotatingtweets.php:192
 msgid "Title:"
-msgstr ""
+msgstr "Titre:"
 
-#: rotatingtweets.php:131
+#: rotatingtweets.php:204
 msgid "Twitter name:"
+msgstr "Nom du Twitter:"
+
+#: rotatingtweets.php:205
+msgid "Search:"
+msgstr "Rechercher:"
+
+#: rotatingtweets.php:206
+msgid "List Tag:"
 msgstr ""
 
-#: rotatingtweets.php:132
+#: rotatingtweets.php:207
+msgid "Type of Tweets?"
+msgstr "Type de Tweets?"
+
+#: rotatingtweets.php:210
+msgid "User timeline (default)"
+msgstr "Fil d'utilisateur (par défaut)"
+
+#: rotatingtweets.php:211
+msgid "Favorites"
+msgstr "Favoris"
+
+#: rotatingtweets.php:212
+msgid "Search"
+msgstr "Rechercher"
+
+#: rotatingtweets.php:213
+msgid "List"
+msgstr "Liste"
+
+#: rotatingtweets.php:221
 msgid "Include retweets?"
-msgstr ""
+msgstr "Inclure les retweets?"
 
-#: rotatingtweets.php:133
+#: rotatingtweets.php:222
 msgid "Exclude replies?"
-msgstr ""
+msgstr "Exclure les réponses?"
 
-#: rotatingtweets.php:134
+#: rotatingtweets.php:223
 msgid "Open all links in new window or tab?"
 msgstr ""
+"Ouvrir tous les liens dans une nouvelle fenêtre ou dans un autre onglet?"
 
-#: rotatingtweets.php:135
+#: rotatingtweets.php:224
 msgid "How many tweets?"
-msgstr ""
+msgstr "Combien de tweets?"
 
-#: rotatingtweets.php:143
+#: rotatingtweets.php:232
 msgid "Speed"
-msgstr ""
+msgstr "Vitesse"
 
-#: rotatingtweets.php:146
+#: rotatingtweets.php:235
 msgid "Faster (3 seconds)"
-msgstr ""
+msgstr "Vite (3 secondes)"
 
-#: rotatingtweets.php:147
+#: rotatingtweets.php:236
 msgid "Normal (4 seconds)"
-msgstr ""
+msgstr "Normal (4 secondes)"
 
-#: rotatingtweets.php:148
+#: rotatingtweets.php:237
 msgid "Slower (5 seconds)"
-msgstr ""
+msgstr "Lent (5 secondes)"
 
-#: rotatingtweets.php:149
+#: rotatingtweets.php:238
 msgid "Slowest (6 seconds)"
-msgstr ""
+msgstr "Plus lent (6 secondes)"
 
-#: rotatingtweets.php:150
+#: rotatingtweets.php:239
 msgid "Ultra slow (20 seconds)"
-msgstr ""
+msgstr "Ultra lent (20 secondes)"
 
-#: rotatingtweets.php:162
+#: rotatingtweets.php:251
 msgid "Scroll Up"
-msgstr ""
+msgstr "Défile vers le haut"
 
-#: rotatingtweets.php:163
+#: rotatingtweets.php:252
 msgid "Scroll Down"
-msgstr ""
+msgstr "Défile vers le bas"
 
-#: rotatingtweets.php:164
+#: rotatingtweets.php:253
 msgid "Scroll Left"
-msgstr ""
+msgstr "Défile vers la gauche"
 
-#: rotatingtweets.php:165
+#: rotatingtweets.php:254
 msgid "Scroll Right"
-msgstr ""
+msgstr "Défile vers la droite"
 
-#: rotatingtweets.php:166
+#: rotatingtweets.php:255
 msgid "Fade"
-msgstr ""
+msgstr "Fondu"
 
-#: rotatingtweets.php:170
+#: rotatingtweets.php:259
 msgid "Type of rotation"
-msgstr ""
+msgstr "Type de rotation"
 
-#: rotatingtweets.php:179
+#: rotatingtweets.php:268
 msgid "Display format"
-msgstr ""
+msgstr "Format d'affichage"
 
-#: rotatingtweets.php:182
+#: rotatingtweets.php:271
 msgid "Original rotating tweets layout"
-msgstr ""
+msgstr "Disposition originale de rotating tweets"
 
-#: rotatingtweets.php:183
+#: rotatingtweets.php:272
 msgid ""
 "<a target='_blank' href='https://dev.twitter.com/terms/display-"
 "guidelines'>Official Twitter guidelines</a> (regular)"
 msgstr ""
 
-#: rotatingtweets.php:184
+#: rotatingtweets.php:273
 msgid ""
 "<a target='_blank' href='https://dev.twitter.com/terms/display-"
 "guidelines'>Official Twitter guidelines</a> (wide)"
 msgstr ""
 
-#: rotatingtweets.php:194
+#: rotatingtweets.php:283
 msgid "Show tweet details?"
-msgstr ""
+msgstr "Montrer les détails du tweet?"
 
-#: rotatingtweets.php:197
+#: rotatingtweets.php:286
 msgid "Time/date of tweet"
-msgstr ""
+msgstr "Heure/date du tweet"
 
-#: rotatingtweets.php:198
+#: rotatingtweets.php:287
 msgid "Name of person tweeting"
-msgstr ""
+msgstr "Nom de la personne tweetant"
 
-#: rotatingtweets.php:199
+#: rotatingtweets.php:288
 msgid "Source of tweet"
-msgstr ""
+msgstr "Source du tweet"
 
-#: rotatingtweets.php:200
+#: rotatingtweets.php:289
 msgid "'reply &middot; retweet &middot; favorite' links"
-msgstr ""
+msgstr " Liens de 'Répondre &middot; Retweeter &middot; Favori'"
 
-#: rotatingtweets.php:210
+#: rotatingtweets.php:300
 msgid "Show follow button?"
-msgstr ""
+msgstr "Montrer le bouton suivre?"
 
-#: rotatingtweets.php:213
+#: rotatingtweets.php:303
 msgctxt "Show follow button?"
 msgid "None"
-msgstr ""
+msgstr "Rien"
 
-#: rotatingtweets.php:214
+#: rotatingtweets.php:304
 msgid "Show name and number of followers"
-msgstr ""
+msgstr "Montrer le nom et le nombre d'abonnés"
 
-#: rotatingtweets.php:215
+#: rotatingtweets.php:305
 msgid "Show name only"
-msgstr ""
+msgstr "Montrer seulement le nom"
 
-#: rotatingtweets.php:216
+#: rotatingtweets.php:306
 msgid "Show followers only"
-msgstr ""
+msgstr "Montrer seulement les abonnés"
 
-#: rotatingtweets.php:217
+#: rotatingtweets.php:307
 msgid "Show button only"
-msgstr ""
+msgstr "Montrer seulement le bouton"
 
-#: rotatingtweets.php:242
+#: rotatingtweets.php:335
 msgid "less than a second ago"
-msgstr ""
+msgstr "Il y a moins d'une seconde"
 
-#: rotatingtweets.php:243
+#: rotatingtweets.php:336
 msgid "%d seconds ago"
-msgstr ""
+msgstr "Il y a %d secondes"
 
-#: rotatingtweets.php:244
+#: rotatingtweets.php:337
 msgid "about a minute ago"
 msgid_plural "about %d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il y a une minute"
+msgstr[1] "Il y a %d minutes"
 
-#: rotatingtweets.php:245 rotatingtweets.php:247
+#: rotatingtweets.php:338 rotatingtweets.php:340
 msgid "about an hour ago"
 msgid_plural "about %d hours ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il y a une heure"
+msgstr[1] "Il y a %d heures"
 
-#: rotatingtweets.php:246
+#: rotatingtweets.php:339
 msgid "yesterday"
-msgstr ""
+msgstr "Hier"
 
-#: rotatingtweets.php:248
+#: rotatingtweets.php:341
 msgid "about a day ago"
 msgid_plural "about %d days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il y a un jour"
+msgstr[1] "Il y a %d jours"
 
-#: rotatingtweets.php:249
+#: rotatingtweets.php:342
 msgid "last week"
-msgstr ""
+msgstr "La semaine dernière"
 
-#: rotatingtweets.php:250
+#: rotatingtweets.php:343
 msgid "about a week ago"
 msgid_plural "about %d weeks ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il y a une semaine"
+msgstr[1] "Il y a %d semaines"
 
-#: rotatingtweets.php:251
+#: rotatingtweets.php:344
 msgid "last month"
-msgstr ""
+msgstr "Le mois dernier"
 
-#: rotatingtweets.php:252
+#: rotatingtweets.php:345
 msgid "about a month ago"
 msgid_plural "about %d months ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il y a un mois"
+msgstr[1] "Il y a %d mois"
 
-#: rotatingtweets.php:253
+#: rotatingtweets.php:346
 msgid "last year"
-msgstr ""
+msgstr "L'année dernière"
 
-#: rotatingtweets.php:254
+#: rotatingtweets.php:347
 msgid "about a year ago"
 msgid_plural "about %d years ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Il y a un an"
+msgstr[1] "Il y a %d ans"
 
-#: rotatingtweets.php:261
+#: rotatingtweets.php:354
 msgctxt "abbreviated timestamp in seconds"
 msgid "%ds"
-msgstr ""
+msgstr "%ds"
 
-#: rotatingtweets.php:262
+#: rotatingtweets.php:355
 msgctxt "abbreviated timestamp in minutes"
 msgid "%dm"
-msgstr ""
+msgstr "%dm"
 
-#: rotatingtweets.php:263
+#: rotatingtweets.php:356
 msgctxt "abbreviated timestamp in hours"
 msgid "%dh"
-msgstr ""
+msgstr "%dh"
 
-#: rotatingtweets.php:264
+#: rotatingtweets.php:357
 msgctxt ""
 "short date format as per http://uk.php.net/manual/en/function.date.php"
 msgid "j M"
-msgstr ""
+msgstr "j M"
 
-#: rotatingtweets.php:265
+#: rotatingtweets.php:358
 msgctxt ""
 "slightly longer date format as per http://uk.php.net/manual/en/function.date."
 "php"
 msgid "j M Y"
-msgstr ""
+msgstr "j M Y"
 
-#: rotatingtweets.php:271
+#: rotatingtweets.php:364
 msgid "reply"
 msgstr "Répondre"
 
-#: rotatingtweets.php:272
+#: rotatingtweets.php:365
 msgid "retweet"
 msgstr "Retweeter"
 
-#: rotatingtweets.php:273
+#: rotatingtweets.php:366
 msgid "favorite"
 msgstr "Favori"
 
-#: rotatingtweets.php:411
+#: rotatingtweets.php:476
+msgid "next"
+msgstr "suivant"
+
+#: rotatingtweets.php:477
+msgid "prev"
+msgstr "précédant"
+
+#: rotatingtweets.php:512
 msgid ""
 "Please update <a href=\"%2$s\">your settings for Rotating Tweets</a>. The "
 "Twitter API <a href=\"%1$s\">changed in March 2013</a> and new settings are "
 "needed for Rotating Tweets to continue working."
 msgstr ""
 
-#: rotatingtweets.php:413
+#: rotatingtweets.php:514
 msgid ""
 "Please update <a href=\"%2$s\">your settings for Rotating Tweets</a>. The "
 "Twitter API will <a href=\"%1$s\">be changing in March 2013</a> and new "
@@ -272,22 +309,22 @@ msgid ""
 "changes."
 msgstr ""
 
-#: rotatingtweets.php:419
+#: rotatingtweets.php:520
 msgid ""
 "Please update <a href=\"%1$s\">your settings for Rotating Tweets</a>. "
 "Currently Rotating Tweets cannot authenticate you with Twitter using the "
 "details you have given."
 msgstr ""
 
-#: rotatingtweets.php:427 rotatingtweets.php:433
+#: rotatingtweets.php:528 rotatingtweets.php:534
 msgid "Rotating Tweets: Twitter API settings"
 msgstr ""
 
-#: rotatingtweets.php:435
+#: rotatingtweets.php:536
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: rotatingtweets.php:437
+#: rotatingtweets.php:538
 msgid ""
 "<p>Twitter <a href=\"%s\">recently announced</a> that they will be changing "
 "the way that they allow people to use the information in their tweets.</"
@@ -295,14 +332,14 @@ msgid ""
 "continues working:</p>"
 msgstr ""
 
-#: rotatingtweets.php:438
+#: rotatingtweets.php:539
 msgid ""
 "<h3>Step 1:</h3><p>Go to the <a href=\"%s\">My applications page</a> on the "
 "Twitter website to set up your website as a new Twitter 'application'. You "
 "may need to log-in using your Twitter user name and password.</p>"
 msgstr ""
 
-#: rotatingtweets.php:439
+#: rotatingtweets.php:540
 msgid ""
 "<h3>Step 2:</h3><p>If you don't already have a suitable 'application' that "
 "you can use for your website, set one up on the <a href=\"%s\">Create an "
@@ -311,14 +348,14 @@ msgid ""
 "p><p>You don't need a Callback URL.</p>"
 msgstr ""
 
-#: rotatingtweets.php:440
+#: rotatingtweets.php:541
 msgid ""
 "<h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</"
 "strong>, on the following page, click on <strong>Create my access token</"
 "strong>.</p>"
 msgstr ""
 
-#: rotatingtweets.php:441
+#: rotatingtweets.php:542
 msgid ""
 "<h3>Step 4:</h3><p>Copy the <strong>Consumer key</strong>, <strong>Consumer "
 "secret</strong>, <strong>Access token</strong> and <strong>Access token "
@@ -326,129 +363,158 @@ msgid ""
 "p>"
 msgstr ""
 
-#: rotatingtweets.php:442
+#: rotatingtweets.php:543
 msgid ""
 "<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>. If there are any "
 "problems, you will get an error message from Twitter which should help "
 "diagnose the problem.</p>"
 msgstr ""
 
-#: rotatingtweets.php:443
+#: rotatingtweets.php:544
 msgid ""
 "<p><em>Even though you are only entering one set of Twitter API data, "
 "Rotating Tweets will continue to support multiple widgets and shortcodes "
 "pulling from a variety of different Twitter accounts.</em></p>"
 msgstr ""
 
-#: rotatingtweets.php:447
+#: rotatingtweets.php:548
 msgid "Save Changes"
-msgstr ""
+msgstr "Sauvegarder les changements"
 
-#: rotatingtweets.php:454
+#: rotatingtweets.php:555
 msgid "Twitter API Settings"
-msgstr ""
+msgstr "Paramètres de l'API de Twitter"
 
-#: rotatingtweets.php:455
+#: rotatingtweets.php:556
 msgid "Twitter API Consumer Key"
-msgstr ""
+msgstr "Clé d'usager pour l'API de Twitter"
 
-#: rotatingtweets.php:456
+#: rotatingtweets.php:557
 msgid "Twitter API Consumer Secret"
-msgstr ""
+msgstr "Clé secrète d'usager pour l'API Twitter"
 
-#: rotatingtweets.php:457
+#: rotatingtweets.php:558
 msgid "Twitter API Access Token"
-msgstr ""
+msgstr "Jeton d'accès pour l'API de Twitter"
 
-#: rotatingtweets.php:458
+#: rotatingtweets.php:559
 msgid "Twitter API Access Token Secret"
-msgstr ""
+msgstr "Jeton secret d'accès pour l'API de Twitter"
 
-#: rotatingtweets.php:489
+#: rotatingtweets.php:590
 msgid "Error: Twitter API Consumer Key not correctly formatted."
 msgstr ""
+"Erreur: La clé d'usager pour l'API de Twitter n'est pas formatée "
+"correctement."
 
-#: rotatingtweets.php:496
+#: rotatingtweets.php:597
 msgid "Error: Twitter API Consumer Secret not correctly formatted."
 msgstr ""
+"Erreur: La clé secrète d'usager pour l'API de Twitter n'est pas formatée "
+"correctement."
 
-#: rotatingtweets.php:503
+#: rotatingtweets.php:604
 msgid "Error: Twitter API Access Token not correctly formatted."
 msgstr ""
+"Erreur: Le jeton d'accès pour l'API de Twitter n'est pas formaté "
+"correctement."
 
-#: rotatingtweets.php:510
+#: rotatingtweets.php:611
 msgid "Error: Twitter API Access Token Secret not correctly formatted."
 msgstr ""
+"Erreur: Le jeton secret d'accès pour l'API de Twitter n'est pas formaté "
+"correctement."
 
-#: rotatingtweets.php:517
+#: rotatingtweets.php:618
 msgid ""
 "Error message received from Twitter: %1$s. <a href=\"%2$s\">Please check "
 "your API key, secret, token and secret token on the Twitter website</a>."
 msgstr ""
 
-#: rotatingtweets.php:772
+#: rotatingtweets.php:936
 msgid "Problem retrieving data from Twitter"
+msgstr "Problème de recouvrement des données de Twitter."
+
+#: rotatingtweets.php:938
+msgid "%3$s error code: %1$s - %2$s"
 msgstr ""
 
-#: rotatingtweets.php:776
+#: rotatingtweets.php:944
 msgid "This website is currently <a href='%s'>rate-limited by Twitter</a>."
-msgstr ""
+msgstr "Ce site web a présentement <a href='%s'>un taux limité par Twitter</a>"
 
-#: rotatingtweets.php:778
+#: rotatingtweets.php:946
 msgid "Next attempt to get data will be in %d minute"
 msgid_plural "Next attempt to get data will be in %d minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le prochain essai pour obtenir les données sera dans %d minute"
+msgstr[1] "Le prochain essai pour obtenir les données sera dans %d minutes"
 
-#: rotatingtweets.php:779
+#: rotatingtweets.php:947
 msgid "Next attempt to get data will be in less than a minute"
 msgstr ""
+"Le prochain essai pour obtenir les données sera dans moins d'une minute."
 
-#: rotatingtweets.php:785
-msgid "Wordpress error message"
+#: rotatingtweets.php:952
+msgid "Please check your <a href='%s'>Rotating Tweets settings</a>."
 msgstr ""
 
-#: rotatingtweets.php:788
+#: rotatingtweets.php:955
 msgid ""
-"Please check the Rotating Tweets settings or the <a href='%s'>Twitter API "
+"Please check the Twitter screen name or list slug in the widget or shortcode."
+msgstr ""
+
+#: rotatingtweets.php:960 rotatingtweets.php:966
+msgid ""
+"Please check the Twitter name in the widget or shortcode, <a "
+"href='%2$s'>Rotating Tweets settings</a> or the <a href='%1$s'>Twitter API "
 "status</a>."
 msgstr ""
 
-#: rotatingtweets.php:910
+#: rotatingtweets.php:963
+msgid "Please check your PHP and server settings."
+msgstr ""
+
+#: rotatingtweets.php:972
+msgid "No Tweet results for search <a href=\"%2$s\"><strong>%1$s</strong></a>"
+msgstr ""
+
+#: rotatingtweets.php:1098 rotatingtweets.php:1166 rotatingtweets.php:1183
 msgid "from <a href='%1$s' title='%2$s'>%2$s's Twitter</a>"
-msgstr ""
+msgstr "De <a href='%1$s' title='%2$s'>%2$s's Twitter</a>"
 
-#: rotatingtweets.php:914
+#: rotatingtweets.php:1102 rotatingtweets.php:1187
 msgid "via %s"
-msgstr ""
+msgstr "via %s"
 
-#: rotatingtweets.php:925
+#: rotatingtweets.php:1119
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
-#: rotatingtweets.php:934 rotatingtweets.php:950
+#: rotatingtweets.php:1128 rotatingtweets.php:1147
 msgid "Retweeted by %s"
 msgstr "Retweeté par %s"
 
-#: rotatingtweets.php:952
+#: rotatingtweets.php:1149
 msgid "Expand"
 msgstr "Ouvrir"
 
-#: rotatingtweets.php:964
+#: rotatingtweets.php:1201
 msgid "Problem retrieving data from Twitter."
-msgstr ""
+msgstr "Problème de recouvrement de données de Twitter."
 
-#: rotatingtweets.php:966
+#: rotatingtweets.php:1203
 msgid "Please check the comments on this page's HTML to understand more."
 msgstr ""
+"S'il vous plait, regardez les commentaires sur cette page HTML pour mieux "
+"comprendre."
 
-#: rotatingtweets.php:986
+#: rotatingtweets.php:1226
 msgid "Follow @%s"
 msgstr "Suivre @%s"
 
 #. Plugin Name of the plugin/theme
 msgid "Rotating Tweets (Twitter widget & shortcode)"
-msgstr ""
+msgstr "Rotating Tweets (Widget pour Twitter & code court)"
 
 #. Description of the plugin/theme
 msgid ""
@@ -458,8 +524,14 @@ msgstr ""
 
 #. Author of the plugin/theme
 msgid "Martin Tod"
-msgstr ""
+msgstr "Martin Tod"
 
 #. Author URI of the plugin/theme
 msgid "http://www.martintod.org.uk"
-msgstr ""
+msgstr "http://www.martintod.org.uk"
+
+#~ msgid "Exclure les réponses?"
+#~ msgstr "Exclure les réponses?"
+
+#~ msgid "Wordpress error message"
+#~ msgstr "Message d'erreur Wordpress"
