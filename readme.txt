@@ -75,6 +75,9 @@ Possible variables for the shortcode include:
 * `url` = Twitter user URL. If `screen_name` is empty and this link is valid, `screen_name` will be set to the user name included in `url`
 * `search` = a term to search for
 * `list` = `'list-slug'` - the 'slug' used by someone's list (something like `my-list`)
+* `next` = content for the next button (default 'next')
+* `prev` = content for the prev button (default 'prev')
+* `middot` = content for the space between the buttons (default ' &amp;middot; ')
 
 although, except when using `search`, the only variable you *have* to have is `screen_name`.
 
