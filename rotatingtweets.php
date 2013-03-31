@@ -917,6 +917,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	$result = '';
 	# Put in the 'next / prev' buttons - although not very styled!
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
+/*
 		$allowed_html = array (
 			'a' => array(
 				'href' => array(),
@@ -957,7 +958,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 				'class' => array()
 			)
 		);
-		$nextprev = '<a id="'.$id.'_rtw_prev" href="#" class="rtw_prev">'.wp_kses($args['prev'],$allowed_html).'</a> '.wp_kses($args['middot'],$allowed_html).' <a href="#" id="'.$id.'_rtw_next" class="rtw_next">'.wp_kses($args['next'],$allowed_html).'</a>';
+*/
+		$nextprev = '<a id="'.$id.'_rtw_prev" href="#" class="rtw_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" id="'.$id.'_rtw_next" class="rtw_next">'.wp_kses_post($args['next']).'</a>';
 		$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
 	endif;
 	if(WP_DEBUG):
