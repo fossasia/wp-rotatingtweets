@@ -17,16 +17,26 @@ jQuery(document).ready(function() {
 		if(rotate_fx == null){rotate_fx = 'scrollUp'};
 		var rt_height_px = 'auto';
 		/* Now find the widget container width */
+		// Take the smaller of the parent and grandparent
+		rt_parent = jQuery(this).parent();
+		rt_grandparent = rt_parent.parent();
+		var rt_target_container_width = Math.min (
+			rt_parent.innerWidth() - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')),
+			rt_grandparent.innerWidth() - parseFloat(rt_grandparent.css('padding-left')) - parseFloat(rt_grandparent.css('padding-right'))
+		);		
 		// Get the size of the parent box and subtract any padding
-		var rt_target_width = jQuery(this).parent().innerWidth() - parseFloat(jQuery(this).parent().css('padding-left')) - parseFloat(jQuery(this).parent().css('padding-right')) - parseFloat(jQuery(this).css('padding-left')) - parseFloat(jQuery(this).css('padding-right'))  - parseFloat(jQuery(this).css('margin-left')) - parseFloat(jQuery(this).css('margin-right'))  - parseFloat(jQuery(this).css('border-left')) - parseFloat(jQuery(this).css('border-right'));
+		var rt_target_width = rt_target_container_width - parseFloat(jQuery(this).css('padding-left')) - parseFloat(jQuery(this).css('padding-right'))  - parseFloat(jQuery(this).css('margin-left')) - parseFloat(jQuery(this).css('margin-right'))  - parseFloat(jQuery(this).css('border-left')) - parseFloat(jQuery(this).css('border-right'));
 		var rt_fit = 1;
 		if( rt_target_width == null ) {
 			rt_fit = 0;
 		}
-		if(rotate_wp_debug) {
+//		if(rotate_wp_debug) {
+			console.log('parent_width = '+rt_parent.innerWidth());
+			console.log('grandparent_width = '+rt_grandparent.innerWidth());
+			console.log('rt_target_container_width = '+rt_target_container_width);
 			console.log('rt_target_width = '+rt_target_width);
 			console.log('rotate_timeout = '+rotate_timeout);
-		};
+//		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
 //		var rt_official_num = jQuery(rt_official_child).length;
