@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 		var rt_height_px = 'auto';
 		/* Now find the widget container width */
 		// Get the size of the parent box and subtract any padding
-		var rt_target_width = jQuery(this).parent().innerWidth() - parseFloat(jQuery(this).parent().css('padding-left')) - parseFloat(jQuery(this).parent().css('padding-right'));
+		var rt_target_width = jQuery(this).parent().innerWidth() - parseFloat(jQuery(this).parent().css('padding-left')) - parseFloat(jQuery(this).parent().css('padding-right')) - parseFloat(jQuery(this).css('padding-left')) - parseFloat(jQuery(this).css('padding-right'));
 		var rt_fit = 1;
 		if( rt_target_width == null ) {
 			rt_fit = 0;
