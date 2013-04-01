@@ -30,13 +30,13 @@ jQuery(document).ready(function() {
 		if( rt_target_width == null ) {
 			rt_fit = 0;
 		}
-//		if(rotate_wp_debug) {
+		if(rotate_wp_debug) {
 			console.log('parent_width = '+rt_parent.innerWidth());
 			console.log('grandparent_width = '+rt_grandparent.innerWidth());
 			console.log('rt_target_container_width = '+rt_target_container_width);
 			console.log('rt_target_width = '+rt_target_width);
 			console.log('rotate_timeout = '+rotate_timeout);
-//		};
+		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
 //		var rt_official_num = jQuery(rt_official_child).length;

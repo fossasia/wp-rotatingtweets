@@ -102,6 +102,15 @@ In most cases, each use (or "instance") of this plug-in gets data from Twitter e
 = How can I pull information from two accounts into one widget =
 The easiest way is to use a search term like 'from:account1 OR from:account2'.
 
+= My widget is too wide! =
+Try putting:
+`
+div.widget_rotatingtweets_widget, div.rotatingtweet, div.widget_rotatingtweets_widget div.widget-title {
+	max-width: 123px;
+}
+`
+into your CSS - changing 123px; to the width you're aiming at - either via putting `rotatingtweets.css` into `wp-content/uploads` or by editing your own template files.
+
 = How can I add a Twitter bird to the left of my tweets? =
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
