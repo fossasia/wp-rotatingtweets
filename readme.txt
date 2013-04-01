@@ -100,7 +100,7 @@ Most of this is my own work, but special thanks are owed to:
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 = How can I pull information from two accounts into one widget =
-The easiest way is to use a search term like 'from:account1 OR from:account2'.
+The easiest way is to use a search term like `'from:account1 OR from:account2'`.
 
 = My widget is too wide! =
 Try putting:
