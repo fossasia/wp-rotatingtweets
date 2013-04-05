@@ -93,6 +93,7 @@ jQuery(document).ready(function() {
 		/* This shows the width of the block containing the icon on 'official version 2' - i.e. the one where the whole tweet is indented */
 		var rt_block_id = rotate_id + ' .rtw_wide_block';
 		var rt_official_num = jQuery(rt_children_id).length;
+		var rt_children_meta_id = rotate_id + ' .rtw_meta';
 		if(rt_official_num > 0) {
 			/* Now run through and make sure all the boxes are the right size */
 			if(jQuery(rt_icon_id).length > 0) {
@@ -112,9 +113,12 @@ jQuery(document).ready(function() {
 					console.log('- Width of the icon: '+rt_icon_width);
 				};
 				if(rt_icon_width > 0) {
+/*
 					jQuery(rt_block_id).each( function() {
 						jQuery(this).css('padding-left', ( rt_icon_width + 10 ) + 'px');
 					});
+*/
+					jQuery(rt_block_id).css('padding-left', ( rt_icon_width + 10 ) + 'px');
 				}
 			}
 			/* Now get the padding-left dimension (if it exists) and subtract it from the max width	*/
@@ -135,15 +139,64 @@ jQuery(document).ready(function() {
 				console.log('- rt_max_width: ' + rt_max_width);
 			};
 			/* Go through the tweets - and set the minimum width */
+/*
 			jQuery(rt_children_id).each(function() {
 				jQuery(this).width(rt_max_width);
 			});
-			var rt_children_id = rotate_id + ' .rtw_meta';
+*/
+			jQuery(rt_children_id).width(rt_max_width);
 			/* Go through the tweets - and set the minimum width */
-			jQuery(rt_children_id).each(function() {
+/*
+			jQuery(rt_children_meta_id).each(function() {
 				jQuery(this).width(rt_max_width);
 			});
+*/
+			jQuery(rt_children_meta_id).width(rt_max_width);
 		};
+		jQuery(window).resize(function() {
+			rt_parent = jQuery(rotate_id).parent();
+			rt_grandparent = rt_parent.parent();
+			var rt_target_container_width_new = Math.min (
+				rt_parent.innerWidth() - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')),
+				rt_grandparent.innerWidth() - parseFloat(rt_grandparent.css('padding-left')) - parseFloat(rt_grandparent.css('padding-right'))  - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')) - parseFloat(rt_parent.css('border-left')) - parseFloat(rt_parent.css('border-right')) - parseFloat(rt_parent.css('margin-left')) - parseFloat(rt_parent.css('margin-right'))
+			);
+			console.log('Old width: '+rt_target_container_width);
+			console.log('New width: '+rt_target_container_width_new);
+			console.log('Old box width: '+rt_target_width);
+			if(rt_max_width == null) {
+				rt_max_width = rt_target_width;
+			}
+			if(rt_target_container_width_new != null && rt_target_container_width_new != rt_target_container_width) {
+				var rt_oldheight = 0;
+				jQuery(rotate_id + ' .rotatingtweet').each( function() {
+					var rt_test_height = jQuery(this).height();
+					if(rt_test_height > rt_oldheight ) {
+						rt_oldheight = rt_test_height;
+					};
+				});
+				console.log('Old height: '+ rt_oldheight);
+				var rt_old_box_height = jQuery(rotate_id).height();
+				console.log('Old container height' + rt_old_box_height )
+				jQuery(rt_children_id).width(rt_max_width + rt_target_container_width_new - rt_target_container_width );
+				jQuery(rt_children_meta_id).width(rt_max_width + rt_target_container_width_new - rt_target_container_width );
+				jQuery(rotate_id + ' .rtw_main').width(rt_target_width + rt_target_container_width_new - rt_target_container_width );
+				jQuery(rotate_id + ' .rotatingtweet').width(rt_target_width + rt_target_container_width_new - rt_target_container_width );
+				jQuery(rotate_id).width(rt_target_width + rt_target_container_width_new - rt_target_container_width );
+				// Now we need to fix the heights
+				var rt_newheight = 0;
+				jQuery(rotate_id + ' .rotatingtweet').each( function() {
+					var rt_test_height = jQuery(this).height();
+					if(rt_test_height > rt_newheight ) {
+						rt_newheight = rt_test_height;
+					};
+				});
+				console.log('New height: '+ rt_newheight);
+
+				if(rt_newheight > 0) {
+					jQuery(rotate_id).height(rt_old_box_height + rt_newheight - rt_oldheight);
+				}
+			}
+		});
 	});
 	// Script to show mouseover effects when going over the Twitter intents
 	jQuery('.rtw_intents a').hover(function() {
