@@ -24,10 +24,7 @@ jQuery(document).ready(function() {
 			rt_parent.innerWidth() - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')),
 			rt_grandparent.innerWidth() - parseFloat(rt_grandparent.css('padding-left')) - parseFloat(rt_grandparent.css('padding-right'))  - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')) - parseFloat(rt_parent.css('margin-left')) - parseFloat(rt_parent.css('margin-right'))
 		);
-		var rt_resize_width_old = Math.min (
-			rt_parent.innerWidth(),
-			rt_grandparent.innerWidth()
-		);
+		
 		// Get the size of the parent box and subtract any padding
 		var rt_target_width = rt_target_container_width - parseFloat(jQuery(this).css('padding-left')) - parseFloat(jQuery(this).css('padding-right'))  - parseFloat(jQuery(this).css('margin-left')) - parseFloat(jQuery(this).css('margin-right'))  - parseFloat(jQuery(this).css('border-left')) - parseFloat(jQuery(this).css('border-right'));
 		var rt_fit = 1;
@@ -99,7 +96,6 @@ jQuery(document).ready(function() {
 		var rt_block_id = rotate_id + ' .rtw_wide_block';
 		var rt_official_num = jQuery(rt_children_id).length;
 		var rt_children_meta_id = rotate_id + ' .rtw_meta';
-		var rt_resize_target_width = jQuery(rotate_id).width();
 		if(rt_official_num > 0) {
 			/* Now run through and make sure all the boxes are the right size */
 			if(jQuery(rt_icon_id).length > 0) {
@@ -159,6 +155,14 @@ jQuery(document).ready(function() {
 */
 			jQuery(rt_children_meta_id).width(rt_max_width);
 		};
+		// Now the resizing
+		var rt_resize_width_old = Math.min (
+			rt_parent.innerWidth(),
+			rt_grandparent.innerWidth()
+		);
+		var rt_resize_target_width = jQuery(rotate_id).width();
+		var rt_resize_target_main = jQuery(rotate_id + ' .rtw_main').width();
+		var rt_resize_target_tweet = jQuery(rotate_id + ' .rotatingtweet').width
 		jQuery(window).resize(function() {
 			rt_parent = jQuery(rotate_id).parent();
 			rt_grandparent = rt_parent.parent();
@@ -174,7 +178,7 @@ jQuery(document).ready(function() {
 				console.log('rt_max_width: '+ (rt_resize_target_width + rt_resize_width_new - rt_resize_width_old));
 			}
 			if(rt_max_width == null) {
-				rt_max_width = rt_resize_target_width;
+				rt_max_width = rt_resize_target_tweet;
 			}
 			if(rt_resize_width_new != null && rt_resize_width_old != null && rt_resize_width_new != rt_resize_width_old) {
 				var rt_oldheight = 0;
@@ -193,11 +197,13 @@ jQuery(document).ready(function() {
 				}
 				jQuery(rt_children_id).width(rt_max_width + rt_resize_width_new - rt_resize_width_old );
 				jQuery(rt_children_meta_id).width(rt_max_width  + rt_resize_width_new - rt_resize_width_old );
-				jQuery(rotate_id + ' .rtw_main').width(rt_resize_target_width  + rt_resize_width_new - rt_resize_width_old );
-				jQuery(rotate_id + ' .rotatingtweet').width(rt_resize_target_width  + rt_resize_width_new - rt_resize_width_old );
+				jQuery(rotate_id + ' .rtw_main').width(rt_resize_target_main  + rt_resize_width_new - rt_resize_width_old );
+				jQuery(rotate_id + ' .rotatingtweet').width(rt_resize_target_tweet  + rt_resize_width_new - rt_resize_width_old );
 				jQuery(rotate_id).width(rt_resize_target_width + rt_resize_width_new - rt_resize_width_old );
 				// Now update the variables
 				rt_resize_target_width = rt_resize_target_width + rt_resize_width_new - rt_resize_width_old;
+				rt_resize_target_main = rt_resize_target_main + rt_resize_width_new - rt_resize_width_old;
+				rt_resize_target_tweet = rt_resize_target_tweet + rt_resize_width_new - rt_resize_width_old;
 				rt_max_width = rt_max_width  + rt_resize_width_new - rt_resize_width_old;
 				rt_resize_width_old = rt_resize_width_new;
 				// Now we need to fix the heights
