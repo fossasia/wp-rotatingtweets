@@ -141,13 +141,16 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
 
 == Upgrade notice ==
-= 1.4.1 =
+= 1.4.2 =
 Works with responsive templates.
 
 = 0.700 (1.3.0) =
 * Upgrade needed for Rotating Tweets to keep working after May 2013. Supports version 1.1 of the Twitter API.
 
 == Changelog ==
+= 1.4.2 =
+* Corrected minor error with resizing of `.rtw_meta` div
+
 = 1.4.1 =
 * Now works with responsive formats
 * Adjusted width overflow issues

@@ -162,7 +162,8 @@ jQuery(document).ready(function() {
 		);
 		var rt_resize_target_width = jQuery(rotate_id).width();
 		var rt_resize_target_main = jQuery(rotate_id + ' .rtw_main').width();
-		var rt_resize_target_tweet = jQuery(rotate_id + ' .rotatingtweet').width
+		var rt_resize_target_tweet = jQuery(rotate_id + ' .rotatingtweet').width();
+		var rt_resize_target_meta = jQuery(rotate_id + ' .rtw_meta').width();
 		jQuery(window).resize(function() {
 			rt_parent = jQuery(rotate_id).parent();
 			rt_grandparent = rt_parent.parent();
@@ -205,12 +206,14 @@ jQuery(document).ready(function() {
 				jQuery(rt_children_meta_id).width(rt_max_width  + rt_resize_width_new - rt_resize_width_old );
 				jQuery(rotate_id + ' .rtw_main').width(rt_resize_target_main  + rt_resize_width_new - rt_resize_width_old );
 				jQuery(rotate_id + ' .rotatingtweet').width(rt_resize_target_tweet  + rt_resize_width_new - rt_resize_width_old );
+				jQuery(rotate_id + ' .rtw_meta').width(rt_resize_target_meta  + rt_resize_width_new - rt_resize_width_old );
 				jQuery(rotate_id).width(rt_resize_target_width + rt_resize_width_new - rt_resize_width_old );
 				// Now update the variables
 				rt_resize_target_width = rt_resize_target_width + rt_resize_width_new - rt_resize_width_old;
 				rt_resize_target_main = rt_resize_target_main + rt_resize_width_new - rt_resize_width_old;
 				rt_resize_target_tweet = rt_resize_target_tweet + rt_resize_width_new - rt_resize_width_old;
 				rt_max_width = rt_max_width  + rt_resize_width_new - rt_resize_width_old;
+				rt_resize_target_meta = rt_resize_target_meta  + rt_resize_width_new - rt_resize_width_old;
 				rt_resize_width_old = rt_resize_width_new;
 				// Now we need to fix the heights
 				var rt_newheight = 0;
