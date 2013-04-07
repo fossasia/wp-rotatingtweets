@@ -182,13 +182,19 @@ jQuery(document).ready(function() {
 			}
 			if(rt_resize_width_new != null && rt_resize_width_old != null && rt_resize_width_new != rt_resize_width_old) {
 				var rt_oldheight = 0;
+				var rt_oldcontainerheight = jQuery(rotate_id).height();
+				jQuery(rotate_id + ' .rotatingtweet').height('auto');
 				jQuery(rotate_id + ' .rotatingtweet').each( function() {
 					var rt_test_height = jQuery(this).height();
+					if(rotate_wp_debug) {
+						console.log('Old tweet height: '+ rt_test_height);
+					}
 					if(rt_test_height > rt_oldheight ) {
 						rt_oldheight = rt_test_height;
 					};
 				});
 				if(rotate_wp_debug) {
+					console.log('Old container height: '+ rt_oldcontainerheight);
 					console.log('Old height: '+ rt_oldheight);
 				}
 				var rt_old_box_height = jQuery(rotate_id).height();
@@ -208,8 +214,12 @@ jQuery(document).ready(function() {
 				rt_resize_width_old = rt_resize_width_new;
 				// Now we need to fix the heights
 				var rt_newheight = 0;
+				jQuery(rotate_id + ' .rotatingtweet').height('auto');
 				jQuery(rotate_id + ' .rotatingtweet').each( function() {
 					var rt_test_height = jQuery(this).height();
+					if(rotate_wp_debug) {
+						console.log('New tweet height: '+ rt_test_height);
+					}
 					if(rt_test_height > rt_newheight ) {
 						rt_newheight = rt_test_height;
 					};
@@ -218,7 +228,7 @@ jQuery(document).ready(function() {
 					console.log('New height: '+ rt_newheight);
 				}
 				if(rt_newheight > 0) {
-					jQuery(rotate_id).height(rt_old_box_height + rt_newheight - rt_oldheight);
+					jQuery(rotate_id).height(rt_oldcontainerheight + rt_newheight - rt_oldheight);
 				}
 			}
 		});
