@@ -18,26 +18,28 @@ jQuery(document).ready(function() {
 		var rt_height_px = 'auto';
 		/* Now find the widget container width */
 		// Take the smaller of the parent and grandparent
-		rt_parent = jQuery(this).parent();
-		rt_grandparent = rt_parent.parent();
+		var rt_parent = jQuery(rotate_id).parent();
+		var rt_grandparent = jQuery(rotate_id).parent().parent();
 		var rt_target_container_width = Math.min (
 			rt_parent.innerWidth() - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')),
 			rt_grandparent.innerWidth() - parseFloat(rt_grandparent.css('padding-left')) - parseFloat(rt_grandparent.css('padding-right'))  - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')) - parseFloat(rt_parent.css('margin-left')) - parseFloat(rt_parent.css('margin-right'))
 		);
 		
 		// Get the size of the parent box and subtract any padding
-		var rt_target_width = rt_target_container_width - parseFloat(jQuery(this).css('padding-left')) - parseFloat(jQuery(this).css('padding-right'))  - parseFloat(jQuery(this).css('margin-left')) - parseFloat(jQuery(this).css('margin-right'))  - parseFloat(jQuery(this).css('border-left')) - parseFloat(jQuery(this).css('border-right'));
+		var rt_target_width = rt_target_container_width - parseFloat(jQuery(this).css('padding-left')) - parseFloat(jQuery(this).css('padding-right'))  - parseFloat(jQuery(this).css('margin-left')) - parseFloat(jQuery(this).css('margin-right'))  - parseFloat(jQuery(this).css('border-left')) - parseFloat(jQuery(this).css('border-right') ) ;
 		var rt_fit = 1;
 		if( rt_target_width == null ) {
 			rt_fit = 0;
 		}
-		if(rotate_wp_debug) {
+//		if(rotate_wp_debug) {
+			console.log('============================');
+			console.log('self_width = '+jQuery(rotate_id).innerWidth());
 			console.log('parent_width = '+rt_parent.innerWidth());
 			console.log('grandparent_width = '+rt_grandparent.innerWidth());
 			console.log('rt_target_container_width = '+rt_target_container_width);
 			console.log('rt_target_width = '+rt_target_width);
 			console.log('rotate_timeout = '+rotate_timeout);
-		};
+//		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
 //		var rt_official_num = jQuery(rt_official_child).length;
@@ -56,9 +58,9 @@ jQuery(document).ready(function() {
 		});
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
-		if(rotate_wp_debug) {
+	//	if(rotate_wp_debug) {
 			console.log('Initial height: '+rt_height );
-		};
+	//	};
 		if( rt_height < 1 ) {	
 			var rt_children_id = rotate_id + ' .rotatingtweet';
 			var rt_height = 0;
@@ -71,9 +73,9 @@ jQuery(document).ready(function() {
 			});
 			rt_height = rt_height + 20;
 			var rt_height_px = rt_height + 'px';
-			if(rotate_wp_debug) {
+	//		if(rotate_wp_debug) {
 				console.log('Resetting height to rt_height_px '+rt_height_px);
-			};
+	//		};
 			jQuery(rotate_id).cycle('destroy');
 			jQuery(rotate_id).cycle({
 				pause: 1,
@@ -99,11 +101,11 @@ jQuery(document).ready(function() {
 		if(rt_official_num > 0) {
 			/* Now run through and make sure all the boxes are the right size */
 			if(jQuery(rt_icon_id).length > 0) {
-				if(rotate_wp_debug) {
+				// if(rotate_wp_debug) {
 					console.log('Adjusting widths for \'Official Twitter Version 2\'');
 					console.log('- Width of Rotating Tweets container: ' + jQuery(this).width());
 					console.log('- Width of the icon container: ' + jQuery(rt_icon_id).show().width());
-				};
+				// };
 				var rt_icon_width = 0;
 				jQuery(rt_icon_id).each( function() {
 					newiconsize = jQuery(this).width();
