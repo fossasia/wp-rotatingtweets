@@ -31,7 +31,7 @@ jQuery(document).ready(function() {
 		if( rt_target_width == null ) {
 			rt_fit = 0;
 		}
-//		if(rotate_wp_debug) {
+		if(rotate_wp_debug) {
 			console.log('============================');
 			console.log('self_width = '+jQuery(rotate_id).innerWidth());
 			console.log('parent_width = '+rt_parent.innerWidth());
@@ -39,7 +39,7 @@ jQuery(document).ready(function() {
 			console.log('rt_target_container_width = '+rt_target_container_width);
 			console.log('rt_target_width = '+rt_target_width);
 			console.log('rotate_timeout = '+rotate_timeout);
-//		};
+		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
 //		var rt_official_num = jQuery(rt_official_child).length;
@@ -58,9 +58,9 @@ jQuery(document).ready(function() {
 		});
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
-	//	if(rotate_wp_debug) {
+		if(rotate_wp_debug) {
 			console.log('Initial height: '+rt_height );
-	//	};
+		};
 		if( rt_height < 1 ) {	
 			var rt_children_id = rotate_id + ' .rotatingtweet';
 			var rt_height = 0;
@@ -73,9 +73,9 @@ jQuery(document).ready(function() {
 			});
 			rt_height = rt_height + 20;
 			var rt_height_px = rt_height + 'px';
-	//		if(rotate_wp_debug) {
+			if(rotate_wp_debug) {
 				console.log('Resetting height to rt_height_px '+rt_height_px);
-	//		};
+			};
 			jQuery(rotate_id).cycle('destroy');
 			jQuery(rotate_id).cycle({
 				pause: 1,
@@ -101,11 +101,11 @@ jQuery(document).ready(function() {
 		if(rt_official_num > 0) {
 			/* Now run through and make sure all the boxes are the right size */
 			if(jQuery(rt_icon_id).length > 0) {
-				// if(rotate_wp_debug) {
+				if(rotate_wp_debug) {
 					console.log('Adjusting widths for \'Official Twitter Version 2\'');
 					console.log('- Width of Rotating Tweets container: ' + jQuery(this).width());
 					console.log('- Width of the icon container: ' + jQuery(rt_icon_id).show().width());
-				// };
+				};
 				var rt_icon_width = 0;
 				jQuery(rt_icon_id).each( function() {
 					newiconsize = jQuery(this).width();
@@ -143,18 +143,8 @@ jQuery(document).ready(function() {
 				console.log('- rt_max_width: ' + rt_max_width);
 			};
 			/* Go through the tweets - and set the minimum width */
-/*
-			jQuery(rt_children_id).each(function() {
-				jQuery(this).width(rt_max_width);
-			});
-*/
 			jQuery(rt_children_id).width(rt_max_width);
 			/* Go through the tweets - and set the minimum width */
-/*
-			jQuery(rt_children_meta_id).each(function() {
-				jQuery(this).width(rt_max_width);
-			});
-*/
 			jQuery(rt_children_meta_id).width(rt_max_width);
 		};
 		// Now the responsiveness code
@@ -163,8 +153,8 @@ jQuery(document).ready(function() {
 		var rt_resize_width_old_grandparent = rt_grandparent.innerWidth();
 		var rt_resize_width_new_parent = rt_resize_width_old_parent;
 		var rt_resize_width_new_grandparent = rt_resize_width_old_grandparent;		
-		var rt_resize_parent_change = rt_resize_width_new_parent - rt_resize_width_old_parent;
-		var rt_resize_grandparent_change = rt_resize_width_new_grandparent - rt_resize_width_old_grandparent;		
+		var rt_resize_parent_change = 0;
+		var rt_resize_grandparent_change = 0;		
 		// Now get the starting measures
 		var rt_resize_target_width = jQuery(rotate_id).width();
 		var rt_resize_target_main = jQuery(rotate_id + ' .rtw_main').width();
