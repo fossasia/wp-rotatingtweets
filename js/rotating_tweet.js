@@ -155,11 +155,15 @@ jQuery(document).ready(function() {
 */
 			jQuery(rt_children_meta_id).width(rt_max_width);
 		};
-		// Now the resizing
-		var rt_resize_width_old = Math.min (
-			rt_parent.innerWidth(),
-			rt_grandparent.innerWidth()
-		);
+		// Now the responsiveness code
+		// First get the measures we will use to track change
+		var rt_resize_width_old_parent = rt_parent.innerWidth();
+		var rt_resize_width_old_grandparent = rt_grandparent.innerWidth();
+		var rt_resize_width_new_parent = rt_resize_width_old_parent;
+		var rt_resize_width_new_grandparent = rt_resize_width_old_grandparent;		
+		var rt_resize_parent_change = rt_resize_width_new_parent - rt_resize_width_old_parent;
+		var rt_resize_grandparent_change = rt_resize_width_new_grandparent - rt_resize_width_old_grandparent;		
+		// Now get the starting measures
 		var rt_resize_target_width = jQuery(rotate_id).width();
 		var rt_resize_target_main = jQuery(rotate_id + ' .rtw_main').width();
 		var rt_resize_target_tweet = jQuery(rotate_id + ' .rotatingtweet').width();
@@ -167,21 +171,29 @@ jQuery(document).ready(function() {
 		jQuery(window).resize(function() {
 			rt_parent = jQuery(rotate_id).parent();
 			rt_grandparent = rt_parent.parent();
-			var rt_resize_width_new = Math.min (
-				rt_parent.innerWidth(),
-				rt_grandparent.innerWidth()
-			);
+			rt_resize_width_new_parent = rt_parent.innerWidth();
+			rt_resize_width_new_grandparent = rt_grandparent.innerWidth();
+			
+			// Now calculate the largest and smallest change in size
+			rt_resize_parent_change = rt_resize_width_new_parent - rt_resize_width_old_parent;
+			rt_resize_grandparent_change = rt_resize_width_new_grandparent - rt_resize_width_old_grandparent;		
+			
+			// Now decide how much to change things
+			rt_resize_change = rt_resize_parent_change;
+			if(rt_resize_change == 0) {
+				rt_resize_change = rt_resize_grandparent_change;
+			}			
 			if(rotate_wp_debug) {
-				console.log('Old width: '+rt_resize_width_old);
-				console.log('New width: '+rt_resize_width_new);
+				console.log('Parent change: '+rt_resize_parent_change);
+				console.log('Grandparent change: '+rt_resize_grandparent_change);
 				console.log('Old box width: '+rt_resize_target_width);
-				console.log('New target width: '+ (rt_resize_target_width + rt_resize_width_new - rt_resize_width_old));
-				console.log('rt_max_width: '+ (rt_resize_target_width + rt_resize_width_new - rt_resize_width_old));
+				console.log('New target width: '+ (rt_resize_target_width + rt_resize_change));
+				console.log('rt_max_width: '+ (rt_resize_target_width + rt_resize_change));
 			}
 			if(rt_max_width == null) {
 				rt_max_width = rt_resize_target_tweet;
 			}
-			if(rt_resize_width_new != null && rt_resize_width_old != null && rt_resize_width_new != rt_resize_width_old) {
+			if(rt_resize_change != 0) {
 				var rt_oldheight = 0;
 				var rt_oldcontainerheight = jQuery(rotate_id).height();
 				jQuery(rotate_id + ' .rotatingtweet').height('auto');
@@ -202,19 +214,20 @@ jQuery(document).ready(function() {
 				if(rotate_wp_debug) {
 					console.log('Old container height' + rt_old_box_height )
 				}
-				jQuery(rt_children_id).width(rt_max_width + rt_resize_width_new - rt_resize_width_old );
-				jQuery(rt_children_meta_id).width(rt_max_width  + rt_resize_width_new - rt_resize_width_old );
-				jQuery(rotate_id + ' .rtw_main').width(rt_resize_target_main  + rt_resize_width_new - rt_resize_width_old );
-				jQuery(rotate_id + ' .rotatingtweet').width(rt_resize_target_tweet  + rt_resize_width_new - rt_resize_width_old );
-				jQuery(rotate_id + ' .rtw_meta').width(rt_resize_target_meta  + rt_resize_width_new - rt_resize_width_old );
-				jQuery(rotate_id).width(rt_resize_target_width + rt_resize_width_new - rt_resize_width_old );
+				jQuery(rt_children_id).width(rt_max_width + rt_resize_change );
+				jQuery(rt_children_meta_id).width(rt_max_width  + rt_resize_change );
+				jQuery(rotate_id + ' .rtw_main').width(rt_resize_target_main  + rt_resize_change );
+				jQuery(rotate_id + ' .rotatingtweet').width(rt_resize_target_tweet  + rt_resize_change );
+				jQuery(rotate_id + ' .rtw_meta').width(rt_resize_target_meta  + rt_resize_change );
+				jQuery(rotate_id).width(rt_resize_target_width + rt_resize_change );
 				// Now update the variables
-				rt_resize_target_width = rt_resize_target_width + rt_resize_width_new - rt_resize_width_old;
-				rt_resize_target_main = rt_resize_target_main + rt_resize_width_new - rt_resize_width_old;
-				rt_resize_target_tweet = rt_resize_target_tweet + rt_resize_width_new - rt_resize_width_old;
-				rt_max_width = rt_max_width  + rt_resize_width_new - rt_resize_width_old;
-				rt_resize_target_meta = rt_resize_target_meta  + rt_resize_width_new - rt_resize_width_old;
-				rt_resize_width_old = rt_resize_width_new;
+				rt_resize_target_width = rt_resize_target_width + rt_resize_change;
+				rt_resize_target_main = rt_resize_target_main +  rt_resize_change;
+				rt_resize_target_tweet = rt_resize_target_tweet  + rt_resize_change;
+				rt_max_width = rt_max_width   + rt_resize_change;
+				rt_resize_target_meta = rt_resize_target_meta   + rt_resize_change;
+				rt_resize_width_old_parent = rt_parent.innerWidth();
+				rt_resize_width_old_grandparent = rt_grandparent.innerWidth();
 				// Now we need to fix the heights
 				var rt_newheight = 0;
 				jQuery(rotate_id + ' .rotatingtweet').height('auto');
