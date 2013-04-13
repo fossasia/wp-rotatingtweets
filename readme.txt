@@ -142,12 +142,15 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 
 == Upgrade notice ==
 = 1.4.3 =
-* Works with responsive templates. Fixes some styling problems.
+* Adds an option to switch off verification of SSL connections to Twitter
 
 = 0.700 (1.3.0) =
 * Upgrade needed for Rotating Tweets to keep working after May 2013. Supports version 1.1 of the Twitter API.
 
 == Changelog ==
+= 1.4.4 =
+* Adds an option to switch off verification of SSL connections to Twitter
+
 = 1.4.3 =
 * Removes two lines of CSS causing formatting problems
 * Improves responsiveness going from narrow to wider layouts

@@ -540,8 +540,11 @@ function rotatingtweets_call_twitter_API_options() {
 	echo sprintf(__('<h3>Step 2:</h3><p>If you don\'t already have a suitable \'application\' that you can use for your website, set one up on the <a href="%s">Create an Application page</a>.</p> <p>It\'s normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets.</p><p>You don\'t need a Callback URL.</p>','rotatingtweets'),'https://dev.twitter.com/apps/new');
 	_e('<h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</strong>, on the following page, click on <strong>Create my access token</strong>.</p>','rotatingtweets');
 	_e('<h3>Step 4:</h3><p>Copy the <strong>Consumer key</strong>, <strong>Consumer secret</strong>, <strong>Access token</strong> and <strong>Access token secret</strong> from your Twitter application page into the settings below.</p>','rotatingtweets');
-	_e('<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>. If there are any problems, you will get an error message from Twitter which should help diagnose the problem.</p>','rotatingtweets');
-	_e('<p><em>Even though you are only entering one set of Twitter API data, Rotating Tweets will continue to support multiple widgets and shortcodes pulling from a variety of different Twitter accounts.</em></p>','rotatingtweets');
+	_e('<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>.');
+	_e('<h3>If there are any problems:</h3><p>If there are any problems, you should get an error message from Twitter displayed as a "rotating tweet" which should help diagnose the problem.</p>','rotatingtweets');
+	_e('<p>If the error message references SSL, try changing the "Verify SSL connection to Twitter" below to "No".</p>','rotatingtweets');
+	_e('<h3>Multiple Twitter Accounts</h3>');
+	_e('<p>Even though you are only entering one set of Twitter API data, Rotating Tweets will continue to support multiple widgets and shortcodes pulling from a variety of different Twitter accounts.</p>','rotatingtweets');
 	echo '<form method="post" action="options.php">';
 	settings_fields( 'rotatingtweets_options' );
 	do_settings_sections('rotatingtweets_api_settings');
@@ -557,6 +560,7 @@ function rotatingtweets_admin_init(){
 	add_settings_field('rotatingtweets_secret', __('Twitter API Consumer Secret','rotatingtweets'), 'rotatingtweets_option_show_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_token', __('Twitter API Access Token','rotatingtweets'), 'rotatingtweets_option_show_token', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_token_secret', __('Twitter API Access Token Secret','rotatingtweets'), 'rotatingtweets_option_show_token_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
+	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_api_main');
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');
@@ -573,6 +577,23 @@ function rotatingtweets_option_show_token() {
 function rotatingtweets_option_show_token_secret() {
 	$options = get_option('rotatingtweets-api-settings');
 	echo "<input id='rotatingtweets_api_token_secret_input' name='rotatingtweets-api-settings[token_secret]' size='70' type='text' value='{$options['token_secret']}' />";
+}
+function rotatingtweets_option_show_ssl_verify() {
+	$options = get_option('rotatingtweets-api-settings');
+	$choice = array(
+		1 => _x('Yes','Verify SSL connection to Twitter','rotatingtweets'),
+		0 => _x('No','Verify SSL connection to Twitter','rotatingtweets')
+	);
+	echo "\n<select id='rotatingtweets_api_ssl_verify_input' name='rotatingtweets-api-settings[ssl_verify]'>";
+	foreach($choice as $value => $text) {
+		if($options['ssl_verify_off'] != $value ) {
+			$selected = 'selected = "selected"';
+		} else {
+			$selected = '';
+		}
+		echo "\n\t<option value='".$value."'".$selected.">".$text."</option>";
+	}
+	echo "\n</select>";
 }
 // Explanatory text
 function rotatingtweets_api_explanation() {
@@ -610,6 +631,14 @@ function rotatingtweets_api_validate($input) {
 		$error = 1;
 		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token-secret'), __('Error: Twitter API Access Token Secret not correctly formatted.','rotatingtweets'));
 	}
+	// Check 'ssl_verify'
+	if(isset($input['ssl_verify']) && $input['ssl_verify']==0):
+		$options['ssl_verify_off']=true;
+	else:
+		$options['ssl_verify_off']=false;
+	endif;	
+
+	unset($options['ssl_verify']);
 	// Now a proper test
 	if(empty($error)):
 		$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
@@ -631,6 +660,17 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		//    $result = $connection->get('statuses/user_timeline', $options);
 		if(WP_DEBUG):
 			echo "\n<!-- Using OAuth - version 1.1 of API -- ".esc_attr($command)." -->\n";
+		endif;
+		if(isset($api['ssl_verify_off']) && $api['ssl_verify_off']):
+			if(WP_DEBUG):
+				echo "\n<!-- NOT verifying SSL peer -->\n";
+			endif;
+			$connection->ssl_verifypeer = FALSE;
+		else:
+			if(WP_DEBUG):
+				echo "\n<!-- Verifying SSL peer -->\n";
+			endif;
+			$connection->ssl_verifypeer = TRUE;
 		endif;
 		$result = $connection->get($command , $options);
 	else:
