@@ -637,8 +637,6 @@ function rotatingtweets_api_validate($input) {
 	else:
 		$options['ssl_verify_off']=false;
 	endif;	
-
-	unset($options['ssl_verify']);
 	// Now a proper test
 	if(empty($error)):
 		$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
