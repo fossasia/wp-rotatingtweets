@@ -77,6 +77,7 @@ Possible variables for the shortcode include:
 	* `show_meta_screen_name` = `'0'` or `'1'` - show who posted each tweet - optional - default is `'1'`
 	* `show_meta_via` = `'0'` or `'1'` - show how each tweet was posted - optional - default is `'1'`
 	* `show_meta_reply_retweet_favorite` = `'0'` or `'1'` - show 'reply', 'retweet' and 'favorite' buttons - optional - default is `'0'`
+	* `no_rotate` = `'0'` or `'1'` - switch off rotation - default is `'0'`
 	* `show_meta_prev_next` = `'0'` or `'1'` - show 'next', 'prev' links - optional - default is `'0'`
 		* `prev` = content for the prev button (default `'prev'`)
 		* `next` = content for the next button (default `'next'`)
@@ -150,6 +151,7 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 == Changelog ==
 = 1.4.4 =
 * Adds an option to switch off verification of SSL connections to Twitter
+* Adds a short code option (`no_rotate`) to switch off rotation
 
 = 1.4.3 =
 * Removes two lines of CSS causing formatting problems
