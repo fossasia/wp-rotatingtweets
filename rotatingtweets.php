@@ -476,7 +476,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'next' => __('next','rotatingtweets'),
 			'prev' => __('prev','rotatingtweets'),
 			'middot' => ' &middot; ',
-			'np_pos' => 'top'
+			'np_pos' => 'top',
+			'no_rotate' => FALSE
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -961,10 +962,15 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
 		endif;
 	endif;
-	if(WP_DEBUG):
-		$result .= "\n<div class='rotatingtweets wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
+	if(isset($args['no_rotate']) && $args['no_rotate']):
+		$rotclass = 'norotatingtweets';
 	else:
-		$result .= "\n<div class='rotatingtweets rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
+		$rotclass = 'rotatingtweets';
+	endif;
+	if(WP_DEBUG):
+		$result .= "\n<div class='$rotclass wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
+	else:
+		$result .= "\n<div class='$rotclass rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
 	endif;
 	$error = get_option('rotatingtweets_api_error');
 	if(!empty($error)):
@@ -1029,7 +1035,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		foreach($json as $twitter_object):
 			$tweet_counter++;
 			if($tweet_counter <= $tweet_count):
-				if($tweet_counter == 1 ):
+				if($tweet_counter == 1 || ( isset($args['no_rotate']) && $args['no_rotate'] ) ):
 					$result .= "\n\t<div class = 'rotatingtweet'>";
 				else:
 					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'>";				

@@ -75,7 +75,8 @@ div.rtw_intents {
 }
 
 /* This sets the style for tweets in articles or posts */
-#content .rotatingtweets  {
+#content .rotatingtweets,
+#content .norotatingtweets  {
 	border-top: 1px solid #DDD;
 	border-bottom: 1px solid #DDD;
 	margin-bottom: 3%;
