@@ -142,6 +142,9 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
 
 == Upgrade notice ==
+= 1.4.4.1 =
+* Fixes a jQuery cycle clash with the [Oxygen theme](http://wordpress.org/extend/themes/oxygen/).
+
 = 1.4.4 =
 * Adds an option to switch off verification of SSL connections to Twitter. Adds an option to switch off rotation.
 
