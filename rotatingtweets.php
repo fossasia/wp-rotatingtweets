@@ -1312,7 +1312,7 @@ function rotatingtweets_enqueue_scripts() {
 		default:
 			wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
 			$dependence[]='jquery-cycle';
-			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),array('jquery','jquery-cycle'),FALSE,FALSE );
+			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
 			break;
 	endswitch;
 	wp_enqueue_style( 'rotatingtweets', plugins_url('css/style.css', __FILE__));
