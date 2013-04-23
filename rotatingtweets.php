@@ -1304,8 +1304,8 @@ function rotatingtweets_enqueue_scripts() {
 			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
 			break;
 		case 'oxygen':
-//			wp_dequeue_script( 'oxygen_cycle');
-//			wp_enqueue_script( 'oxygen_cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
+			wp_dequeue_script( 'oxygen_cycle');
+			wp_enqueue_script( 'oxygen_cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
 			$dependence[]='oxygen_cycle';
 			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
 			break;		
@@ -1322,11 +1322,11 @@ function rotatingtweets_enqueue_scripts() {
 		$uploads['basedir'].'/rotatingtweets.css' => $uploads['baseurl'].'/rotatingtweets.css'
 	);
 	$scriptname = 'rotatingtweet-yourstyle';
-	$scriptcounter = '';
+	$scriptcounter = 1;
 	foreach($personalstyle as $dir => $url):
 		if(file_exists( $dir )):
 			wp_enqueue_style( $scriptname, $url);
-			$scriptname = 'rotating-tweet-yourstyle-';
+			$scriptname = 'rotatingtweet-yourstyle-'.$scriptcounter;
 			$scriptcounter ++;
 		endif;
 	endforeach;
