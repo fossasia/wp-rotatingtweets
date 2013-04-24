@@ -725,10 +725,12 @@ function rotatingtweets_shrink_cache() {
 	# Get the age and size of tweets remaining
 	foreach($option as $stringname => $contents) {
 		$ageindays = (time()-$contents['datetime'])/60/60/24;
-		$cachesize = strlen(json_encode($contents));
-		if(WP_DEBUG) echo "\n<!-- $stringname -- $cachesize --".date('d-m-Y',$contents['datetime'])." -- ".$ageindays." -->";
-		if($ageindays < $minageindays) $minageindays = $ageindays;
-		$totalcachesize = $totalcachesize + $cachesize;
+		if($ageindays < $minageindays) $minageindays = $ageindays;		
+		if(WP_DEBUG):
+			$cachesize = strlen(json_encode($contents));
+			echo "\n<!-- $stringname -- $cachesize --".date('d-m-Y',$contents['datetime'])." -- ".$ageindays." -->";
+			$totalcachesize = $totalcachesize + $cachesize;
+		endif;
 	};	
 	if(WP_DEBUG) echo "\n<-- The youngest age in days is ".$targetageindays." and total cache size is ".$totalcachesize.". -->";
 	# Set the goal of deleting all the tweets more than 30 days older than the most recent tweets
