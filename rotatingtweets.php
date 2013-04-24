@@ -710,9 +710,43 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 	endif;
 	return($result);
 }
+# Clear tweets (if too much memory used)
+function rotatingtweets_shrink_cache() {
+	# Solves a problem that 40+ caches can overload the memory - cuts it to fewer without risking deletion of the tweets on display
+	$optionname = "rotatingtweets-cache";
+	$option = get_option($optionname);
+	$numberidentities = count($option);
+	if(WP_DEBUG) echo "<!-- There are currently ".$numberidentities." identities cached -->";
+	# If there are fewer than 10 sets of information cached - just return (for speed)
+	if($numberidentities < 10) return;
+	# Now make sure that we don't overwrite 'live' tweets
+	$minageindays = 1000000;
+	$totalcachesize = 0;
+	# Get the age and size of tweets remaining
+	foreach($option as $stringname => $contents) {
+		$ageindays = (time()-$contents['datetime'])/60/60/24;
+		$cachesize = strlen(json_encode($contents));
+		if(WP_DEBUG) echo "\n<!-- $stringname -- $cachesize --".date('d-m-Y',$contents['datetime'])." -- ".$ageindays." -->";
+		if($ageindays < $minageindays) $minageindays = $ageindays;
+		$totalcachesize = $totalcachesize + $cachesize;
+	};	
+	if(WP_DEBUG) echo "\n<-- The youngest age in days is ".$targetageindays." and total cache size is ".$totalcachesize.". -->";
+	# Set the goal of deleting all the tweets more than 30 days older than the most recent tweets
+	$targetageindays = $mindageindays + 30;
+	# Now run through and delete 
+	foreach($option as $stringname => $contents) {
+		$ageindays = (time()-$contents['datetime'])/60/60/24;
+		if($ageindays > $targetageindays) unset($option[$stringname]);
+	};
+	$numberidentities = count($option);
+	if(WP_DEBUG) echo "<-- There are now ".$numberidentities." identities cached -->";
+	update_option($optionname,$option);
+}
 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
+	# Check cache
+	rotatingtweets_shrink_cache();
 	# Clear up variables
 	$tw_screen_name = trim(remove_accents(str_replace('@','',$tw_screen_name)));
 	if($tw_list):

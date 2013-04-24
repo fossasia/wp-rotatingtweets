@@ -142,16 +142,18 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
 
 == Upgrade notice ==
-= 1.4.4.1 =
+= 1.4.5 =
+* Deletes old cache entries if unused for more than 30 days
 * Fixes a jQuery cycle clash with the [Oxygen theme](http://wordpress.org/extend/themes/oxygen/).
-
-= 1.4.4 =
-* Adds an option to switch off verification of SSL connections to Twitter. Adds an option to switch off rotation.
 
 = 0.700 (1.3.0) =
 * Upgrade needed for Rotating Tweets to keep working after May 2013. Supports version 1.1 of the Twitter API.
 
 == Changelog ==
+= 1.4.5 =
+* Deletes old cache entries if unused for more than 30 days
+* Fixes a jQuery cycle clash with the [Oxygen theme](http://wordpress.org/extend/themes/oxygen/).
+
 = 1.4.4 =
 * Adds an option to switch off verification of SSL connections to Twitter
 * Adds a short code option (`no_rotate`) to switch off rotation
