@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.4.4
+Version: 1.4.5
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -728,20 +728,20 @@ function rotatingtweets_shrink_cache() {
 		if($ageindays < $minageindays) $minageindays = $ageindays;		
 		if(WP_DEBUG):
 			$cachesize = strlen(json_encode($contents));
-			echo "\n<!-- $stringname -- $cachesize --".date('d-m-Y',$contents['datetime'])." -- ".$ageindays." -->";
+			echo "\n<!-- $stringname -- $cachesize --".date('d-m-Y',$contents['datetime'])." -- ".number_format($ageindays,1)." days -->";
 			$totalcachesize = $totalcachesize + $cachesize;
 		endif;
 	};	
-	if(WP_DEBUG) echo "\n<-- The youngest age in days is ".$targetageindays." and total cache size is ".$totalcachesize.". -->";
+	if(WP_DEBUG) echo "\n<!-- The youngest age of any cache is ".number_format($minageindays*24*60,2)." minutes (".number_format($minageindays,8)." days) and total cache size is ".$totalcachesize.". -->";
 	# Set the goal of deleting all the tweets more than 30 days older than the most recent tweets
-	$targetageindays = $mindageindays + 30;
+	$targetageindays = $minageindays + 30;
 	# Now run through and delete 
 	foreach($option as $stringname => $contents) {
 		$ageindays = (time()-$contents['datetime'])/60/60/24;
 		if($ageindays > $targetageindays) unset($option[$stringname]);
 	};
 	$numberidentities = count($option);
-	if(WP_DEBUG) echo "<-- There are now ".$numberidentities." identities cached -->";
+	if(WP_DEBUG) echo "<!-- There are now ".$numberidentities." identities cached -->";
 	update_option($optionname,$option);
 }
 

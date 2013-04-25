@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 3.5.1
-Stable tag: 1.4.4
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,14 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 1. In Chrome or IE, select the tab marked 'console'.
 1. Read the diagnostics and look for any problems that relate to JavaScript. This will normally tell you which JavaScript (if any) is having problems.
 
+= What can I do if I get the WordPress error code: `http_request_failed - name lookup timed out`? =
+
+Try installing the [Core Control plug-in](http://wordpress.org/extend/plugins/core-control/) and disabling cURL.
+
+You can read more about the problem via [this support page](http://wordpress.org/support/topic/wp-351-wordpress-error-code-http_request_failed-name-lookup-timed-out).
+
+Thank you to [darkiko](http://wordpress.org/support/profile/darkiko) for sharing their solution to this problem.
+
 == Upgrade notice ==
 = 1.4.5 =
 * Deletes old cache entries if unused for more than 30 days
@@ -153,6 +161,7 @@ If there is only one copy of `jquery` and of `jquery.cycle` on your page, the be
 = 1.4.5 =
 * Deletes old cache entries if unused for more than 30 days
 * Fixes a jQuery cycle clash with the [Oxygen theme](http://wordpress.org/extend/themes/oxygen/).
+* Added `readme.txt` instructions for dealing with the WordPress error code: `http_request_failed - name lookup timed out`.
 
 = 1.4.4 =
 * Adds an option to switch off verification of SSL connections to Twitter
