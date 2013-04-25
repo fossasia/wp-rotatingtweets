@@ -509,10 +509,10 @@ function rotatingtweets_settings_check() {
 	endif;
 	$optionslink = 'options-general.php?page=rotatingtweets';
 	if(empty($apistring)):
-		if(time() > strtotime('1-Apr-2013')):
-			$msgString = __('Please update <a href="%2$s">your settings for Rotating Tweets</a>. The Twitter API <a href="%1$s">changed in March 2013</a> and new settings are needed for Rotating Tweets to continue working.','rotatingtweets');
+		if(time() > strtotime('6-May-2013')):
+			$msgString = __('Please update <a href="%2$s">your settings for Rotating Tweets</a>. The Twitter API <a href="%1$s">changed on May 7, 2013</a> and new settings are needed for Rotating Tweets to continue working.','rotatingtweets');
 		else:
-			$msgString = __('Please update <a href="%2$s">your settings for Rotating Tweets</a>. The Twitter API will <a href="%1$s">be changing in March 2013</a> and new settings are needed for Rotating Tweets to continue working after the API changes.','rotatingtweets');
+			$msgString = __('Please update <a href="%2$s">your settings for Rotating Tweets</a>. The Twitter API will <a href="%1$s">be changing on May 7, 2013</a> and new settings are needed for Rotating Tweets to continue working after the API changes.','rotatingtweets');
 		endif;
 		// add_settings_error( 'rotatingtweets_settings_needed', esc_attr('rotatingtweets_settings_needed'), sprintf($msgString,'https://dev.twitter.com/calendar',$optionslink), 'error');
 		echo "<div class='error'><p><strong>".sprintf($msgString,'https://dev.twitter.com/calendar',$optionslink)."</strong></p></div>";
