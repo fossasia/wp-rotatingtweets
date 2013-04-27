@@ -541,10 +541,10 @@ function rotatingtweets_call_twitter_API_options() {
 	echo sprintf(__('<h3>Step 2:</h3><p>If you don\'t already have a suitable \'application\' that you can use for your website, set one up on the <a href="%s">Create an Application page</a>.</p> <p>It\'s normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets.</p><p>You don\'t need a Callback URL.</p>','rotatingtweets'),'https://dev.twitter.com/apps/new');
 	_e('<h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</strong>, on the following page, click on <strong>Create my access token</strong>.</p>','rotatingtweets');
 	_e('<h3>Step 4:</h3><p>Copy the <strong>Consumer key</strong>, <strong>Consumer secret</strong>, <strong>Access token</strong> and <strong>Access token secret</strong> from your Twitter application page into the settings below.</p>','rotatingtweets');
-	_e('<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>.');
+	_e('<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>.','rotatingtweets');
 	_e('<h3>If there are any problems:</h3><p>If there are any problems, you should get an error message from Twitter displayed as a "rotating tweet" which should help diagnose the problem.</p>','rotatingtweets');
 	_e('<p>If the error message references SSL, try changing the "Verify SSL connection to Twitter" below to "No".</p>','rotatingtweets');
-	_e('<h3>Multiple Twitter Accounts</h3>');
+	_e('<h3>Multiple Twitter Accounts</h3>','rotatingtweets');
 	_e('<p>Even though you are only entering one set of Twitter API data, Rotating Tweets will continue to support multiple widgets and shortcodes pulling from a variety of different Twitter accounts.</p>','rotatingtweets');
 	echo '<form method="post" action="options.php">';
 	settings_fields( 'rotatingtweets_options' );
