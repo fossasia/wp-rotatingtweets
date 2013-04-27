@@ -27,6 +27,7 @@ Currently the following languages are available:
 
 * US English *(complete)*
 * British English *(complete - mainly changing 'favorite' to 'favourite'!)*
+* Brazilian Portugese *(complete - many thanks to Felipe Wilmerson for his help on this)*
 * German *(basic tweet display only)*
 * Spanish *(basic tweet display only)*
 * Italian *(basic tweet display only)*
@@ -148,14 +149,13 @@ Try installing the [Core Control plug-in](http://wordpress.org/extend/plugins/co
 Thank you to [darkiko](http://wordpress.org/support/profile/darkiko) for sharing their solution to this problem.
 
 == Upgrade notice ==
-= 1.4.5 =
-* Deletes old cache entries if unused for more than 30 days
-* Fixes a jQuery cycle clash with the [Oxygen theme](http://wordpress.org/extend/themes/oxygen/).
-
-= 0.700 (1.3.0) =
-* Upgrade needed for Rotating Tweets to keep working after May 2013. Supports version 1.1 of the Twitter API.
+= 1.4.6 =
+* Addition of Brazilian Portuguese. If you are using a version before 0.700, you will need to upgrade to a more recent version for Rotating Tweets to keep accessing Twitter after May 7, 2013.
 
 == Changelog ==
+= 1.4.6 =
+* Addition of Brazilian Portuguese translation
+
 = 1.4.5 =
 * Deletes old cache entries if unused for more than 30 days
 * Fixes a jQuery cycle clash with the [Oxygen theme](http://wordpress.org/extend/themes/oxygen/).
