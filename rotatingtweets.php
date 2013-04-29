@@ -399,6 +399,10 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 	case 'screen_name':
 		$return .= "@".$person['screen_name']."</a>";
 		break;
+	case 'blue_bird':
+		$return = "<a href='https://twitter.com/intent/user?user_id={$person['id']}' title='".esc_attr(sprintf(__('Follow @%s','rotatingtweets'),$person['name']))."' lang='{$lang}'{$targetvalue}>";
+		$return .= '<img src="'.plugins_url('images/bird_blue_32.png', __FILE__).'" class="twitter_icon" /></a>';
+		break;
 	default:
 		$return .= $linkcontent."</a>";
 		break;
@@ -1275,6 +1279,33 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$meta .= $nextprev;
 						endif;
 						if(!empty($meta)) $result .= "\n\t\t<span class='rtw_meta'>".ucfirst($meta)."</span></p>";
+						break;
+					case 6:
+						# This is the original Rotating Tweets display routine - adjusted for a user
+						$result .= "\n\t\t<p class='rtw_main'>".rotatingtweets_user_intent($user,$twitterlocale,'blue_bird',$targetvalue).$main_text."</p>";
+						$meta = '';
+						if($args['show_meta_timestamp']):
+							$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
+						endif;
+						if($args['show_meta_screen_name']):
+							if(!empty($meta)) $meta .= ' ';
+							$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+						endif;
+						if($args['show_meta_via']):
+							if(!empty($meta)) $meta .= ' ';
+							$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
+						endif;
+						if($args['show_meta_reply_retweet_favorite']):
+							if(!empty($meta)) $meta .= ' &middot; ';
+							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
+						endif;
+
+						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+							if(!empty($meta)) $meta .= ' &middot; ';
+							$meta .= $nextprev;
+						endif;
+
+						if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
 						break;
 					}
 				else:
