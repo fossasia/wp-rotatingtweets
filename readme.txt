@@ -100,7 +100,7 @@ Most of this is my own work, but special thanks are owed to:
 * All the people who have given advice and suggested improvements
 
 == Frequently Asked Questions ==
-= What options can I use for the shortcode?
+= What options can I use for the shortcode? =
 All the options are listed on the [Rotating Tweets installation page](http://wordpress.org/extend/plugins/rotatingtweets/installation/).
 
 = The Rotating Tweets are not rotating. What can I do? =
