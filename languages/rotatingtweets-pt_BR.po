@@ -5,9 +5,9 @@ msgstr ""
 "Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 1.3.18\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
 "POT-Creation-Date: 2013-04-27 13:20:05+00:00\n"
-"PO-Revision-Date: 2013-04-27 19:26-0000\n"
+"PO-Revision-Date: 2013-04-29 18:36-0300\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
-"Language-Team: Will Phelipe <will.phelipe@gmail.com>\n"
+"Language-Team: Wilmerson Felipe <will.phelipe@gmail.com>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,11 +38,11 @@ msgstr "Lista de Tag:"
 
 #: rotatingtweets.php:207
 msgid "Type of Tweets?"
-msgstr "Tipos de tweets?"
+msgstr "Tipos de Tweets?"
 
 #: rotatingtweets.php:210
 msgid "User timeline (default)"
-msgstr "Usuário da timeline (default)"
+msgstr "Linha de tempo do usuário (padrão)"
 
 #: rotatingtweets.php:211
 msgid "Favorites"
@@ -58,7 +58,7 @@ msgstr "Lista"
 
 #: rotatingtweets.php:221
 msgid "Include retweets?"
-msgstr "Incluir retweets?"
+msgstr "Incluir retuites?"
 
 #: rotatingtweets.php:222
 msgid "Exclude replies?"
@@ -78,7 +78,7 @@ msgstr "Velocidade"
 
 #: rotatingtweets.php:235
 msgid "Faster (3 seconds)"
-msgstr "Mais rápido (3 segundos)"
+msgstr "Rápido (3 segundos)"
 
 #: rotatingtweets.php:236
 msgid "Normal (4 seconds)"
@@ -86,7 +86,7 @@ msgstr "Normal (4 segundos)"
 
 #: rotatingtweets.php:237
 msgid "Slower (5 seconds)"
-msgstr "Mais lento (5 segundos)"
+msgstr "Lento (5 segundos)"
 
 #: rotatingtweets.php:238
 msgid "Slowest (6 seconds)"
@@ -98,19 +98,19 @@ msgstr "Ultra lento (20 segundos)"
 
 #: rotatingtweets.php:251
 msgid "Scroll Up"
-msgstr "Role para cima"
+msgstr "Deslizar para cima"
 
 #: rotatingtweets.php:252
 msgid "Scroll Down"
-msgstr "Rolar para baixo"
+msgstr "Deslizar para baixo"
 
 #: rotatingtweets.php:253
 msgid "Scroll Left"
-msgstr "Role para a esquerda"
+msgstr "Deslizar para a esquerda"
 
 #: rotatingtweets.php:254
 msgid "Scroll Right"
-msgstr "Role para a direita"
+msgstr "Deslizar para a direita"
 
 #: rotatingtweets.php:255
 msgid "Fade"
@@ -126,7 +126,7 @@ msgstr "Formato de exibição"
 
 #: rotatingtweets.php:271
 msgid "Original rotating tweets layout"
-msgstr "Traçado original da rotação dos tweets"
+msgstr "Layout original de rotação dos tweets"
 
 #: rotatingtweets.php:272
 msgid ""
@@ -150,11 +150,11 @@ msgstr "Mostrar detalhes do tweet?"
 
 #: rotatingtweets.php:286
 msgid "Time/date of tweet"
-msgstr "Data/hora de tweet"
+msgstr "Data/hora do tweet"
 
 #: rotatingtweets.php:287
 msgid "Name of person tweeting"
-msgstr "Nome da pessoa twittando"
+msgstr "Nome da pessoa twitando"
 
 #: rotatingtweets.php:288
 msgid "Source of tweet"
@@ -420,7 +420,7 @@ msgstr ""
 
 #: rotatingtweets.php:547
 msgid "<h3>Multiple Twitter Accounts</h3>"
-msgstr "<h3>Várias contas do Twitter</h3>"
+msgstr "<h3>Várias contas no Twitter</h3>"
 
 #: rotatingtweets.php:548
 msgid ""
@@ -428,10 +428,9 @@ msgid ""
 "Tweets will continue to support multiple widgets and shortcodes pulling from "
 "a variety of different Twitter accounts.</p>"
 msgstr ""
-"<p>Mesmo que você só está entrando em um conjunto de dados da API do "
-"Twitter, Rotating Tweets continuará a apoiar vários widgets e códigos de "
-"acesso para puxar a partir de uma variedade de diferentes contas do Twitter."
-"</p>"
+"<p>Mesmo que você esteja entrando em um conjunto de dados API do Twitter, "
+"Rotating Tweets continuará a apoiar vários widgets e códigos de acesso "
+"puxando a partir de uma variedade de diferentes contas no Twitter.</p>"
 
 #: rotatingtweets.php:552
 msgid "Save Changes"
@@ -501,7 +500,7 @@ msgstr "Problema ao recuperar dados do Twitter"
 
 #: rotatingtweets.php:1018
 msgid "%3$s error code: %1$s - %2$s"
-msgstr "%3$s código do Erro: %1$s - %2$s"
+msgstr "%3$s. Código de Erro: %1$s - %2$s"
 
 #: rotatingtweets.php:1024
 msgid "This website is currently <a href='%s'>rate-limited by Twitter</a>."
@@ -595,8 +594,8 @@ msgid ""
 "Replaces a shortcode such as [rotatingtweets "
 "screen_name='your_twitter_name'], or a widget, with a rotating tweets display"
 msgstr ""
-"Substituir um shortcode como [rotatingtweets "
-"screen_name='seu_nome_no_twitter'],ou um widget, com os tweets rotativas à "
+"Substituir por um pequeno codigo, como [rotatingtweets "
+"screen_name='seu_nome_no_twitter'], ou um widget com os tweets rotativas à "
 "exibir"
 
 #. Author of the plugin/theme
