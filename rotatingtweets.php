@@ -834,8 +834,19 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	if(!empty($twitterjson['errors'])):
 		# If there's an error, reset the cache timer to make sure we don't hit Twitter too hard and get rate limited.
 //		print_r($twitterjson);
-		$option[$stringname]['datetime']=time();
-		update_option($optionname,$option);
+		if( $twitterjson['errors'][0]['type'] == 'Twitter' && $twitterjson['errors'][0]['code'] == 88 ):
+			$rate = rotatingtweets_get_rate_data();
+			if($rate && $rate['remaining_hits'] == 0):
+				$option[$stringname]['datetime']= $rate['reset_time_in_seconds'] - $cache_delay + 1;
+				update_option($optionname,$option);
+			else:
+				$option[$stringname]['datetime']=time();
+				update_option($optionname,$option);
+			endif;
+		else:
+			$option[$stringname]['datetime']=time();
+			update_option($optionname,$option);
+		endif;
 	elseif(!empty($twitterjson['error'])):
 		# If Twitter is being rate limited, delays the next load until the reset time
 		# For some reason the rate limiting error has a different error variable!
