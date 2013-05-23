@@ -662,7 +662,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		$connection = new wp_TwitterOAuth($api['key'], $api['secret'], $api['token'], $api['token_secret'] );
 		//    $result = $connection->get('statuses/user_timeline', $options);
 		if(WP_DEBUG):
-			echo "\n<!-- Using OAuth - version 1.1 of API -- ".esc_attr($command)." -->\n";
+			echo "\n<!-- Using OAuth - version 1.1 of API - ".esc_attr($command)." -->\n";
 		endif;
 		if(isset($api['ssl_verify_off']) && $api['ssl_verify_off']):
 			if(WP_DEBUG):
@@ -693,7 +693,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		else:
 			$apicall = "http://search.twitter.com/search.json";
 		endif;
-		if(!empty($string)) $apicall .= "?".implode('&',$string);
+		if(!empty($string)) $apicall .= "?".implode('&amp;',$string);
 		if(WP_DEBUG) echo "<!-- Using version 1 of API - calling string ".esc_attr($apicall)." -->";
 		$result = wp_remote_request($apicall);
 	endif;
@@ -732,7 +732,7 @@ function rotatingtweets_shrink_cache() {
 		if($ageindays < $minageindays) $minageindays = $ageindays;		
 		if(WP_DEBUG):
 			$cachesize = strlen(json_encode($contents));
-			echo "\n<!-- $stringname -- $cachesize --".date('d-m-Y',$contents['datetime'])." -- ".number_format($ageindays,1)." days -->";
+			echo "\n<!-- $stringname - $cachesize - ".date('d-m-Y',$contents['datetime'])." - ".number_format($ageindays,1)." days -->";
 			$totalcachesize = $totalcachesize + $cachesize;
 		endif;
 	};	
@@ -1073,7 +1073,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		# Check if the problem is rate limiting
 		if($rate['hourly_limit']>0 && $rate['remaining_hits'] == 0):
 			$waittimevalue = intval(($rate['reset_time_in_seconds'] - time())/60);
-			$result .= "<!-- Rate limited -- ";
+			$result .= "<!-- Rate limited - ";
 			$result .= sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue)." -->";
 		endif;
 		*/
@@ -1176,7 +1176,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 //					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
 					# This is designed to find hashtags and turn them into links...
 					$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
-					$after[]='<a href="http://twitter.com/search?q=%23$1&src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
+					$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
 
 					# Now for the meta text
