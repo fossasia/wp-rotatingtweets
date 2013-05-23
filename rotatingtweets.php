@@ -693,7 +693,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		else:
 			$apicall = "http://search.twitter.com/search.json";
 		endif;
-		if(!empty($string)) $apicall .= "?".implode('&amp;',$string);
+		if(!empty($string)) $apicall .= "?".implode('&',$string);
 		if(WP_DEBUG) echo "<!-- Using version 1 of API - calling string ".esc_attr($apicall)." -->";
 		$result = wp_remote_request($apicall);
 	endif;
