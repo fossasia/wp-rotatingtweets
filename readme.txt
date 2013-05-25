@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 3.5.1
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,6 +103,16 @@ Most of this is my own work, but special thanks are owed to:
 = What options can I use for the shortcode? =
 All the options are listed on the [Rotating Tweets installation page](http://wordpress.org/extend/plugins/rotatingtweets/installation/).
 
+= How can I include Rotating Tweets in my template? =
+Try something like:
+`<?php echo do_shortcode( "[rotatingtweets screen_name='your_twitter']" ) ?>`
+
+= How can I pull information from two accounts into one widget =
+The easiest way is to use a search term like `'from:account1 OR from:account2'`.
+
+= How often does the plug-in call Twitter =
+In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
+
 = The Rotating Tweets are not rotating. What can I do? =
 This normally happens if there is more than one copy of `jQuery` installed on a page - or more than one copy of `jQuery.cycle`.
 
@@ -132,9 +142,6 @@ Try installing the [Core Control plug-in](http://wordpress.org/extend/plugins/co
 
 Thank you to [darkiko](http://wordpress.org/support/profile/darkiko) for sharing their solution to this problem.
 
-= How can I pull information from two accounts into one widget =
-The easiest way is to use a search term like `'from:account1 OR from:account2'`.
-
 = My widget is too wide! =
 Try putting:
 `
@@ -144,17 +151,18 @@ div.widget_rotatingtweets_widget, div.rotatingtweet, div.widget_rotatingtweets_w
 `
 into your CSS - changing `123px;` to the width you're aiming at - either via putting `rotatingtweets.css` into `wp-content/uploads` or by editing your own template files.
 
-= How often does the plug-in call Twitter =
-In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
-
 = How can I add a Twitter bird to the left of my tweets? =
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.4.6 =
-* Addition of Brazilian Portuguese and extra display format. If you are using a version before 0.700, you will need to upgrade to a more recent version for Rotating Tweets to keep accessing Twitter after May 7, 2013.
+= 1.4.7 =
+* HTML5 compliance and improved rate-limiting. If you are using a version before 0.700, you will need to upgrade to a more recent version for Rotating Tweets to keep accessing Twitter after May 7, 2013.
 
 == Changelog ==
+= 1.4.7 =
+* HTML5 compliance
+* Improved rate-limiting
+
 = 1.4.6 =
 * Addition of Brazilian Portuguese translation
 * Addition of new display format 6
