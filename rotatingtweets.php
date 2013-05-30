@@ -401,7 +401,7 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 		break;
 	case 'blue_bird':
 		$return = "<a href='https://twitter.com/intent/user?user_id={$person['id']}' title='".esc_attr(sprintf(__('Follow @%s','rotatingtweets'),$person['name']))."' lang='{$lang}'{$targetvalue}>";
-		$return .= '<img src="'.plugins_url('images/bird_blue_32.png', __FILE__).'" class="twitter_icon" /></a>';
+		$return .= '<img src="'.plugins_url('images/bird_blue_32.png', __FILE__).'" class="twitter_icon" alt="'.__('Twitter','rotatingtweets').'" /></a>';
 		break;
 	default:
 		$return .= $linkcontent."</a>";
