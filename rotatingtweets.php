@@ -1371,7 +1371,7 @@ function rotatingtweets_enqueue_scripts() {
 		$dependence = array('jquery');
 	}
 	# Get Stylesheet
-	$style = get_stylesheet();
+	$style = strtolower(get_stylesheet());
 	switch ($style):
 		case 'bremen_theme':
 		case 'zeebizzcard':
@@ -1387,6 +1387,12 @@ function rotatingtweets_enqueue_scripts() {
 			$dependence[]='oxygen_cycle';
 			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
 			break;		
+		case 'avada':
+			wp_dequeue_script( 'jquery.cycle');
+			wp_enqueue_script( 'jquery.cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
+			$dependence[]='jquery.cycle';
+			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
+			break;
 		default:
 			wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
 			$dependence[]='jquery-cycle';
