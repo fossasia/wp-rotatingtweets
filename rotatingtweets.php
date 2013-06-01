@@ -404,7 +404,7 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 		$return .= '<img src="'.plugins_url('images/bird_blue_32.png', __FILE__).'" class="twitter_icon" alt="'.__('Twitter','rotatingtweets').'" /></a>';
 		break;
 	default:
-		$return .= $linkcontent."</a>";
+		$return .= strip_tags($linkcontent,'<img>')."</a>";
 		break;
 	}
 	return ($return);
@@ -481,6 +481,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'prev' => __('prev','rotatingtweets'),
 			'middot' => ' &middot; ',
 			'np_pos' => 'top',
+			'link_all_text' => FALSE,
 			'no_rotate' => FALSE
 		), $atts ) ;
 	extract($args);
@@ -1178,7 +1179,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
 					$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 					$main_text = preg_replace($before,$after,$main_text);
-
+					if(isset($args['link_all_text']) && $args['link_all_text']):
+						$main_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
+					endif;
 					# Now for the meta text
 					switch ($args['official_format']) {
 					case 0:
