@@ -1391,6 +1391,7 @@ function rotatingtweets_enqueue_scripts() {
 			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
 			break;		
 		case 'avada':
+		case 'avada child':
 			wp_dequeue_script( 'jquery.cycle');
 			wp_enqueue_script( 'jquery.cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
 			$dependence[]='jquery.cycle';
