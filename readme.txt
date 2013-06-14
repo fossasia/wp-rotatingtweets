@@ -12,7 +12,7 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 
 == Description ==
 * **Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets**
-* **Supports v 1.1 of the Twitter API** - yes! it will keep working after [May 2013](https://dev.twitter.com/calendar)
+* **Supports v 1.1 of the Twitter API** - yes! it will keep working after [June 11, 2013](https://dev.twitter.com/blog/api-v1-is-retired)
 * **Space efficient** - instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
 * **Reliable** - keeps showing your latest Tweets even if the Twitter website is down.
 * **Customisable** - you decide whose tweets to show, how many to show, whether to include retweets and replies, and whether to show a follow button. You can also decide how quickly the tweets rotate and what type of animation to use.
@@ -108,7 +108,7 @@ Try something like:
 `<?php echo do_shortcode( "[rotatingtweets screen_name='your_twitter']" ) ?>`
 
 = How can I pull information from two accounts into one widget =
-The easiest way is to use a search term like `'from:account1 OR from:account2'`.
+The easiest way is to use a search term like `'from:account1 OR from:account2'`.  There's a list of advanced Twitter search options at https://support.twitter.com/articles/71577-using-advanced-search
 
 = How often does the plug-in call Twitter =
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
