@@ -8,7 +8,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2013-03-15 12:25-0000\n"
+"PO-Revision-Date: 2013-06-17 22:44-0000\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
 "Language-Team: \n"
 "X-Generator: Poedit 1.5.5\n"
@@ -159,63 +159,63 @@ msgstr ""
 
 #: rotatingtweets.php:242
 msgid "less than a second ago"
-msgstr ""
+msgstr "Minder dan een seconde geleden"
 
 #: rotatingtweets.php:243
 msgid "%d seconds ago"
-msgstr ""
+msgstr "%d seconden geleden"
 
 #: rotatingtweets.php:244
 msgid "about a minute ago"
 msgid_plural "about %d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ongeveer een minuut geleden"
+msgstr[1] "Ongeveer %d minuten geleden"
 
 #: rotatingtweets.php:245 rotatingtweets.php:247
 msgid "about an hour ago"
 msgid_plural "about %d hours ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ongeveer een uur geleden"
+msgstr[1] "Ongeveer %d uur geleden"
 
 #: rotatingtweets.php:246
 msgid "yesterday"
-msgstr ""
+msgstr "Gisteren"
 
 #: rotatingtweets.php:248
 msgid "about a day ago"
 msgid_plural "about %d days ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ongeveer een dag geleden"
+msgstr[1] "Ongeveer %d dagen geleden"
 
 #: rotatingtweets.php:249
 msgid "last week"
-msgstr ""
+msgstr "Vorige week"
 
 #: rotatingtweets.php:250
 msgid "about a week ago"
 msgid_plural "about %d weeks ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ongeveer een week geleden"
+msgstr[1] "Ongeveer %d weken geleden"
 
 #: rotatingtweets.php:251
 msgid "last month"
-msgstr ""
+msgstr "Vorige maand"
 
 #: rotatingtweets.php:252
 msgid "about a month ago"
 msgid_plural "about %d months ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ongeveer een maand geleden"
+msgstr[1] "Ongeveer %d maanden geleden"
 
 #: rotatingtweets.php:253
 msgid "last year"
-msgstr ""
+msgstr "Vorig jaar"
 
 #: rotatingtweets.php:254
 msgid "about a year ago"
 msgid_plural "about %d years ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ongeveer een jaar geleden"
+msgstr[1] "Ongeveer %d jaar geleden"
 
 #: rotatingtweets.php:261
 msgctxt "abbreviated timestamp in seconds"
@@ -416,7 +416,7 @@ msgstr ""
 
 #: rotatingtweets.php:910
 msgid "from <a href='%1$s' title='%2$s'>%2$s's Twitter</a>"
-msgstr ""
+msgstr "op <a href='%1$s' title='%2$s'>%2$s's Twitter</a>"
 
 #: rotatingtweets.php:914
 msgid "via %s"
@@ -444,7 +444,7 @@ msgstr ""
 
 #: rotatingtweets.php:986
 msgid "Follow @%s"
-msgstr "@%s folgen"
+msgstr "@%s volgen"
 
 #. Plugin Name of the plugin/theme
 msgid "Rotating Tweets (Twitter widget & shortcode)"
