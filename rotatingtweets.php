@@ -1323,7 +1323,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
 					$result .= "\n\t\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".__("Please check the comments on this page's HTML to understand more.",'rotatingtweets')."</p>";
 				endif;
-				$result .= "\n\t</div>";
+				$result .= "</div>";
 			endif;
 		endforeach;
 	endif;
