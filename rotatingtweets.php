@@ -563,6 +563,10 @@ function rotatingtweets_admin_init(){
 	add_settings_field('rotatingtweets_token', __('Twitter API Access Token','rotatingtweets'), 'rotatingtweets_option_show_token', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_token_secret', __('Twitter API Access Token Secret','rotatingtweets'), 'rotatingtweets_option_show_token_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_api_main');
+	if(WP_DEBUG):
+		add_settings_section('rotatingtweets_jquery_main', __('JQuery Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
+		add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
+	endif;
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');
@@ -597,9 +601,31 @@ function rotatingtweets_option_show_ssl_verify() {
 	}
 	echo "\n</select>";
 }
+function rotatingtweets_option_show_cycle_version() {
+	$options = get_option('rotatingtweets-api-settings');
+	$choice = array(
+		1 => _x('Version 1 (default)','Version of JQuery Cycle','rotatingtweets'),
+		2 => _x('Version 2 (beta)','Version of JQuery Cycle','rotatingtweets')
+	);
+	echo "\n<select id='rotatingtweets_api_jqery_cycle_version_input' name='rotatingtweets-api-settings[jquery_cycle_version]'>";
+	if(!isset($options['jquery_cycle_version']))	$options['jquery_cycle_version'] = 1;
+	foreach($choice as $value => $text) {
+		if($options['jquery_cycle_version'] == $value ) {
+			$selected = 'selected = "selected"';
+		} else {
+			$selected = '';
+		}
+		echo "\n\t<option value='".$value."'".$selected.">".$text."</option>";
+	}
+	echo "\n</select>";
+}
 // Explanatory text
 function rotatingtweets_api_explanation() {
 	
+};
+// Explanatory text
+function rotatingtweets_jquery_explanation() {
+	_e('This section is experimental and currently only displays if WP_DEBUG is set','rotatingtweets');
 };
 // validate our options
 function rotatingtweets_api_validate($input) {
@@ -639,6 +665,12 @@ function rotatingtweets_api_validate($input) {
 	else:
 		$options['ssl_verify_off']=false;
 	endif;	
+	// Check 'jquery_cycle_version'
+	if(isset($input['jquery_cycle_version'])):
+		$options['jquery_cycle_version']=max(min(absint($input['jquery_cycle_version']),2),1);
+	else:
+		$options['jquery_cycle_version']=1;
+	endif;	
 	// Now a proper test
 	if(empty($error)):
 		$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
@@ -658,16 +690,16 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 	if(!empty($api)):
 		$connection = new wp_TwitterOAuth($api['key'], $api['secret'], $api['token'], $api['token_secret'] );
 		//    $result = $connection->get('statuses/user_timeline', $options);
-		if(WP_DEBUG):
+		if(WP_DEBUG && ! is_admin()):
 			echo "\n<!-- Using OAuth - version 1.1 of API - ".esc_attr($command)." -->\n";
 		endif;
 		if(isset($api['ssl_verify_off']) && $api['ssl_verify_off']):
-			if(WP_DEBUG):
+			if(WP_DEBUG  && ! is_admin() ):
 				echo "\n<!-- NOT verifying SSL peer -->\n";
 			endif;
 			$connection->ssl_verifypeer = FALSE;
 		else:
-			if(WP_DEBUG):
+			if(WP_DEBUG && ! is_admin() ):
 				echo "\n<!-- Verifying SSL peer -->\n";
 			endif;
 			$connection->ssl_verifypeer = TRUE;
@@ -691,7 +723,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 			$apicall = "http://search.twitter.com/search.json";
 		endif;
 		if(!empty($string)) $apicall .= "?".implode('&',$string);
-		if(WP_DEBUG) echo "<!-- Using version 1 of API - calling string ".esc_attr($apicall)." -->";
+		if(WP_DEBUG  && ! is_admin() ) echo "<!-- Using version 1 of API - calling string ".esc_attr($apicall)." -->";
 		$result = wp_remote_request($apicall);
 	endif;
 	if(!is_wp_error($result)):
@@ -995,8 +1027,14 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		# Default
 		$twitterlocale = 'en';
 	endif;
+	$api = get_option('rotatingtweets-api-settings');
+	# Sending the variables for JQuery Cycle 1
 	# All the valid rotations - if people to use one that looks weird, that's their business!
-	$possibleRotations = array('blindX','blindY','blindZ','cover','curtainX','curtainY','fade','fadeZoom','growX','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','slideX','slideY','toss','turnUp','turnDown','turnLeft','turnRight','uncover','wipe','zoom');
+	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
+		$possibleRotations = array('scrollUp','scrollDown','scrollHorz','scrollVert','fade','carousel');
+	else:
+		$possibleRotations = array('blindX','blindY','blindZ','cover','curtainX','curtainY','fade','fadeZoom','growX','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','slideX','slideY','toss','turnUp','turnDown','turnLeft','turnRight','uncover','wipe','zoom');
+	endif;
 	foreach($possibleRotations as $possibleRotation):
 		if(strtolower($args['rotation_type']) == strtolower($possibleRotation)) $rotation_type = $possibleRotation;
 	endforeach;
@@ -1015,10 +1053,33 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	else:
 		$rotclass = 'rotatingtweets';
 	endif;
+	# Now set all the version 2 options
+	$v2string = '';
+	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
+		$v2options = array(
+			'auto-height' => 'calc',
+			'fx' => $rotation_type,
+			'pause-on-hover' => 'true',
+			'timeout' => $timeout,
+			'speed' => 1000,
+			'slides'=> 'div.rotatingtweet'
+		);
+		if(! WP_DEBUG) $v2options['log'] = 'false';
+		if($rotation_type == 'carousel'):
+			$v2options['carousel-vertical'] = 'true';
+			$v2options['carousel-visible'] = 3;
+		endif;
+		$v2stringelements = array();
+		foreach ($v2options as $name => $value) {
+			$v2stringelements[] = ' data-cycle-'.$name.'="'.$value.'"';
+		}
+		$v2string = implode(' ',$v2stringelements);
+	endif;
+	# Now finalise things
 	if(WP_DEBUG):
-		$result .= "\n<div class='$rotclass wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
+		$result .= "\n<div class='$rotclass wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'$v2string>";
 	else:
-		$result .= "\n<div class='$rotclass rotatingtweets_format_".+intval($args['official_format'])."' id='$id'>";
+		$result .= "\n<div class='$rotclass rotatingtweets_format_".+intval($args['official_format'])."' id='$id'$v2string>";
 	endif;
 	$error = get_option('rotatingtweets_api_error');
 	if(!empty($error)):
@@ -1083,7 +1144,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		foreach($json as $twitter_object):
 			$tweet_counter++;
 			if($tweet_counter <= $tweet_count):
-				if($tweet_counter == 1 || ( isset($args['no_rotate']) && $args['no_rotate'] ) ):
+				if($tweet_counter == 1 || ( isset($args['no_rotate']) && $args['no_rotate'] ) || $rotation_type == 'carousel' ):
 					$result .= "\n\t<div class = 'rotatingtweet'>";
 				else:
 					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'>";				
@@ -1359,6 +1420,9 @@ add_action('plugins_loaded', 'rotatingtweets_init');
 
 function rotatingtweets_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' ); 
+	# Set the base versions of the strings
+	$cyclejsfile = 'js/jquery.cycle.all.min.js';
+	$rotatingtweetsjsfile = 'js/rotating_tweet.js';
 	# Check for evil plug-ins
 	if ( ! function_exists( 'is_plugin_active' ) )
 		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
@@ -1369,38 +1433,49 @@ function rotatingtweets_enqueue_scripts() {
 	} else {
 		$dependence = array('jquery');
 	}
-	# Get Stylesheet
-	$style = strtolower(get_stylesheet());
-	switch ($style):
-		case 'bremen_theme':
-		case 'zeebizzcard':
-//		case 'zeeStyle':
-			wp_dequeue_script( 'zee_jquery-cycle');
-			wp_enqueue_script( 'zee_jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
-			$dependence[]='zee_jquery-cycle';
-			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
-			break;
-		case 'oxygen':
-			wp_dequeue_script( 'oxygen_cycle');
-			wp_enqueue_script( 'oxygen_cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
-			$dependence[]='oxygen_cycle';
-			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
-			break;		
-		case 'avada':
-		case 'avada child':
-		case 'avada-child-theme':
-		case 'avada child theme':
-			wp_dequeue_script( 'jquery.cycle');
-			wp_enqueue_script( 'jquery.cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
-			$dependence[]='jquery.cycle';
-			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
-			break;
-		default:
-			wp_enqueue_script( 'jquery-cycle', plugins_url('js/jquery.cycle.all.min.js', __FILE__),$dependence,FALSE,FALSE );
-			$dependence[]='jquery-cycle';
-			wp_enqueue_script( 'rotating_tweet', plugins_url('js/rotating_tweet.js', __FILE__),$dependence,FALSE,FALSE );
-			break;
-	endswitch;
+	# Check if we're using jQuery Cycle 1 or 2
+	$api = get_option('rotatingtweets-api-settings');
+	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2):
+		$cyclejsfile = 'js/jquery.cycle2.js';
+		$rotatingtweetsjsfile = 'js/rotatingtweets_v2.js';
+		wp_enqueue_script( 'jquery-cycle2', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+		$dependence[]='jquery-cycle2';
+		wp_enqueue_script( 'jquery-cycle2-scrollvert', plugins_url('js/jquery.cycle2.scrollVert.js', __FILE__),$dependence,FALSE,FALSE );
+		$dependence[]='jquery-cycle2-scrollvert';
+		wp_enqueue_script( 'jquery-cycle2-carousel', plugins_url('js/jquery.cycle2.carousel.js', __FILE__),$dependence,FALSE,FALSE );
+		$dependence[]='jquery-cycle2-carousel';
+		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,FALSE,FALSE );
+	else:
+		# Get Stylesheet
+		$style = strtolower(get_stylesheet());
+		switch ($style):
+			case 'bremen_theme':
+			case 'zeebizzcard':
+	//		case 'zeeStyle':
+				wp_dequeue_script( 'zee_jquery-cycle');
+				wp_enqueue_script( 'zee_jquery-cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				$dependence[]='zee_jquery-cycle';
+				break;
+			case 'oxygen':
+				wp_dequeue_script( 'oxygen_cycle');
+				wp_enqueue_script( 'oxygen_cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				$dependence[]='oxygen_cycle';
+				break;		
+			case 'avada':
+			case 'avada child':
+			case 'avada-child-theme':
+			case 'avada child theme':
+				wp_dequeue_script( 'jquery.cycle');
+				wp_enqueue_script( 'jquery.cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				$dependence[]='jquery.cycle';
+				break;
+			default:
+				wp_enqueue_script( 'jquery-cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				$dependence[]='jquery-cycle';
+				break;
+		endswitch;
+		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,FALSE,FALSE );
+	endif;
 }
 function rotatingtweets_enqueue_style() {
 	wp_enqueue_style( 'rotatingtweets', plugins_url('css/style.css', __FILE__));
