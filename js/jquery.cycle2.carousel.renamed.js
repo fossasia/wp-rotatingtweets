@@ -24,7 +24,7 @@ $( document ).on('cycle-bootstrap', function( e, opts, API ) {
 });
 
 
-$.fn.cycle.transitions.carousel = {
+$.fn.cycle2.transitions.carousel = {
     // transition API impl
     preInit: function( opts ) {
         opts.hideNonActive = false;
@@ -81,7 +81,7 @@ $.fn.cycle.transitions.carousel = {
                 }
             }
 
-            wrap.find('.cycle-slide-active').removeClass('cycle-slide-active');
+            wrap.find('.cycle2-slide-active').removeClass('cycle-slide-active');
             opts.slides.eq(opts.startingSlide).addClass('cycle-slide-active');
         }
 

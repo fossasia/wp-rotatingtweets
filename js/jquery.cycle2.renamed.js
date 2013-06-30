@@ -9,14 +9,14 @@
 
 var version = '20130409';
 
-$.fn.cycle = function( options ) {
+$.fn.cycle2 = function( options ) {
     // fix mistakes with the ready state
     var o;
     if ( this.length === 0 && !$.isReady ) {
         o = { s: this.selector, c: this.context };
-        $.fn.cycle.log('requeuing slideshow (dom not ready)');
+        $.fn.cycle2.log('requeuing slideshow (dom not ready)');
         $(function() {
-            $( o.s, o.c ).cycle(options);
+            $( o.s, o.c ).cycle2(options);
         });
         return this;
     }
@@ -24,7 +24,7 @@ $.fn.cycle = function( options ) {
     return this.each(function() {
         var data, opts, shortName, val;
         var container = $(this);
-        var log = $.fn.cycle.log;
+        var log = $.fn.cycle2.log;
 
         if ( container.data('cycle.opts') )
             return; // already initialized
@@ -47,14 +47,14 @@ $.fn.cycle = function( options ) {
             }
         }
 
-        opts = $.extend( {}, $.fn.cycle.defaults, data, options || {});
+        opts = $.extend( {}, $.fn.cycle2.defaults, data, options || {});
 
         opts.timeoutId = 0;
         opts.paused = opts.paused || false; // #57
         opts.container = container;
         opts._maxZ = opts.maxZ;
 
-        opts.API = $.extend ( { _container: container }, $.fn.cycle.API );
+        opts.API = $.extend ( { _container: container }, $.fn.cycle2.API );
         opts.API.log = log;
         opts.API.trigger = function( eventName, args ) {
             opts.container.trigger( eventName, args );
@@ -75,7 +75,7 @@ $.fn.cycle = function( options ) {
     });
 };
 
-$.fn.cycle.API = {
+$.fn.cycle2.API = {
     opts: function() {
         return this._container.data( 'cycle.opts' );
     },
@@ -98,7 +98,7 @@ $.fn.cycle.API = {
     preInitSlideshow: function() {
         var opts = this.opts();
         opts.API.trigger('cycle-pre-initialize', [ opts ]);
-        var tx = $.fn.cycle.transitions[opts.fx];
+        var tx = $.fn.cycle2.transitions[opts.fx];
         if (tx && $.isFunction(tx.preInit))
             tx.preInit( opts );
         opts._preInitialized = true;
@@ -107,7 +107,7 @@ $.fn.cycle.API = {
     postInitSlideshow: function() {
         var opts = this.opts();
         opts.API.trigger('cycle-post-initialize', [ opts ]);
-        var tx = $.fn.cycle.transitions[opts.fx];
+        var tx = $.fn.cycle2.transitions[opts.fx];
         if (tx && $.isFunction(tx.postInit))
             tx.postInit( opts );
     },
@@ -277,12 +277,12 @@ $.fn.cycle.API = {
         var opts = slideOpts;
         var tx;
         if ( manual && opts.manualFx )
-            tx = $.fn.cycle.transitions[opts.manualFx];
+            tx = $.fn.cycle2.transitions[opts.manualFx];
         if ( !tx )
-            tx = $.fn.cycle.transitions[opts.fx];
+            tx = $.fn.cycle2.transitions[opts.fx];
 
         if (!tx) {
-            tx = $.fn.cycle.transitions.fade;
+            tx = $.fn.cycle2.transitions.fade;
             opts.API.log('Transition "' + opts.fx + '" not found.  Using fade.');
         }
         return tx;
@@ -450,7 +450,7 @@ $.fn.cycle.API = {
             }
         }
 
-        slideOpts = $.extend( {}, $.fn.cycle.defaults, opts, slideOpts );
+        slideOpts = $.extend( {}, $.fn.cycle2.defaults, opts, slideOpts );
         slideOpts.slideNum = opts.slideCount;
 
         try {
@@ -567,13 +567,13 @@ $.fn.cycle.API = {
 }; // API
 
 // default logger
-$.fn.cycle.log = function log() {
+$.fn.cycle2.log = function log() {
     /*global console:true */
     if (window.console && console.log)
         console.log('[cycle2] ' + Array.prototype.join.call(arguments, ' ') );
 };
 
-$.fn.cycle.version = function() { return 'Cycle2: ' + version; };
+$.fn.cycle2.version = function() { return 'Cycle2: ' + version; };
 
 // helper functions
 
@@ -582,7 +582,7 @@ function lowerCase(s) {
 }
 
 // expose transition object
-$.fn.cycle.transitions = {
+$.fn.cycle2.transitions = {
     custom: {
     },
     none: {
@@ -621,9 +621,9 @@ $.fn.cycle.transitions = {
 };
 
 // @see: http://jquery.malsup.com/cycle2/api
-$.fn.cycle.defaults = {
+$.fn.cycle2.defaults = {
     allowWrap:        true,
-    autoSelector:     '.cycle-slideshow[data-cycle-auto-init!=false]',
+    autoSelector:     '.cycle2-slideshow[data-cycle-auto-init!=false]',
     delay:            0,
     easing:           null,
     fx:              'fade',
@@ -648,7 +648,7 @@ $.fn.cycle.defaults = {
 
 // automatically find and run slideshows
 $(document).ready(function() {
-    $( $.fn.cycle.defaults.autoSelector ).cycle();
+    $( $.fn.cycle2.defaults.autoSelector ).cycle2();
 });
 
 })(jQuery);
@@ -657,7 +657,7 @@ $(document).ready(function() {
 (function($) {
 "use strict";
 
-$.extend($.fn.cycle.defaults, {
+$.extend($.fn.cycle2.defaults, {
     autoHeight: 0 // setting this option to false disables autoHeight logic
 });    
 
@@ -788,10 +788,10 @@ function onDestroy( e, opts ) {
 (function($) {
 "use strict";
 
-$.extend($.fn.cycle.defaults, {
-    caption:          '> .cycle-caption',
+$.extend($.fn.cycle2.defaults, {
+    caption:          '> .cycle2-caption',
     captionTemplate:  '{{slideNum}} / {{slideCount}}',
-    overlay:          '> .cycle-overlay',
+    overlay:          '> .cycle2-overlay',
     overlayTemplate:  '<div>{{title}}</div><div>{{desc}}</div>',
     captionModule:    'caption'
 });    
@@ -831,14 +831,14 @@ $(document).on( 'cycle-destroyed', function( e, opts ) {
 (function($) {
 "use strict";
 
-var c2 = $.fn.cycle;
+var c2 = $.fn.cycle2;
 
-$.fn.cycle = function( options ) {
+$.fn.cycle2 = function( options ) {
     var cmd, cmdFn, opts;
     var args = $.makeArray( arguments );
 
     if ( $.type( options ) == 'number' ) {
-        return this.cycle( 'goto', options );
+        return this.cycle2( 'goto', options );
     }
 
     if ( $.type( options ) == 'string' ) {
@@ -871,7 +871,7 @@ $.fn.cycle = function( options ) {
 };
 
 // copy props
-$.extend( $.fn.cycle, c2 );
+$.extend( $.fn.cycle2, c2 );
 
 $.extend( c2.API, {
     next: function() {
@@ -963,7 +963,7 @@ $.extend( c2.API, {
     reinit: function() {
         var opts = this.opts();
         opts.API.destroy();
-        opts.container.cycle();
+        opts.container.cycle2();
     },
 
     remove: function( index ) {
@@ -996,13 +996,13 @@ $.extend( c2.API, {
 });
 
 // listen for clicks on elements with data-cycle-cmd attribute
-$(document).on('click.cycle', '[data-cycle-cmd]', function(e) {
+$(document).on('click.cycle2', '[data-cycle-cmd]', function(e) {
     // issue cycle command
     e.preventDefault();
     var el = $(this);
     var command = el.data('cycle-cmd');
-    var context = el.data('cycle-context') || '.cycle-slideshow';
-    $(context).cycle(command, el.data('cycle-arg'));
+    var context = el.data('cycle-context') || '.cycle2-slideshow';
+    $(context).cycle2(command, el.data('cycle-arg'));
 });
 
 
@@ -1064,7 +1064,7 @@ function onHashChange( opts, setStartingSlide ) {
 (function($) {
 "use strict";
 
-$.extend($.fn.cycle.defaults, {
+$.extend($.fn.cycle2.defaults, {
     loader: false
 });
 
@@ -1099,7 +1099,7 @@ $(document).on( 'cycle-bootstrap', function( e, opts ) {
             var images = slide.is('img') ? slide : slide.find('img');
             slide.data('index', i);
             // allow some images to be marked as unimportant (and filter out images w/o src value)
-            images = images.filter(':not(.cycle-loader-ignore)').filter(':not([src=""])');
+            images = images.filter(':not(.cycle2-loader-ignore)').filter(':not([src=""])');
             if ( ! images.length ) {
                 --slideCount;
                 slideArr.push( slide );
@@ -1170,10 +1170,10 @@ $(document).on( 'cycle-bootstrap', function( e, opts ) {
 (function($) {
 "use strict";
 
-$.extend($.fn.cycle.defaults, {
-    pager:            '> .cycle-pager',
+$.extend($.fn.cycle2.defaults, {
+    pager:            '> .cycle2-pager',
     pagerActiveClass: 'cycle-pager-active',
-    pagerEvent:       'click.cycle',
+    pagerEvent:       'click.cycle2',
     pagerTemplate:    '<span>&bull;</span>'
 });    
 
@@ -1264,12 +1264,12 @@ function page( pager, target ) {
 (function($) {
 "use strict";
 
-$.extend($.fn.cycle.defaults, {
-    next:           '> .cycle-next',
-    nextEvent:      'click.cycle',
+$.extend($.fn.cycle2.defaults, {
+    next:           '> .cycle2-next',
+    nextEvent:      'click.cycle2',
     disabledClass:  'disabled',
-    prev:           '> .cycle-prev',
-    prevEvent:      'click.cycle',
+    prev:           '> .cycle2-prev',
+    prevEvent:      'click.cycle2',
     swipe:          false
 });    
 
@@ -1285,8 +1285,8 @@ $(document).on( 'cycle-initialized', function( e, opts ) {
     });
 
     if ( opts.swipe ) {
-        var nextEvent = opts.swipeVert ? 'swipeUp.cycle' : 'swipeLeft.cycle swipeleft.cycle';
-        var prevEvent = opts.swipeVert ? 'swipeDown.cycle' : 'swipeRight.cycle swiperight.cycle';
+        var nextEvent = opts.swipeVert ? 'swipeUp.cycle2' : 'swipeLeft.cycle2 swipeleft.cycle2';
+        var prevEvent = opts.swipeVert ? 'swipeDown.cycle2' : 'swipeRight.cycle2 swiperight.cycle2';
         opts.container.on( nextEvent, function(e) {
             opts.API.next();
         });
@@ -1321,7 +1321,7 @@ $(document).on( 'cycle-update-view', function( e, opts, slideOpts, currSlide ) {
 $(document).on( 'cycle-destroyed', function( e, opts ) {
     opts.API.getComponent( 'prev' ).off( opts.nextEvent );
     opts.API.getComponent( 'next' ).off( opts.prevEvent );
-    opts.container.off( 'swipeleft.cycle swiperight.cycle swipeLeft.cycle swipeRight.cycle swipeUp.cycle swipeDown.cycle' );
+    opts.container.off( 'swipeleft.cycle2 swiperight.cycle2 swipeLeft.cycle2 swipeRight.cycle2 swipeUp.cycle2 swipeDown.cycle2' );
 });
 
 })(jQuery);
@@ -1330,7 +1330,7 @@ $(document).on( 'cycle-destroyed', function( e, opts ) {
 (function($) {
 "use strict";
 
-$.extend($.fn.cycle.defaults, {
+$.extend($.fn.cycle2.defaults, {
     progressive: false
 });
 
@@ -1462,13 +1462,13 @@ $(document).on( 'cycle-pre-initialize', function( e, opts ) {
 (function($) {
 "use strict";
 
-$.extend($.fn.cycle.defaults, {
+$.extend($.fn.cycle2.defaults, {
     tmplRegex: '{{((.)?.*?)}}'
 });
 
-$.extend($.fn.cycle.API, {
+$.extend($.fn.cycle2.API, {
     tmpl: function( str, opts /*, ... */) {
-        var regex = new RegExp( opts.tmplRegex || $.fn.cycle.defaults.tmplRegex, 'g' );
+        var regex = new RegExp( opts.tmplRegex || $.fn.cycle2.defaults.tmplRegex, 'g' );
         var args = $.makeArray( arguments );
         args.shift();
         return str.replace(regex, function(_, str) {
