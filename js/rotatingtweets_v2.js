@@ -4,7 +4,7 @@
 (function($) {
 "use strict";
 
-$.fn.cycle.transitions.scrollDown = {
+$.fn.cycle2.transitions.scrollDown = {
     before: function( opts, curr, next, fwd ) {
         opts.API.stackSlides( opts, curr, next, fwd );
         var height = opts.container.css('overflow','hidden').height();
@@ -13,13 +13,43 @@ $.fn.cycle.transitions.scrollDown = {
         opts.animOut = { top: fwd ? height : -height };
     }
 };
-$.fn.cycle.transitions.scrollUp = {
+$.fn.cycle2.transitions.scrollUp = {
     before: function( opts, curr, next, fwd ) {
         opts.API.stackSlides( opts, curr, next, fwd );
         var height = opts.container.css('overflow','hidden').height();
         opts.cssBefore = { top: fwd ? height : -height, left: 0, opacity: 1, display: 'block' };
         opts.animIn = { top: 0 };
         opts.animOut = { top: fwd ? -height : height };
+    }
+};
+$.fn.cycle2.transitions.scrollLeft = {
+    before: function( opts, curr, next, fwd ) {
+        opts.API.stackSlides( opts, curr, next, fwd );
+        var width = opts.container.css('overflow','hidden').width();
+        opts.cssBefore = { width: width, left : width+20, top: 0, opacity: 1, display: 'block' };
+        opts.animIn = { left: 0 };
+        opts.animOut = { left : -width-20,width:width };
+    }
+};
+
+$.fn.cycle2.transitions.scrollRight = {
+    before: function( opts, curr, next, fwd ) {
+        opts.API.stackSlides( opts, curr, next, fwd );
+        var width = opts.container.css('overflow','hidden').width();
+        opts.cssBefore = { width: width, left : -width-20, top: 0, opacity: 1, display: 'block' };
+        opts.animIn = { left: 0 };
+        opts.animOut = { left : width+20 };
+    }
+};
+
+$.fn.cycle2.transitions.toss = {
+    before: function( opts, curr, next, fwd ) {
+        opts.API.stackSlides( opts, curr, next, fwd );
+        var width = opts.container.css('overflow','visible').width();
+		var height = opts.container.css('overflow','visible').height();
+        opts.cssBefore = { left: 0, top: 0, opacity: 1, display: 'block' };
+        opts.animIn = { left: 0 };
+        opts.animOut = { left : width*2, top:-height/2 , opacity:0, width:width, display:'block' };
     }
 };
 
@@ -29,7 +59,7 @@ $.fn.cycle.transitions.scrollUp = {
 */
 jQuery(document).ready(function() {
 	// Not at all sure we need this
-	jQuery('.rotatingtweets').cycle();
+	jQuery('.rotatingtweets').cycle2();
 	// Script to show mouseover effects when going over the Twitter intents
 	jQuery('.rtw_intents a').hover(function() {
 		var rtw_src = jQuery(this).find('img').attr('src');

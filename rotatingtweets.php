@@ -391,7 +391,11 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 	$return = "<a href='https://twitter.com/intent/user?user_id={$person['id']}' title='".esc_attr($person['name'])."' lang='{$lang}'{$targetvalue}>";
 	switch($linkcontent){
 	case 'icon':
-		$return .= "<img src='{$person['profile_image_url']}' alt='".esc_attr($person['name'])."' /></a>";
+		if(isset($_SERVER['HTTPS'])):
+			$return .= "<img src='{$person['profile_image_url_https']}' alt='".esc_attr($person['name'])."' /></a>";
+		else:
+			$return .= "<img src='{$person['profile_image_url']}' alt='".esc_attr($person['name'])."' /></a>";		
+		endif;
 		break;
 	case 'name':
 		$return .= $person['name']."</a>";
@@ -1031,7 +1035,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	# Sending the variables for JQuery Cycle 1
 	# All the valid rotations - if people to use one that looks weird, that's their business!
 	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
-		$possibleRotations = array('scrollUp','scrollDown','scrollHorz','scrollVert','fade','carousel');
+		$possibleRotations = array('scrollUp','scrollDown','scrollHorz','scrollLeft','scrollRight','toss','scrollVert','fade','carousel');
 	else:
 		$possibleRotations = array('blindX','blindY','blindZ','cover','curtainX','curtainY','fade','fadeZoom','growX','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','slideX','slideY','toss','turnUp','turnDown','turnLeft','turnRight','uncover','wipe','zoom');
 	endif;
@@ -1062,6 +1066,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			'pause-on-hover' => 'true',
 			'timeout' => $timeout,
 			'speed' => 1000,
+			'easing' => 'swing',
 			'slides'=> 'div.rotatingtweet'
 		);
 		if(! WP_DEBUG) $v2options['log'] = 'false';
@@ -1436,15 +1441,20 @@ function rotatingtweets_enqueue_scripts() {
 	# Check if we're using jQuery Cycle 1 or 2
 	$api = get_option('rotatingtweets-api-settings');
 	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2):
-		$cyclejsfile = 'js/jquery.cycle2.js';
-		$rotatingtweetsjsfile = 'js/rotatingtweets_v2.js';
-		wp_enqueue_script( 'jquery-cycle2', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
-		$dependence[]='jquery-cycle2';
-		wp_enqueue_script( 'jquery-cycle2-scrollvert', plugins_url('js/jquery.cycle2.scrollVert.js', __FILE__),$dependence,FALSE,FALSE );
-		$dependence[]='jquery-cycle2-scrollvert';
-		wp_enqueue_script( 'jquery-cycle2-carousel', plugins_url('js/jquery.cycle2.carousel.js', __FILE__),$dependence,FALSE,FALSE );
-		$dependence[]='jquery-cycle2-carousel';
-		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,FALSE,FALSE );
+/*
+	'jquery-easing' => 'http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js',
+*/		
+		$rt_enqueue_script_list = array(
+			'jquery-cycle2' => plugins_url('js/jquery.cycle2.renamed.js', __FILE__),
+			'jquery-cycle2-scrollvert' => plugins_url('js/jquery.cycle2.scrollVert.renamed.js', __FILE__),
+			'jquery-cycle2-carousel' => plugins_url('js/jquery.cycle2.carousel.renamed.js', __FILE__),
+			'rotating_tweet' => plugins_url('js/rotatingtweets_v2.js', __FILE__)
+		);
+//		$dependence[]='jquery-effects-core';
+		foreach($rt_enqueue_script_list as $scriptname => $scriptlocation):
+			wp_enqueue_script($scriptname,$scriptlocation,$dependence,FALSE,FALSE);
+			$dependence[] = $scriptname;
+		endforeach;
 	else:
 		# Get Stylesheet
 		$style = strtolower(get_stylesheet());
