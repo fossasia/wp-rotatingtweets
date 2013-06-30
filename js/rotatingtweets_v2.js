@@ -7,8 +7,9 @@
 $.fn.cycle2.transitions.scrollDown = {
     before: function( opts, curr, next, fwd ) {
         opts.API.stackSlides( opts, curr, next, fwd );
+        var width = opts.container.css('overflow','visible').width();
         var height = opts.container.css('overflow','hidden').height();
-        opts.cssBefore = { top: fwd ? -height : height, left: 0, opacity: 1, display: 'block' };
+        opts.cssBefore = { top: fwd ? -height : height, left: 0, opacity: 1, display: 'block' ,width:width };
         opts.animIn = { top: 0 };
         opts.animOut = { top: fwd ? height : -height };
     }
@@ -16,8 +17,9 @@ $.fn.cycle2.transitions.scrollDown = {
 $.fn.cycle2.transitions.scrollUp = {
     before: function( opts, curr, next, fwd ) {
         opts.API.stackSlides( opts, curr, next, fwd );
+        var width = opts.container.css('overflow','visible').width();
         var height = opts.container.css('overflow','hidden').height();
-        opts.cssBefore = { top: fwd ? height : -height, left: 0, opacity: 1, display: 'block' };
+        opts.cssBefore = { top: fwd ? height : -height, left: 0, opacity: 1, display: 'block' ,width:width };
         opts.animIn = { top: 0 };
         opts.animOut = { top: fwd ? -height : height };
     }
@@ -47,7 +49,7 @@ $.fn.cycle2.transitions.toss = {
         opts.API.stackSlides( opts, curr, next, fwd );
         var width = opts.container.css('overflow','visible').width();
 		var height = opts.container.css('overflow','visible').height();
-        opts.cssBefore = { left: 0, top: 0, opacity: 1, display: 'block' };
+        opts.cssBefore = { left: 0, top: 0, opacity: 1, display: 'block',width:width };
         opts.animIn = { left: 0 };
         opts.animOut = { left : width*2, top:-height/2 , opacity:0, width:width, display:'block' };
     }
