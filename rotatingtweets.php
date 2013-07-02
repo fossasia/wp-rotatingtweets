@@ -567,10 +567,10 @@ function rotatingtweets_admin_init(){
 	add_settings_field('rotatingtweets_token', __('Twitter API Access Token','rotatingtweets'), 'rotatingtweets_option_show_token', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_token_secret', __('Twitter API Access Token Secret','rotatingtweets'), 'rotatingtweets_option_show_token_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_api_main');
-	if(WP_DEBUG):
+//	if(WP_DEBUG):
 		add_settings_section('rotatingtweets_jquery_main', __('JQuery Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
 		add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
-	endif;
+//	endif;
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');
@@ -1475,6 +1475,7 @@ function rotatingtweets_enqueue_scripts() {
 			case 'avada child':
 			case 'avada-child-theme':
 			case 'avada child theme':
+			case 'a52cars':
 				wp_dequeue_script( 'jquery.cycle');
 				wp_enqueue_script( 'jquery.cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
 				$dependence[]='jquery.cycle';
