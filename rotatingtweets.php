@@ -247,13 +247,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		<?php
 		# For reference, all the rotations that look good.
 		# $goodRotations = array('blindX','blindY','blindZ','cover','curtainY','fade','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','toss','turnUp','turnDown','uncover');
-		$rotationoptions = array (
-			'scrollUp' => __('Scroll Up','rotatingtweets'),
-			'scrollDown' => __('Scroll Down','rotatingtweets'),
-			'scrollLeft' => __('Scroll Left','rotatingtweets'),
-			'scrollRight' => __('Scroll Right','rotatingtweets'),
-			'fade' => __('Fade','rotatingtweets')
-		);
+		$rotationoptions = rotatingtweets_possible_rotations(true);
 		asort($rotationoptions);
 		?>
 		<p><label for="<?php echo $this->get_field_id('tw_rotation_type'); ?>"><?php _e('Type of rotation','rotatingtweets'); ?> <select id="<?php echo $this->get_field_id('tw_rotation_type'); ?>" name="<?php echo $this->get_field_name('tw_rotation_type');?>">
@@ -1031,14 +1025,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		# Default
 		$twitterlocale = 'en';
 	endif;
+	# Now get the possible rotationgs that are permitted
 	$api = get_option('rotatingtweets-api-settings');
-	# Sending the variables for JQuery Cycle 1
-	# All the valid rotations - if people to use one that looks weird, that's their business!
-	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
-		$possibleRotations = array('scrollUp','scrollDown','scrollHorz','scrollLeft','scrollRight','toss','scrollVert','fade','carousel');
-	else:
-		$possibleRotations = array('blindX','blindY','blindZ','cover','curtainX','curtainY','fade','fadeZoom','growX','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','slideX','slideY','toss','turnUp','turnDown','turnLeft','turnRight','uncover','wipe','zoom');
-	endif;
+	$possibleRotations = rotatingtweets_possible_rotations();
 	foreach($possibleRotations as $possibleRotation):
 		if(strtolower($args['rotation_type']) == strtolower($possibleRotation)) $rotation_type = $possibleRotation;
 	endforeach;
@@ -1423,6 +1412,38 @@ function rotatingtweets_init() {
 }
 add_action('plugins_loaded', 'rotatingtweets_init');
 
+function rotatingtweets_possible_rotations($dropbox = FALSE) {
+	# Check if we're using jQuery Cycle 1 or 2
+	$api = get_option('rotatingtweets-api-settings');
+	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2):
+		if($dropbox):
+			$possibleRotations = array (
+				'scrollUp' => __('Scroll Up','rotatingtweets'),
+				'scrollDown' => __('Scroll Down','rotatingtweets'),
+				'scrollLeft' => __('Scroll Left','rotatingtweets'),
+				'scrollRight' => __('Scroll Right','rotatingtweets'),
+				'fade' => __('Fade','rotatingtweets'),
+				'carousel' => __('Carousel','rotatingtweets')
+			);
+		else:
+			$possibleRotations = array('scrollUp','scrollDown','scrollHorz','scrollLeft','scrollRight','toss','scrollVert','fade','carousel');
+		endif;
+	else:
+		if($dropbox):
+			$possibleRotations = array (
+				'scrollUp' => __('Scroll Up','rotatingtweets'),
+				'scrollDown' => __('Scroll Down','rotatingtweets'),
+				'scrollLeft' => __('Scroll Left','rotatingtweets'),
+				'scrollRight' => __('Scroll Right','rotatingtweets'),
+				'fade' => __('Fade','rotatingtweets')
+			);
+		else:
+			$possibleRotations = array('blindX','blindY','blindZ','cover','curtainX','curtainY','fade','fadeZoom','growX','growY','none','scrollUp','scrollDown','scrollLeft','scrollRight','scrollHorz','scrollVert','shuffle','slideX','slideY','toss','turnUp','turnDown','turnLeft','turnRight','uncover','wipe','zoom');
+		endif;
+	endif;
+	return($possibleRotations);
+}
+
 function rotatingtweets_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' ); 
 	# Set the base versions of the strings
@@ -1516,4 +1537,9 @@ add_action( 'admin_enqueue_scripts', 'rotatingtweets_enqueue_admin_scripts' );
 Forces the inclusion of Rotating Tweets CSS in the header - irrespective of whether the widget or shortcode is in use.  I wouldn't normally do this, but CSS needs to be in the header for HTML5 compliance (at least if the intention is not to break other browsers) - and short-code only pages won't do that without some really time-consuming and complicated code up front to check for this
 */
 add_action('wp_enqueue_scripts','rotatingtweets_enqueue_style');
+// add_action('wp_enqueue_scripts','rotatingtweets_enqueue_scripts'); // Use this if you are loading the tweet page via ajax
+$style = strtolower(get_stylesheet());
+if($style == 'gleam'):
+	add_action('wp_enqueue_scripts','rotatingtweets_enqueue_scripts');
+endif;
 ?>
