@@ -918,6 +918,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 function rotatingtweets_get_rate_data() {
 //	$callstring = "http://api.twitter.com/1/account/rate_limit_status.json";
 //	$command = 'account/rate_limit_status';
+	if(WP_DEBUG) echo "<!-- Retrieving Rate Data \n";
 	$ratedata = rotatingtweets_call_twitter_API('application/rate_limit_status',array('resources'=>'statuses'));
 //	$ratedata = wp_remote_request($callstring);
 	if(!is_wp_error($ratedata)):
@@ -926,8 +927,16 @@ function rotatingtweets_get_rate_data() {
 			$newrate['hourly_limit']=$rate['resources']['statuses']['/statuses/user_timeline']['limit'];
 			$newrate['remaining_hits']=$rate['resources']['statuses']['/statuses/user_timeline']['remaining'];
 			$newrate['reset_time_in_seconds']=$rate['resources']['statuses']['/statuses/user_timeline']['reset'];
+			if(WP_DEBUG):
+				print_r($newrate);
+				echo "\n -->";
+			endif;
 			return($newrate);
 		else:
+			if(WP_DEBUG):
+				print_r($rate);
+				echo "\n -->";
+			endif;
 			return($rate);
 		endif;
 	else:
@@ -957,6 +966,7 @@ function rotatingtweets_get_twitter_language() {
 	if($timegap > $cache_delay):
 //		$callstring = "https://api.twitter.com/1/help/languages.json";
 //		$twitterdata = wp_remote_request($callstring);
+		if(WP_DEBUG) echo "<!-- Retrieving Twitter Language Options -->";
 		$twitterdata = rotatingtweets_call_twitter_API('help/languages');
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body'],TRUE);
@@ -976,6 +986,7 @@ function rotatingtweets_get_twitter_language() {
 					$option['languages']=$latest_languages;
 					$option['datetime']=time();
 					update_option($optionname,$option);
+					if(WP_DEBUG) echo "<!-- ".count($option['languages'])." language options successfully retrieved -->";
 				endif;
 			endif;
 		else:
