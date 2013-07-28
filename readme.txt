@@ -162,10 +162,20 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.4.7 =
-* HTML5 compliance and improved rate-limiting. If you are using a version before 0.700, you will need to upgrade to a more recent version for Rotating Tweets to keep accessing Twitter after May 7, 2013.
+= 1.5.0 =
+* Added `Carousel` rotation option and beta support for version 2 of JQuery Cycle
 
 == Changelog ==
+= 1.5.0 =
+* Added `Carousel` rotation option and beta support for [version 2 of JQuery Cycle](http://jquery.malsup.com/cycle2/)
+* Added `link_all_text` shortcode tag and functionality
+* Added richer debug information
+* Corrected API expiry date
+* Added missing `alt` tag
+* Kept CSS permanently in the header to maintain HTML capability
+* Full Dutch translation
+* Attempt to fix clash with [Avada](http://themeforest.net/item/avada-responsive-multipurpose-theme/2833226) and [Gleam](http://www.elegantthemes.com/gallery/gleam/) themes
+
 = 1.4.7 =
 * HTML5 compliance
 * Improved rate-limiting
