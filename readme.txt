@@ -31,7 +31,7 @@ Currently the following languages are available:
 * German *(basic tweet display only)*
 * Spanish *(basic tweet display only)*
 * Italian *(basic tweet display only)*
-* Dutch *(basic tweet display only)*
+* Dutch *(public facing translation complete - many thanks to Natasja Weijer for her help on this)*
 * French *(almost complete - many thanks to [Alexandre Trudel](http://wordpress.org/support/profile/alexandretrudel) for his help on this)*
 
 If you have made the plug-in work in your language, please send the translations you'd like to see or, even better, the relevant [gettext PO and MO files](http://codex.wordpress.org/I18n_for_WordPress_Developers) to [me](http://www.martintod.org.uk/contact-martin/) and I will then share them with everyone else. You can download [the latest POT file](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/rotatingtweets.pot), and [PO files in each language](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/) from this site. You may find [Poedit](http://www.poedit.net/) rather useful for translation and creation of PO and MO files - although the PO files themselves are quite simple text files and can be edited in Notepad or [Notepad++](http://notepad-plus-plus.org/).
@@ -173,7 +173,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Corrected API expiry date
 * Added missing `alt` tag
 * Kept CSS permanently in the header to maintain HTML capability
-* Full Dutch translation
+* Public facing Dutch translation complete - many thanks to Natasja Weijer for her help on this
 * Attempt to fix clash with [Avada](http://themeforest.net/item/avada-responsive-multipurpose-theme/2833226) and [Gleam](http://www.elegantthemes.com/gallery/gleam/) themes
 
 = 1.4.7 =
