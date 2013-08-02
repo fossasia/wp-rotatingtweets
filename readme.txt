@@ -168,6 +168,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 == Changelog ==
 = 1.5.1 =
 * Fixed problem with [Magazino template](http://wordpress.org/themes/magazino)
+* Fixed incorrect message on settings page
 
 = 1.5.0 =
 * Added `Carousel` rotation option and beta support for [version 2 of JQuery Cycle](http://jquery.malsup.com/cycle2/)
