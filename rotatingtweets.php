@@ -623,7 +623,7 @@ function rotatingtweets_api_explanation() {
 };
 // Explanatory text
 function rotatingtweets_jquery_explanation() {
-	_e('This section is experimental and currently only displays if WP_DEBUG is set','rotatingtweets');
+//	_e('This section is experimental and currently only displays if WP_DEBUG is set','rotatingtweets');
 };
 // validate our options
 function rotatingtweets_api_validate($input) {
@@ -1059,7 +1059,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	endif;
 	# Now set all the version 2 options
 	$v2string = '';
-	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
+	if( strtolower(get_stylesheet()) == 'magazino' || isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
 		$v2options = array(
 			'auto-height' => 'calc',
 			'fx' => $rotation_type,
@@ -1472,7 +1472,9 @@ function rotatingtweets_enqueue_scripts() {
 	}
 	# Check if we're using jQuery Cycle 1 or 2
 	$api = get_option('rotatingtweets-api-settings');
-	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2):
+	$style = strtolower(get_stylesheet());
+	// Fixes a problem with the magazino template
+	if($style == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2)):
 /*
 	'jquery-easing' => 'http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js',
 */		
@@ -1489,7 +1491,6 @@ function rotatingtweets_enqueue_scripts() {
 		endforeach;
 	else:
 		# Get Stylesheet
-		$style = strtolower(get_stylesheet());
 		switch ($style):
 			case 'bremen_theme':
 			case 'zeebizzcard':
