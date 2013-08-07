@@ -1147,249 +1147,251 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$targetvalue = '';
 		}
 		foreach($json as $twitter_object):
-			$tweet_counter++;
-			if($tweet_counter <= $tweet_count):
-				if($tweet_counter == 1 || ( isset($args['no_rotate']) && $args['no_rotate'] ) || $rotation_type == 'carousel' ):
-					$result .= "\n\t<div class = 'rotatingtweet'>";
-				else:
-					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'>";				
-				endif;
-				# Now to process the text
-				// print_r($twitter_object);
-				$main_text = $twitter_object['text'];
-				if(!empty($main_text)):
-					$user = $twitter_object['user'];
-					$tweetuser = $user;
-					# Now the substitutions
-					$entities = $twitter_object['entities'];
-					# Fix up retweets, links, hashtags and use names
-					unset($before);
-					unset($after);
-					unset($retweeter);
-					# First clean up the retweets
-					if(isset($twitter_object['retweeted_status'])):
-						$rt_data = $twitter_object['retweeted_status'];
+			if ( ! (  ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@') ||  (!$args['include_rts'] && isset($twitter_object['retweeted_stats']))  )  ):
+				$tweet_counter++;
+				if($tweet_counter <= $tweet_count):
+					if($tweet_counter == 1 || ( isset($args['no_rotate']) && $args['no_rotate'] ) || $rotation_type == 'carousel' ):
+						$result .= "\n\t<div class = 'rotatingtweet'>";
 					else:
-						unset($rt_data);
+						$result .= "\n\t<div class = 'rotatingtweet' style='display:none'>";				
 					endif;
-					if(!empty($rt_data)):
-						$rt_user = $rt_data['user'];
-						// These versions remove RT and use the original text
-						$rt_replace_array = array(1,2,3);
-						if(in_array($args['official_format'],$rt_replace_array)):
-							$main_text = $rt_data['text'];
-							$retweeter = $user;
-							$tweetuser = $rt_user;
+					# Now to process the text
+					// print_r($twitter_object);
+					$main_text = $twitter_object['text'];
+					if(!empty($main_text)):
+						$user = $twitter_object['user'];
+						$tweetuser = $user;
+						# Now the substitutions
+						$entities = $twitter_object['entities'];
+						# Fix up retweets, links, hashtags and use names
+						unset($before);
+						unset($after);
+						unset($retweeter);
+						# First clean up the retweets
+						if(isset($twitter_object['retweeted_status'])):
+							$rt_data = $twitter_object['retweeted_status'];
 						else:
-							$main_text = "RT @".$rt_user['screen_name'] . " " . $rt_data['text'];
+							unset($rt_data);
 						endif;
-						$before[] = "*@".$rt_user['screen_name']."\b*i";
-						$after[] = rotatingtweets_user_intent($rt_user,$twitterlocale,'screen_name',$targetvalue);
-						$entities = $rt_data['entities'];
-					endif;
-					# First the user mentions
-					if(isset($entities['user_mentions'])):
-						$user_mentions = $entities['user_mentions'];
-					else:
-						unset($user_mentions);
-					endif;
-					if(!empty($user_mentions)):
-						foreach($user_mentions as $user_mention):
-							$before[] = "*@".$user_mention['screen_name']."\b*i";
-							$after[] = rotatingtweets_user_intent($user_mention,$twitterlocale,'screen_name',$targetvalue);
-						endforeach;
-						# Clearing up duplicates to avoid strange result (possibly risky?)
-						$before = array_unique($before);
-						$after = array_unique($after);
-					endif;
-					# Now the URLs
-					if(isset($entities['urls'])):
-						$urls = $entities['urls'];
-					else:
-						unset($urls);
-					endif;
-					if(!empty($urls)):
-						foreach($urls as $url):
-							$before[] = "*".$url['url']."*";
-							$displayurl = $url['display_url'];
-							if(strlen($displayurl)>$urllength):
-								# PHP sometimes has a really hard time with unicode characters - this one removes the ellipsis
-								$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
-								$displayurl = substr($displayurl,0,$urllength)."&hellip;";
+						if(!empty($rt_data)):
+							$rt_user = $rt_data['user'];
+							// These versions remove RT and use the original text
+							$rt_replace_array = array(1,2,3);
+							if(in_array($args['official_format'],$rt_replace_array)):
+								$main_text = $rt_data['text'];
+								$retweeter = $user;
+								$tweetuser = $rt_user;
+							else:
+								$main_text = "RT @".$rt_user['screen_name'] . " " . $rt_data['text'];
 							endif;
-							$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
-						endforeach;
-					endif;
-					if(isset($entities['media'])):
-						$media = $entities['media'];
-					else:
-						unset($media);
-					endif;
-					if(!empty($media)):
-						foreach($media as $medium):
-							$before[] = "*".$medium['url']."*";
-							$displayurl = $medium['display_url'];
-							if(strlen($displayurl)>$urllength):
-								$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
-								$displayurl = substr($displayurl,0,$urllength)."&hellip;";
+							$before[] = "*@".$rt_user['screen_name']."\b*i";
+							$after[] = rotatingtweets_user_intent($rt_user,$twitterlocale,'screen_name',$targetvalue);
+							$entities = $rt_data['entities'];
+						endif;
+						# First the user mentions
+						if(isset($entities['user_mentions'])):
+							$user_mentions = $entities['user_mentions'];
+						else:
+							unset($user_mentions);
+						endif;
+						if(!empty($user_mentions)):
+							foreach($user_mentions as $user_mention):
+								$before[] = "*@".$user_mention['screen_name']."\b*i";
+								$after[] = rotatingtweets_user_intent($user_mention,$twitterlocale,'screen_name',$targetvalue);
+							endforeach;
+							# Clearing up duplicates to avoid strange result (possibly risky?)
+							$before = array_unique($before);
+							$after = array_unique($after);
+						endif;
+						# Now the URLs
+						if(isset($entities['urls'])):
+							$urls = $entities['urls'];
+						else:
+							unset($urls);
+						endif;
+						if(!empty($urls)):
+							foreach($urls as $url):
+								$before[] = "*".$url['url']."*";
+								$displayurl = $url['display_url'];
+								if(strlen($displayurl)>$urllength):
+									# PHP sometimes has a really hard time with unicode characters - this one removes the ellipsis
+									$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
+									$displayurl = substr($displayurl,0,$urllength)."&hellip;";
+								endif;
+								$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
+							endforeach;
+						endif;
+						if(isset($entities['media'])):
+							$media = $entities['media'];
+						else:
+							unset($media);
+						endif;
+						if(!empty($media)):
+							foreach($media as $medium):
+								$before[] = "*".$medium['url']."*";
+								$displayurl = $medium['display_url'];
+								if(strlen($displayurl)>$urllength):
+									$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
+									$displayurl = substr($displayurl,0,$urllength)."&hellip;";
+								endif;
+								$after[] = "<a href='".$medium['url']."' title='".$medium['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
+							endforeach;			
+						endif;
+	//					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
+						# This is designed to find hashtags and turn them into links...
+						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
+						$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
+						$main_text = preg_replace($before,$after,$main_text);
+						if(isset($args['link_all_text']) && $args['link_all_text']):
+							$main_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
+						endif;
+						# Now for the meta text
+						switch ($args['official_format']) {
+						case 0:
+							# This is the original Rotating Tweets display routine
+							$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
+							$meta = '';
+							if($args['show_meta_timestamp']):
+								$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
 							endif;
-							$after[] = "<a href='".$medium['url']."' title='".$medium['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
-						endforeach;			
-					endif;
-//					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
-					# This is designed to find hashtags and turn them into links...
-					$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
-					$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
-					$main_text = preg_replace($before,$after,$main_text);
-					if(isset($args['link_all_text']) && $args['link_all_text']):
-						$main_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
-					endif;
-					# Now for the meta text
-					switch ($args['official_format']) {
-					case 0:
-						# This is the original Rotating Tweets display routine
-						$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
-						$meta = '';
-						if($args['show_meta_timestamp']):
-							$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
-						endif;
-						if($args['show_meta_screen_name']):
-							if(!empty($meta)) $meta .= ' ';
-							$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
-						endif;
-						if($args['show_meta_via']):
-							if(!empty($meta)) $meta .= ' ';
-							$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
-						endif;
-						if($args['show_meta_reply_retweet_favorite']):
-							if(!empty($meta)) $meta .= ' &middot; ';
-							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
-						endif;
+							if($args['show_meta_screen_name']):
+								if(!empty($meta)) $meta .= ' ';
+								$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+							endif;
+							if($args['show_meta_via']):
+								if(!empty($meta)) $meta .= ' ';
+								$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
+							endif;
+							if($args['show_meta_reply_retweet_favorite']):
+								if(!empty($meta)) $meta .= ' &middot; ';
+								$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
+							endif;
 
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-							if(!empty($meta)) $meta .= ' &middot; ';
-							$meta .= $nextprev;
-						endif;
+							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+								if(!empty($meta)) $meta .= ' &middot; ';
+								$meta .= $nextprev;
+							endif;
 
-						if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
-						break;
-					case 1:
-						# This is an attempt to replicate the original Tweet
-						$result .= "\n\t<div class='rtw_info'>";
-						$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></div>";
-						$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
-						$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
-						$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
-						$result .= "\n\t</div>";
-						$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
-						$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
-						$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
-						if(isset($retweeter)) {
-							$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
+							if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
+							break;
+						case 1:
+							# This is an attempt to replicate the original Tweet
+							$result .= "\n\t<div class='rtw_info'>";
+							$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></div>";
+							$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
+							$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
+							$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
+							$result .= "\n\t</div>";
+							$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
+							$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
+							$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
+							if(isset($retweeter)) {
+								$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
+							}
+							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+								$result .= ' &middot; '.$nextprev;
+							endif;
+							$result .= "\n</div>";
+							break;
+						case 2:
+							# This is a slightly adjusted version of the original tweet - designed for wide boxes - consistent with Twitter guidelines
+							$result .= "\n\t\t<div class='rtw_wide'>";
+							$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
+							$result .= "\n\t\t<div class='rtw_wide_block'><div class='rtw_info'>";
+							$result .= "\n\t\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short',$targetvalue).'</div>';
+							$result .= "\n\t\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
+							$result .= "\n\t\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
+							$result .= "\n\t\t</div>";
+							$result .= "\n\t\t<p class='rtw_main'>".$main_text."</p>";
+	//						$result .= "\n\t\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1).'</div>';
+							if(isset($retweeter)) {
+								$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
+							}
+							$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
+							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+								$result .= wp_kses_post($args['middot']).$nextprev;
+							endif;
+							$result .= "</span></div></div></div>";
+							break;
+						case 3:
+							# This one uses the twitter standard approach for embedding via their javascript API - unfortunately I can't work out how to make it work with the rotating tweet javascript!  If anyone can work out how to calculate the height of a oEmbed Twitter tweet, I will be very grateful! :-)
+							$result .= '<blockquote class="twitter-tweet">';
+							$result .= "<p>".$main_text."</p>";
+							$result .= '&mdash; '.$user['name'].' (@'.$user['screen_name'].') <a href="https://twitter.com/twitterapi/status/'.$twitter_object['id_str'].'" data-datetime="'.date('c',strtotime($twitter_object['created_at'])).'"'.$targetvalue.'>'.date_i18n(get_option('date_format') ,strtotime($twitter_object['created_at'])).'</a>';
+							$result .= '</blockquote>';
+							break;
+						case 4:
+							$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
+							$result .= "\n\t<div class='rtw_meta rtw_info'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
+							if($args['show_meta_screen_name']):
+								$result .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']).' &middot; ';
+							endif;
+							$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
+							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+								$result .= ' &middot; '.$nextprev;
+							endif;
+							$result .= "\n</div>";
+							break;
+						case 5:
+							# This is an adjusted Rotating Tweets display routine
+							$result .= "\n\t\t<p class='rtw_main'><img src='".plugins_url('images/bird_16_black.png', __FILE__)."' alt='Twitter' />&nbsp;&nbsp; $main_text ";
+							$meta = '';
+							if($args['show_meta_timestamp']):
+								$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
+							endif;
+							if($args['show_meta_screen_name']):
+								if(!empty($meta)) $meta .= ' ';
+								$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+							endif;
+							if($args['show_meta_via']):
+								if(!empty($meta)) $meta .= ' ';
+								$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
+							endif;
+							if($args['show_meta_reply_retweet_favorite']):
+								if(!empty($meta)) $meta .= ' &middot; ';
+								$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
+							endif;
+							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+								if(!empty($meta)) $meta .= ' &middot; ';
+								$meta .= $nextprev;
+							endif;
+							if(!empty($meta)) $result .= "\n\t\t<span class='rtw_meta'>".ucfirst($meta)."</span></p>";
+							break;
+						case 6:
+							# This is the original Rotating Tweets display routine - adjusted for a user
+							$result .= "\n\t\t<p class='rtw_main'>".rotatingtweets_user_intent($user,$twitterlocale,'blue_bird',$targetvalue).$main_text."</p>";
+							$meta = '';
+							if($args['show_meta_timestamp']):
+								$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
+							endif;
+							if($args['show_meta_screen_name']):
+								if(!empty($meta)) $meta .= ' ';
+								$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+							endif;
+							if($args['show_meta_via']):
+								if(!empty($meta)) $meta .= ' ';
+								$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
+							endif;
+							if($args['show_meta_reply_retweet_favorite']):
+								if(!empty($meta)) $meta .= ' &middot; ';
+								$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
+							endif;
+
+							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+								if(!empty($meta)) $meta .= ' &middot; ';
+								$meta .= $nextprev;
+							endif;
+
+							if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
+							break;
 						}
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-							$result .= ' &middot; '.$nextprev;
-						endif;
-						$result .= "\n</div>";
-						break;
-					case 2:
-						# This is a slightly adjusted version of the original tweet - designed for wide boxes - consistent with Twitter guidelines
-						$result .= "\n\t\t<div class='rtw_wide'>";
-						$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
-						$result .= "\n\t\t<div class='rtw_wide_block'><div class='rtw_info'>";
-						$result .= "\n\t\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short',$targetvalue).'</div>';
-						$result .= "\n\t\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
-						$result .= "\n\t\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
-						$result .= "\n\t\t</div>";
-						$result .= "\n\t\t<p class='rtw_main'>".$main_text."</p>";
-//						$result .= "\n\t\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1).'</div>';
-						if(isset($retweeter)) {
-							$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
-						}
-						$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-							$result .= wp_kses_post($args['middot']).$nextprev;
-						endif;
-						$result .= "</span></div></div></div>";
-						break;
-					case 3:
-						# This one uses the twitter standard approach for embedding via their javascript API - unfortunately I can't work out how to make it work with the rotating tweet javascript!  If anyone can work out how to calculate the height of a oEmbed Twitter tweet, I will be very grateful! :-)
-						$result .= '<blockquote class="twitter-tweet">';
-						$result .= "<p>".$main_text."</p>";
-						$result .= '&mdash; '.$user['name'].' (@'.$user['screen_name'].') <a href="https://twitter.com/twitterapi/status/'.$twitter_object['id_str'].'" data-datetime="'.date('c',strtotime($twitter_object['created_at'])).'"'.$targetvalue.'>'.date_i18n(get_option('date_format') ,strtotime($twitter_object['created_at'])).'</a>';
-						$result .= '</blockquote>';
-						break;
-					case 4:
-						$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
-						$result .= "\n\t<div class='rtw_meta rtw_info'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
-						if($args['show_meta_screen_name']):
-							$result .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']).' &middot; ';
-						endif;
-						$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-							$result .= ' &middot; '.$nextprev;
-						endif;
-						$result .= "\n</div>";
-						break;
-					case 5:
-						# This is an adjusted Rotating Tweets display routine
-						$result .= "\n\t\t<p class='rtw_main'><img src='".plugins_url('images/bird_16_black.png', __FILE__)."' alt='Twitter' />&nbsp;&nbsp; $main_text ";
-						$meta = '';
-						if($args['show_meta_timestamp']):
-							$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
-						endif;
-						if($args['show_meta_screen_name']):
-							if(!empty($meta)) $meta .= ' ';
-							$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
-						endif;
-						if($args['show_meta_via']):
-							if(!empty($meta)) $meta .= ' ';
-							$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
-						endif;
-						if($args['show_meta_reply_retweet_favorite']):
-							if(!empty($meta)) $meta .= ' &middot; ';
-							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
-						endif;
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-							if(!empty($meta)) $meta .= ' &middot; ';
-							$meta .= $nextprev;
-						endif;
-						if(!empty($meta)) $result .= "\n\t\t<span class='rtw_meta'>".ucfirst($meta)."</span></p>";
-						break;
-					case 6:
-						# This is the original Rotating Tweets display routine - adjusted for a user
-						$result .= "\n\t\t<p class='rtw_main'>".rotatingtweets_user_intent($user,$twitterlocale,'blue_bird',$targetvalue).$main_text."</p>";
-						$meta = '';
-						if($args['show_meta_timestamp']):
-							$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
-						endif;
-						if($args['show_meta_screen_name']):
-							if(!empty($meta)) $meta .= ' ';
-							$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
-						endif;
-						if($args['show_meta_via']):
-							if(!empty($meta)) $meta .= ' ';
-							$meta .=sprintf(__("via %s",'rotatingtweets'),$twitter_object['source']);
-						endif;
-						if($args['show_meta_reply_retweet_favorite']):
-							if(!empty($meta)) $meta .= ' &middot; ';
-							$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
-						endif;
-
-						if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-							if(!empty($meta)) $meta .= ' &middot; ';
-							$meta .= $nextprev;
-						endif;
-
-						if(!empty($meta)) $result .= "\n\t\t<p class='rtw_meta'>".ucfirst($meta)."</p>";
-						break;
-					}
-				else:
-					$result .= "\n\t\t<p class='rtw_main'>".__("Problem retrieving data from Twitter.",'rotatingtweets')."</p></div>";
-					$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
-					$result .= "\n\t\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".__("Please check the comments on this page's HTML to understand more.",'rotatingtweets')."</p>";
+					else:
+						$result .= "\n\t\t<p class='rtw_main'>".__("Problem retrieving data from Twitter.",'rotatingtweets')."</p></div>";
+						$result .= "<!-- rotatingtweets plugin was unable to parse this data: ".print_r($json,TRUE)." -->";
+						$result .= "\n\t\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".__("Please check the comments on this page's HTML to understand more.",'rotatingtweets')."</p>";
+					endif;
+					$result .= "</div>";
 				endif;
-				$result .= "</div>";
 			endif;
 		endforeach;
 	endif;
