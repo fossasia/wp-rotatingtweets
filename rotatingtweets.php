@@ -554,18 +554,20 @@ function rotatingtweets_call_twitter_API_options() {
 add_action('admin_init', 'rotatingtweets_admin_init');
 
 function rotatingtweets_admin_init(){
+// API settings
 	register_setting( 'rotatingtweets_options', 'rotatingtweets-api-settings', 'rotatingtweets_api_validate' );
 	add_settings_section('rotatingtweets_api_main', __('Twitter API Settings','rotatingtweets'), 'rotatingtweets_api_explanation', 'rotatingtweets_api_settings');
 	add_settings_field('rotatingtweets_key', __('Twitter API Consumer Key','rotatingtweets'), 'rotatingtweets_option_show_key', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_secret', __('Twitter API Consumer Secret','rotatingtweets'), 'rotatingtweets_option_show_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_token', __('Twitter API Access Token','rotatingtweets'), 'rotatingtweets_option_show_token', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_token_secret', __('Twitter API Access Token Secret','rotatingtweets'), 'rotatingtweets_option_show_token_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
-	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_api_main');
-	add_settings_field('rotatingtweets_timeout', __('Connection timeout','rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_api_main');
-//	if(WP_DEBUG):
-		add_settings_section('rotatingtweets_jquery_main', __('JQuery Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
-		add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
-//	endif;
+// Connection settings	
+	add_settings_section('rotatingtweets_connection_main', __('Connection Settings','rotatingtweets'), 'rotatingtweets_connection_explanation', 'rotatingtweets_api_settings');
+	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_connection_main');
+	add_settings_field('rotatingtweets_timeout', __('Connection timeout','rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_connection_main');
+//	JQuery settings
+	add_settings_section('rotatingtweets_jquery_main', __('JQuery Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
+	add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');
@@ -640,6 +642,10 @@ function rotatingtweets_option_show_cycle_version() {
 }
 // Explanatory text
 function rotatingtweets_api_explanation() {
+	
+};
+// Explanatory text
+function rotatingtweets_connection_explanation() {
 	
 };
 // Explanatory text
