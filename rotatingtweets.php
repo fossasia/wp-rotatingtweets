@@ -561,6 +561,7 @@ function rotatingtweets_admin_init(){
 	add_settings_field('rotatingtweets_token', __('Twitter API Access Token','rotatingtweets'), 'rotatingtweets_option_show_token', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_token_secret', __('Twitter API Access Token Secret','rotatingtweets'), 'rotatingtweets_option_show_token_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_api_main');
+	add_settings_field('rotatingtweets_timeout', __('Connection timeout','rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_api_main');
 //	if(WP_DEBUG):
 		add_settings_section('rotatingtweets_jquery_main', __('JQuery Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
 		add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
@@ -599,17 +600,37 @@ function rotatingtweets_option_show_ssl_verify() {
 	}
 	echo "\n</select>";
 }
+function rotatingtweets_option_show_timeout() {
+	$options = get_option('rotatingtweets-api-settings');
+	$choice = array(
+		1 => _x('1 second','Connection timeout','rotatingtweets'),
+		3 => _x('3 seconds (default)','Connection timeout','rotatingtweets'),
+		5 => _x('5 seconds','Connection timeout','rotatingtweets'),
+		7 => _x('7 seconds','Connection timeout','rotatingtweets')
+	);
+	echo "\n<select id='rotatingtweets_api_timeout_input' name='rotatingtweets-api-settings[timeout]'>";
+	if(!isset($options['timeout']))	$options['timeout'] = 3;
+	foreach($choice as $value => $text) {
+		if($options['timeout'] == $value ) {
+			$selected = ' selected = "selected"';
+		} else {
+			$selected = '';
+		}
+		echo "\n\t<option value='".$value."'".$selected.">".$text."</option>";
+	}
+	echo "\n</select>";
+}
 function rotatingtweets_option_show_cycle_version() {
 	$options = get_option('rotatingtweets-api-settings');
 	$choice = array(
 		1 => _x('Version 1 (default)','Version of JQuery Cycle','rotatingtweets'),
 		2 => _x('Version 2 (beta)','Version of JQuery Cycle','rotatingtweets')
 	);
-	echo "\n<select id='rotatingtweets_api_jqery_cycle_version_input' name='rotatingtweets-api-settings[jquery_cycle_version]'>";
+	echo "\n<select id='rotatingtweets_api_jquery_cycle_version_input' name='rotatingtweets-api-settings[jquery_cycle_version]'>";
 	if(!isset($options['jquery_cycle_version']))	$options['jquery_cycle_version'] = 1;
 	foreach($choice as $value => $text) {
 		if($options['jquery_cycle_version'] == $value ) {
-			$selected = 'selected = "selected"';
+			$selected = ' selected = "selected"';
 		} else {
 			$selected = '';
 		}
@@ -663,6 +684,10 @@ function rotatingtweets_api_validate($input) {
 	else:
 		$options['ssl_verify_off']=false;
 	endif;	
+	// Check 'timeout'
+	if(isset($input['timeout'])):
+		$options['timeout'] = max(1,intval($input['timeout']));
+	endif;
 	// Check 'jquery_cycle_version'
 	if(isset($input['jquery_cycle_version'])):
 		$options['jquery_cycle_version']=max(min(absint($input['jquery_cycle_version']),2),1);
@@ -701,6 +726,10 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 				echo "\n<!-- Verifying SSL peer -->\n";
 			endif;
 			$connection->ssl_verifypeer = TRUE;
+		endif;
+		if(isset($api['timeout'])):
+			$timeout = max(1,$api['timeout']);
+			$connection->timeout = $timeout;
 		endif;
 		$result = $connection->get($command , $options);
 	else:
