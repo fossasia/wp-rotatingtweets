@@ -706,7 +706,11 @@ function rotatingtweets_api_validate($input) {
 		$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
 		$error = get_option('rotatingtweets_api_error');
 		if(!empty($error)):
-			add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Twitter: %1$s. <a href="%2$s">Please check your API key, secret, token and secret token on the Twitter website</a>.','rotatingtweets'),$error[0]['message'],'https://dev.twitter.com/apps'), 'error' );
+			if($error[0]['type'] == 'Twitter'):
+				add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Twitter: %1$s. <a href="%2$s">Please check your API key, secret, token and secret token on the Twitter website</a>.','rotatingtweets'),$error[0]['message'],'https://dev.twitter.com/apps'), 'error' );
+			else:				
+				add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Wordpress: %1$s. Please check your connection settings.','rotatingtweets'),$error[0]['message']), 'error' );
+			endif;
 		endif;
 	endif;
 	return $options;
