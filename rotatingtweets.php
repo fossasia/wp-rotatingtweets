@@ -608,7 +608,8 @@ function rotatingtweets_option_show_timeout() {
 		1 => _x('1 second','Connection timeout','rotatingtweets'),
 		3 => _x('3 seconds (default)','Connection timeout','rotatingtweets'),
 		5 => _x('5 seconds','Connection timeout','rotatingtweets'),
-		7 => _x('7 seconds','Connection timeout','rotatingtweets')
+		7 => _x('7 seconds','Connection timeout','rotatingtweets'),
+		20 => _x('20 seconds','Connection timeout','rotatingtweets')
 	);
 	echo "\n<select id='rotatingtweets_api_timeout_input' name='rotatingtweets-api-settings[timeout]'>";
 	if(!isset($options['timeout']))	$options['timeout'] = 3;
