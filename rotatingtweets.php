@@ -768,6 +768,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		$data = json_decode($result['body'],true);
 		if(!empty($data['errors'])):
 			$data['errors'][0]['type'] = 'Twitter';
+			if( empty($api) ) $errorstring[0]['message'] = 'Please enter valid Twitter API Settings on the Rotating Tweets settings page';
 			update_option('rotatingtweets_api_error',$data['errors']);
 		else:
 			delete_option('rotatingtweets_api_error');
