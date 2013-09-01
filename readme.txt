@@ -166,6 +166,9 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Includes Carousel rotation. Enforces rules on replies and retweets even if the Twitter API doesn't.
 
 == Changelog ==
+= 1.5.2 = 
+* Improved clean-up on uninstallation or deactivation
+
 = 1.5.1 =
 * Enforce rules on replies and retweets even if the Twitter API doesn't
 * Fixed problem with [Magazino template](http://wordpress.org/themes/magazino)

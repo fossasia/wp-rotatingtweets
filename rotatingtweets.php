@@ -1599,4 +1599,20 @@ $style = strtolower(get_stylesheet());
 if($style == 'gleam'):
 	add_action('wp_enqueue_scripts','rotatingtweets_enqueue_scripts');
 endif;
+
+// Add the deactivation and uninstallation functions
+function rotatingtweets_deactivate() {
+	// Gets rid of the cache - but not the settings
+	delete_option('rotatingtweets_api_error');
+	delete_option('rotatingtweets-cache');
+	delete_option('rotatingtweets-twitter-languages');
+}
+function rotatingtweets_uninstall() {
+	// Gets rid of all data stored - including settings
+	rotatingtweets_deactivate();
+	delete_option('rotatingtweets-api-settings');
+}
+
+register_deactivation_hook( __FILE__, 'rotatingtweets_deactivate' );
+register_uninstall_hook( __FILE__, 'rotatingtweets_uninstall' );
 ?>
