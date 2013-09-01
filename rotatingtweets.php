@@ -772,8 +772,10 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		if(!empty($data['errors'])):
 			$data['errors'][0]['type'] = 'Twitter';
 			if( empty($api) ) $errorstring[0]['message'] = 'Please enter valid Twitter API Settings on the Rotating Tweets settings page';
+			if(WP_DEBUG  && ! is_admin() ) echo "<!-- Error message from Twitter - {$data['errors']} -->";
 			update_option('rotatingtweets_api_error',$data['errors']);
 		else:
+			if(WP_DEBUG  && ! is_admin() ) echo "<!-- Successfully read data from Twitter -->";
 			delete_option('rotatingtweets_api_error');
 		endif;
 	else:
@@ -781,6 +783,7 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 		$errorstring[0]['code']= $result->get_error_code();
 		$errorstring[0]['message']= $result->get_error_message();
 		$errorstring[0]['type'] = 'Wordpress';
+		if(WP_DEBUG  && ! is_admin() ) echo "<!-- Error message from Wordpress - {$errorstring[0]['message']} -->";
 		update_option('rotatingtweets_api_error',$errorstring);
 	endif;
 	return($result);
