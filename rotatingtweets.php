@@ -739,7 +739,10 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 			$connection->ssl_verifypeer = TRUE;
 		endif;
 		if(isset($api['timeout'])):
-			$timeout = max(1,$api['timeout']);
+			$timeout = max(1,intval($api['timeout']));
+			if(WP_DEBUG && ! is_admin() ):
+				echo "\n<!-- Setting timeout to $timeout seconds -->\n";
+			endif;
 			$connection->timeout = $timeout;
 		endif;
 		$result = $connection->get($command , $options);
