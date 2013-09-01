@@ -566,8 +566,9 @@ function rotatingtweets_admin_init(){
 	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_connection_main');
 	add_settings_field('rotatingtweets_timeout', __('Connection timeout','rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_connection_main');
 //	JQuery settings
-	add_settings_section('rotatingtweets_jquery_main', __('JQuery Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
+	add_settings_section('rotatingtweets_jquery_main', __('JavaScript Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
 	add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
+	add_settings_field('rotatingtweets_js_in_footer', __('Where to load Rotating Tweets JavaScript','rotatingtweets'), 'rotatingtweets_option_show_in_footer','rotatingtweets_api_settings','rotatingtweets_jquery_main');
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');
@@ -641,6 +642,24 @@ function rotatingtweets_option_show_cycle_version() {
 	}
 	echo "\n</select>";
 }
+function rotatingtweets_option_show_in_footer() {
+	$options = get_option('rotatingtweets-api-settings');
+	$choice = array(
+		0 => _x('Load in header (default)','Location of JavaScript','rotatingtweets'),
+		1 => _x('Load in footer','Location of JavaScript','rotatingtweets')
+	);
+	echo "\n<select id='rotatingtweets_api_js_in_footer_input' name='rotatingtweets-api-settings[js_in_footer]'>";
+	if(!isset($options['js_in_footer'])) $options['js_in_footer'] = FALSE;
+	foreach($choice as $value => $text) {
+		if($options['js_in_footer'] == $value ) {
+			$selected = ' selected = "selected"';
+		} else {
+			$selected = '';
+		}
+		echo "\n\t<option value='".$value."'".$selected.">".$text."</option>";
+	}
+	echo "\n</select>";
+}
 // Explanatory text
 function rotatingtweets_api_explanation() {
 	
@@ -700,7 +719,13 @@ function rotatingtweets_api_validate($input) {
 		$options['jquery_cycle_version']=max(min(absint($input['jquery_cycle_version']),2),1);
 	else:
 		$options['jquery_cycle_version']=1;
-	endif;	
+	endif;
+	// Check 'in footer'
+	if(isset($input['js_in_footer'])):
+		$options['js_in_footer'] = (bool) $input['js_in_footer'];
+	else:
+		$options['js_in_footer'] = FALSE;
+	endif;
 	// Now a proper test
 	if(empty($error)):
 		$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
@@ -1507,7 +1532,7 @@ function rotatingtweets_possible_rotations($dropbox = FALSE) {
 }
 
 function rotatingtweets_enqueue_scripts() {
-	wp_enqueue_script( 'jquery' ); 
+//	wp_enqueue_script( 'jquery' ); 
 	# Set the base versions of the strings
 	$cyclejsfile = 'js/jquery.cycle.all.min.js';
 	$rotatingtweetsjsfile = 'js/rotating_tweet.js';
@@ -1523,6 +1548,7 @@ function rotatingtweets_enqueue_scripts() {
 	}
 	# Check if we're using jQuery Cycle 1 or 2
 	$api = get_option('rotatingtweets-api-settings');
+	if(!isset($api['js_in_footer'])) $api['js_in_footer'] = FALSE;
 	$style = strtolower(get_stylesheet());
 	// Fixes a problem with the magazino template
 	if($style == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2)):
@@ -1537,7 +1563,7 @@ function rotatingtweets_enqueue_scripts() {
 		);
 //		$dependence[]='jquery-effects-core';
 		foreach($rt_enqueue_script_list as $scriptname => $scriptlocation):
-			wp_enqueue_script($scriptname,$scriptlocation,$dependence,FALSE,FALSE);
+			wp_enqueue_script($scriptname,$scriptlocation,$dependence,FALSE,$api['js_in_footer']);
 			$dependence[] = $scriptname;
 		endforeach;
 	else:
@@ -1547,12 +1573,12 @@ function rotatingtweets_enqueue_scripts() {
 			case 'zeebizzcard':
 	//		case 'zeeStyle':
 				wp_dequeue_script( 'zee_jquery-cycle');
-				wp_enqueue_script( 'zee_jquery-cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				wp_enqueue_script( 'zee_jquery-cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,$api['js_in_footer']);
 				$dependence[]='zee_jquery-cycle';
 				break;
 			case 'oxygen':
 				wp_dequeue_script( 'oxygen_cycle');
-				wp_enqueue_script( 'oxygen_cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				wp_enqueue_script( 'oxygen_cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,$api['js_in_footer']);
 				$dependence[]='oxygen_cycle';
 				break;		
 			case 'avada':
@@ -1561,15 +1587,15 @@ function rotatingtweets_enqueue_scripts() {
 			case 'avada child theme':
 			case 'a52cars':
 				wp_dequeue_script( 'jquery.cycle');
-				wp_enqueue_script( 'jquery.cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				wp_enqueue_script( 'jquery.cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,$api['js_in_footer'] );
 				$dependence[]='jquery.cycle';
 				break;
 			default:
-				wp_enqueue_script( 'jquery-cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,FALSE );
+				wp_enqueue_script( 'jquery-cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,$api['js_in_footer'] );
 				$dependence[]='jquery-cycle';
 				break;
 		endswitch;
-		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,FALSE,FALSE );
+		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,FALSE,$api['js_in_footer'] );
 	endif;
 }
 function rotatingtweets_enqueue_style() {
@@ -1591,7 +1617,7 @@ function rotatingtweets_enqueue_style() {
 }
 function rotatingtweets_enqueue_admin_scripts($hook) {
 		if( 'widgets.php' != $hook ) return;
-		wp_enqueue_script( 'jquery' ); 
+//		wp_enqueue_script( 'jquery' ); 
 		wp_enqueue_script( 'rotating_tweet_admin', plugins_url('js/rotating_tweet_admin.js', __FILE__),array('jquery'),FALSE,FALSE );		
 }
 add_action( 'admin_enqueue_scripts', 'rotatingtweets_enqueue_admin_scripts' );
