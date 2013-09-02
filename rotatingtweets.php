@@ -1532,7 +1532,7 @@ function rotatingtweets_possible_rotations($dropbox = FALSE) {
 }
 
 function rotatingtweets_enqueue_scripts() {
-//	wp_enqueue_script( 'jquery' ); 
+	wp_enqueue_script( 'jquery' ); 
 	# Set the base versions of the strings
 	$cyclejsfile = 'js/jquery.cycle.all.min.js';
 	$rotatingtweetsjsfile = 'js/rotating_tweet.js';
@@ -1616,9 +1616,9 @@ function rotatingtweets_enqueue_style() {
 	endforeach;
 }
 function rotatingtweets_enqueue_admin_scripts($hook) {
-		if( 'widgets.php' != $hook ) return;
-//		wp_enqueue_script( 'jquery' ); 
-		wp_enqueue_script( 'rotating_tweet_admin', plugins_url('js/rotating_tweet_admin.js', __FILE__),array('jquery'),FALSE,FALSE );		
+	if( 'widgets.php' != $hook ) return;
+	wp_enqueue_script( 'jquery' ); 
+	wp_enqueue_script( 'rotating_tweet_admin', plugins_url('js/rotating_tweet_admin.js', __FILE__),array('jquery'),FALSE,FALSE );		
 }
 add_action( 'admin_enqueue_scripts', 'rotatingtweets_enqueue_admin_scripts' );
 
