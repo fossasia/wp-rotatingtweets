@@ -207,9 +207,7 @@ class wp_TwitterOAuth {
 	$args['timeout'] = $this->timeout;
 	$args['sslverify'] = $this->ssl_verifypeer;
 	if(WP_DEBUG):
-		echo "<!--";
-		echo "\n URL is: ".esc_url($url);
-		echo "\n\n\$args = \n";
+		echo "<!--\n URL is: ".esc_url($url)."\n\n\$args = \n";
 		print_r($args);
 		echo "-->\n";
 	endif;
