@@ -166,8 +166,12 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Includes Carousel rotation. Enforces rules on replies and retweets even if the Twitter API doesn't.
 
 == Changelog ==
-= 1.5.2 = 
+= 1.6.0 = 
 * Improved clean-up on uninstallation or deactivation
+* Addition of settings page option for timeout of connection to Twitter
+* Addition of settings page option for placement of JavaScript at the bottom of the page
+* Addition of settings page option for duration of cache (not yet done)
+* Tidying up settings page text
 
 = 1.5.1 =
 * Enforce rules on replies and retweets even if the Twitter API doesn't
