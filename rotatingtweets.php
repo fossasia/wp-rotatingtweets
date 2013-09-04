@@ -535,7 +535,7 @@ function rotatingtweets_call_twitter_API_options() {
 	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.','rotatingtweets' ) );
 	}
-	echo sprintf(__('<p>Twitter <a href="%s">recently announced</a> that they will be changing the way that they allow people to use the information in their tweets.</p><p>Please take the following steps to make sure that Rotating Tweets continues working:</p>','rotatingtweets'),'https://dev.twitter.com/blog/changes-coming-to-twitter-api');
+	echo sprintf(__('<p>Twitter <a href="%s">has changed</a> the way that they allow people to use the information in their tweets.</p><p>You need to take the following steps to make sure that Rotating Tweets can access the information it needs from Twitter:</p>','rotatingtweets'),'https://dev.twitter.com/blog/changes-coming-to-twitter-api');
 	echo sprintf(__('<h3>Step 1:</h3><p>Go to the <a href="%s">My applications page</a> on the Twitter website to set up your website as a new Twitter \'application\'. You may need to log-in using your Twitter user name and password.</p>','rotatingtweets'),'https://dev.twitter.com/apps');
 	echo sprintf(__('<h3>Step 2:</h3><p>If you don\'t already have a suitable \'application\' that you can use for your website, set one up on the <a href="%s">Create an Application page</a>.</p> <p>It\'s normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets.</p><p>You don\'t need a Callback URL.</p>','rotatingtweets'),'https://dev.twitter.com/apps/new');
 	_e('<h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</strong>, on the following page, click on <strong>Create my access token</strong>.</p>','rotatingtweets');
@@ -543,7 +543,8 @@ function rotatingtweets_call_twitter_API_options() {
 	_e('<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>.','rotatingtweets');
 	_e('<h3>If there are any problems:</h3><p>If there are any problems, you should get an error message from Twitter displayed as a "rotating tweet" which should help diagnose the problem.</p>','rotatingtweets');
 	_e('<p>If the error message references SSL, try changing the "Verify SSL connection to Twitter" below to "No".</p>','rotatingtweets');
-	_e('<h3>Multiple Twitter Accounts</h3>','rotatingtweets');
+	_e('<p>If you are getting timeout problems, try increasing the "Connection timeout" setting below to a bigger value.</p>','rotatingtweets');
+	_e('<h3>Getting information from more than one Twitter account</h3>','rotatingtweets');
 	_e('<p>Even though you are only entering one set of Twitter API data, Rotating Tweets will continue to support multiple widgets and shortcodes pulling from a variety of different Twitter accounts.</p>','rotatingtweets');
 	echo '<form method="post" action="options.php">';
 	settings_fields( 'rotatingtweets_options' );
