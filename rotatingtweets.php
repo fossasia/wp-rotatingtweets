@@ -8,7 +8,7 @@ Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
 */
-/*  Copyright 2012 Martin Tod email : martin@martintod.org.uk)
+/*  Copyright 2014 Martin Tod email : martin@martintod.org.uk)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -868,7 +868,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	if($tw_search) {
 		$tw_search = trim($tw_search);
 	}
-	$cache_delay = 120;
+	$cache_delay = max(120,intval(get_option('rotatingtweets_cache_delay',120)));
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
 	
