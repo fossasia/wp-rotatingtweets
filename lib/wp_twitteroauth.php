@@ -219,6 +219,7 @@ class wp_TwitterOAuth {
 		echo "\n-->\n";
 	endif;
 	$response = wp_remote_request($url,$args);
+	if(WP_DEBUG) echo "<!-- wp_remote_request() in lib/wp_twitteroauth.php successfully completed -->\n";
 	return($response);
 /*
     $this->http_info = array();
