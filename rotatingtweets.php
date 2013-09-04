@@ -729,13 +729,18 @@ function rotatingtweets_api_validate($input) {
 	endif;
 	// Now a proper test
 	if(empty($error)):
-		$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
-		$error = get_option('rotatingtweets_api_error');
-		if(!empty($error)):
-			if($error[0]['type'] == 'Twitter'):
-				add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Twitter: %1$s. <a href="%2$s">Please check your API key, secret, token and secret token on the Twitter website</a>.','rotatingtweets'),$error[0]['message'],'https://dev.twitter.com/apps'), 'error' );
-			else:				
-				add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Wordpress: %1$s. Please check your connection settings.','rotatingtweets'),$error[0]['message']), 'error' );
+		$transientname = 'rotatingtweets_check_wp_remote_request'; // This whole code is to help someone who has a problem with wp_remote_request
+		if(!get_transient($transientname)):
+			set_transient($transientname,true,24*60*60);
+			$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
+			delete_transient($transientname);
+			$error = get_option('rotatingtweets_api_error');
+			if(!empty($error)):
+				if($error[0]['type'] == 'Twitter'):
+					add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Twitter: %1$s. <a href="%2$s">Please check your API key, secret, token and secret token on the Twitter website</a>.','rotatingtweets'),$error[0]['message'],'https://dev.twitter.com/apps'), 'error' );
+				else:				
+					add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-'.$error[0]['code']), sprintf(__('Error message received from Wordpress: %1$s. Please check your connection settings.','rotatingtweets'),$error[0]['message']), 'error' );
+				endif;
 			endif;
 		endif;
 	endif;
