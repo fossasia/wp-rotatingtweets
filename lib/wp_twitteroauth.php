@@ -200,16 +200,23 @@ class wp_TwitterOAuth {
    * @return API results
    */
   function http($url, $method, $postfields = NULL) {
-	$args['method']=$method;
-	if(!empty($args)):
+	if(WP_DEBUG) echo "<!-- \n\n wp_remote_request() variables in lib/wp_twitteroauth.php \n\nURL = ".esc_url($url)."\n";
+	if(!empty($method)):
+		$args['method']=$method;
+	endif;
+	if(is_array($postfields)):
 		$args['body'] = $postfields;
 	endif;
 	$args['timeout'] = $this->timeout;
 	$args['sslverify'] = $this->ssl_verifypeer;
 	if(WP_DEBUG):
-		echo "<!--\n URL is: ".esc_url($url)."\n\n\$args = \n";
-		print_r($args);
-		echo "-->\n";
+		echo "\n\$args = ";
+		if(isset($args)):
+			print_r($args);
+		else:
+			echo "NULL";
+		endif;
+		echo "\n-->\n";
 	endif;
 	$response = wp_remote_request($url,$args);
 	return($response);
