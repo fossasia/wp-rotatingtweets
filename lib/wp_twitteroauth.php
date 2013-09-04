@@ -200,7 +200,7 @@ class wp_TwitterOAuth {
    * @return API results
    */
   function http($url, $method, $postfields = NULL) {
-	if(WP_DEBUG) echo "<!-- \n\n wp_remote_request() variables in lib/wp_twitteroauth.php \n\nURL = ".esc_url($url)."\n";
+	if(WP_DEBUG) echo "<!-- wp_remote_request() variables in lib/wp_twitteroauth.php: \n\n\$url = ".esc_url($url)."\n";
 	if(!empty($method)):
 		$args['method']=$method;
 	endif;
