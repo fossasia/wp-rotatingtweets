@@ -200,6 +200,7 @@ class wp_TwitterOAuth {
    * @return API results
    */
   function http($url, $method, $postfields = NULL) {
+ /*
 	if(WP_DEBUG) echo "<!-- wp_remote_request() variables in lib/wp_twitteroauth.php: \n\n\$url = ".esc_url($url)."\n";
 	if(!empty($method)):
 		$args['method']=$method;
@@ -221,7 +222,8 @@ class wp_TwitterOAuth {
 	$response = wp_remote_request($url,$args);
 	if(WP_DEBUG) echo "<!-- wp_remote_request() in lib/wp_twitteroauth.php successfully completed -->\n";
 	return($response);
-/*
+*/
+	if(WP_DEBUG) echo "<!-- Using curl API to access data directly -->";
     $this->http_info = array();
     $ci = curl_init();
     # Curl settings 
@@ -254,8 +256,8 @@ class wp_TwitterOAuth {
     $this->http_info = array_merge($this->http_info, curl_getinfo($ci));
     $this->url = $url;
     curl_close ($ci);
-    return $response;
-*/
+	$return = array('body' => $response);
+    return $return;
   }
 
   /**
