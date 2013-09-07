@@ -1661,4 +1661,13 @@ function rotatingtweets_uninstall() {
 
 register_deactivation_hook( __FILE__, 'rotatingtweets_deactivate' );
 register_uninstall_hook( __FILE__, 'rotatingtweets_uninstall' );
+
+// Filters that can be used to adjust transports - if you have problems with connecting to Twitter, try commenting in one of the following lines
+// From a brilliant post by Sam Wood http://wordpress.org/support/topic/warning-curl_exec-has-been-disabled?replies=6#post-920787
+function rotatingtweets_block_transport() { return false; }
+// add_filter('use_http_extension_transport', 'rotatingtweets_block_transport');
+// add_filter('use_curl_transport', 'rotatingtweets_block_transport');
+// add_filter('use_streams_transport', 'rotatingtweets_block_transport');
+// add_filter('use_fopen_transport', 'rotatingtweets_block_transport');
+// add_filter('use_fsockopen_transport', 'rotatingtweets_block_transport');
 ?>
