@@ -1367,17 +1367,24 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t<div class='rtw_info'>";
 							$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></div>";
 							$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
-							$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
+							if($args['show_meta_screen_name']):
+								$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
+							endif;
 							$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
 							$result .= "\n\t</div>";
 							$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
 							$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
-							$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
+							$gap = '';
+							if($args['show_meta_timestamp']):
+								$result .= "\n\t<div class='rtw_timestamp'>".rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue)."</div>";
+								$gap = " &middot; ";
+							endif;
 							if(isset($retweeter)) {
-								$result .= " &middot; ".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
+								$result .= $gap.rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
+								$gap = " &middot; ";
 							}
 							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-								$result .= ' &middot; '.$nextprev;
+								$result .= $gap.$nextprev;
 							endif;
 							$result .= "\n</div>";
 							break;

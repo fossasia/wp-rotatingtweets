@@ -67,6 +67,9 @@ div.rtw_intents {
 	float:right;
 	margin-left: 0.5em;
 }
+div.rtw_timestamp {
+	display: inline;
+}
 .rotatingtweet p.rtw_main {
 	clear: both;
 }
