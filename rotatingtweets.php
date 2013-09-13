@@ -1327,7 +1327,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						endif;
 	//					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
 						# This is designed to find hashtags and turn them into links...
-						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
+						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%u";
 						$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 						$main_text = preg_replace($before,$after,$main_text);
 						if(isset($args['link_all_text']) && $args['link_all_text']):
@@ -1367,24 +1367,19 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t<div class='rtw_info'>";
 							$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></div>";
 							$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
-							if($args['show_meta_screen_name']):
-								$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
-							endif;
+							$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
 							$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
 							$result .= "\n\t</div>";
 							$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
 							$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
-							$gap = '';
-							if($args['show_meta_timestamp']):
-								$result .= "\n\t<div class='rtw_timestamp'>".rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue)."</div>";
-								$gap = " &middot; ";
-							endif;
+							$result .= "\n\t<div class='rtw_timestamp'>".rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
 							if(isset($retweeter)) {
-								$result .= $gap.rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
-								$gap = " &middot; ";
+								$result .= " &middot; </div>".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
+							} else {
+								$result .=  "</div>";
 							}
 							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-								$result .= $gap.$nextprev;
+								$result .= " &middot; ".$nextprev;
 							endif;
 							$result .= "\n</div>";
 							break;
