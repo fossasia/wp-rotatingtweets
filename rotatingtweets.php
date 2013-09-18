@@ -871,9 +871,18 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	if($tw_list):
 		$tw_list = strtolower(sanitize_file_name( $tw_list ));
 	endif;
-	if($tw_search) {
+	if(empty($tw_search)):
+		$possibledividers = array(' ',';',',');
+		$rt_namesarray = false;
+		foreach($possibledividers as $possibledivider):
+			if(strpos($tw_screen_name,$possibledivider) !== false ):
+				$rt_namesarray = explode(' ',$tw_screen_name);
+				$tw_search = 'from:'.implode(' OR from:',$rt_namesarray);
+			endif;
+		endforeach;	
+	else:
 		$tw_search = trim($tw_search);
-	}
+	endif;
 	$cache_delay = max(120,intval(get_option('rotatingtweets_cache_delay',120)));
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
