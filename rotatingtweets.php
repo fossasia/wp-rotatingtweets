@@ -1507,7 +1507,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$result .= "</div>";
 	endif;
 */
-	if($args['show_follow'] && !empty($args['screen_name'])):
+	if($args['show_follow'] && !empty($args['screen_name']) && !strpos($args['screen_name'],' ') && !strpos($args['screen_name'],',') && !strpos($args['screen_name'],';')):
 		$shortenvariables = '';
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
 		if($args['no_show_screen_name']) $shortenvariables .= ' data-show-screen-name="false"';
