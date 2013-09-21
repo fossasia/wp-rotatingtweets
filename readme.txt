@@ -167,6 +167,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 
 == Changelog ==
 = 1.6.0 = 
+* New support for multiple accounts
 * Improved clean-up on uninstallation or deactivation
 * Addition of settings page option for timeout of connection to Twitter
 * Addition of settings page option for placement of JavaScript at the bottom of the page
