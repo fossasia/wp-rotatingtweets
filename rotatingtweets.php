@@ -564,8 +564,9 @@ function rotatingtweets_admin_init(){
 	add_settings_field('rotatingtweets_token_secret', __('Twitter API Access Token Secret','rotatingtweets'), 'rotatingtweets_option_show_token_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 // Connection settings	
 	add_settings_section('rotatingtweets_connection_main', __('Connection Settings','rotatingtweets'), 'rotatingtweets_connection_explanation', 'rotatingtweets_api_settings');
+	add_settings_field('rotatingtweets_cache_delay', __('How often should Rotating Tweets get the latest tweets from Twitter?','rotatingtweets'), 'rotatingtweets_option_show_cache_delay','rotatingtweets_api_settings','rotatingtweets_connection_main');
+	add_settings_field('rotatingtweets_timeout', __("How long should Rotating Tweets wait for data from Twitter before timing out",'rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_connection_main');
 	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_connection_main');
-	add_settings_field('rotatingtweets_timeout', __('Connection timeout','rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_connection_main');
 //	JQuery settings
 	add_settings_section('rotatingtweets_jquery_main', __('JavaScript Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
 	add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
@@ -617,6 +618,26 @@ function rotatingtweets_option_show_timeout() {
 	if(!isset($options['timeout']))	$options['timeout'] = 3;
 	foreach($choice as $value => $text) {
 		if($options['timeout'] == $value ) {
+			$selected = ' selected = "selected"';
+		} else {
+			$selected = '';
+		}
+		echo "\n\t<option value='".$value."'".$selected.">".$text."</option>";
+	}
+	echo "\n</select>";
+}
+function rotatingtweets_option_show_cache_delay() {
+	$options = get_option('rotatingtweets-api-settings');
+	$choice = array(
+		60 => _x('1 minute','Cache Delay','rotatingtweets'),
+		120 => _x('2 minutes (default)','Cache Delay','rotatingtweets'),
+		300 => _x('5 minutes','Cache Delay','rotatingtweets'),
+		3600 => _x('1 hour','Cache Delay','rotatingtweets'),
+	);
+	echo "\n<select id='rotatingtweets_cache_delay_input' name='rotatingtweets-api-settings[cache_delay]'>";
+	if(!isset($options['cache_delay'])) $options['cache_delay'] = 120;
+	foreach($choice as $value => $text) {
+		if($options['cache_delay'] == $value ) {
 			$selected = ' selected = "selected"';
 		} else {
 			$selected = '';
@@ -714,6 +735,12 @@ function rotatingtweets_api_validate($input) {
 	// Check 'timeout'
 	if(isset($input['timeout'])):
 		$options['timeout'] = max(1,intval($input['timeout']));
+	endif;
+	// Check 'cache delay'
+	if(isset($input['cache_delay'])):
+		$options['cache_delay'] = max(60,intval($input['cache_delay']));
+	else:
+		$options['cache_delay']=120;
 	endif;
 	// Check 'jquery_cycle_version'
 	if(isset($input['jquery_cycle_version'])):
@@ -883,7 +910,12 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	else:
 		$tw_search = trim($tw_search);
 	endif;
-	$cache_delay = max(120,intval(get_option('rotatingtweets_cache_delay',120)));
+	$cacheoption = get_option('rotatingtweets-api-settings');
+	if(!isset($cacheoption['cache_delay'])):
+		$cache_delay = 120;
+	else:
+		$cache_delay = max(60,intval($cacheoption['cache_delay']));
+	endif;
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
 	
