@@ -542,8 +542,13 @@ function rotatingtweets_call_twitter_API_options() {
 	_e('<h3>Step 4:</h3><p>Copy the <strong>Consumer key</strong>, <strong>Consumer secret</strong>, <strong>Access token</strong> and <strong>Access token secret</strong> from your Twitter application page into the settings below.</p>','rotatingtweets');
 	_e('<h3>Step 5:</h3><p>Click on <strong>Save Changes</strong>.','rotatingtweets');
 	_e('<h3>If there are any problems:</h3><p>If there are any problems, you should get an error message from Twitter displayed as a "rotating tweet" which should help diagnose the problem.</p>','rotatingtweets');
-	_e('<p>If the error message references SSL, try changing the "Verify SSL connection to Twitter" below to "No".</p>','rotatingtweets');
-	_e('<p>If you are getting timeout problems, try increasing the "Connection timeout" setting below to a bigger value.</p>','rotatingtweets');
+	echo "<ol>\n\t<li>";
+	_e('If you are getting problems with "rate limiting", try changing the first connection setting below to increase the time that Rotating Tweets waits before trying to get new data from Twitter.','rotatingtweets');
+	echo "</li>\n\t<li>";
+	_e('If you are getting time-out problems, try changing the second connection setting below to increase how long Rotating Tweets waits when connecting to Twitter before timing out.','rotatingtweets');
+	echo "</li>\n\t<li>";
+	_e('If the error message references SSL, try changing the "Verify SSL connection to Twitter" setting below to "No".','rotatingtweets');
+	echo "\n</ol>";
 	_e('<h3>Getting information from more than one Twitter account</h3>','rotatingtweets');
 	_e('<p>Even though you are only entering one set of Twitter API data, Rotating Tweets will continue to support multiple widgets and shortcodes pulling from a variety of different Twitter accounts.</p>','rotatingtweets');
 	echo '<form method="post" action="options.php">';
@@ -564,8 +569,8 @@ function rotatingtweets_admin_init(){
 	add_settings_field('rotatingtweets_token_secret', __('Twitter API Access Token Secret','rotatingtweets'), 'rotatingtweets_option_show_token_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 // Connection settings	
 	add_settings_section('rotatingtweets_connection_main', __('Connection Settings','rotatingtweets'), 'rotatingtweets_connection_explanation', 'rotatingtweets_api_settings');
-	add_settings_field('rotatingtweets_cache_delay', __('How often should Rotating Tweets get the latest tweets from Twitter?','rotatingtweets'), 'rotatingtweets_option_show_cache_delay','rotatingtweets_api_settings','rotatingtweets_connection_main');
-	add_settings_field('rotatingtweets_timeout', __("How long should Rotating Tweets wait for data from Twitter before timing out",'rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_connection_main');
+	add_settings_field('rotatingtweets_cache_delay', __('How often should Rotating Tweets try to get the latest tweets from Twitter?','rotatingtweets'), 'rotatingtweets_option_show_cache_delay','rotatingtweets_api_settings','rotatingtweets_connection_main');
+	add_settings_field('rotatingtweets_timeout', __("When connecting to Twitter, how long should Rotating Tweets wait before timing out?",'rotatingtweets'), 'rotatingtweets_option_show_timeout','rotatingtweets_api_settings','rotatingtweets_connection_main');
 	add_settings_field('rotatingtweets_ssl_verify', __('Verify SSL connection to Twitter','rotatingtweets'), 'rotatingtweets_option_show_ssl_verify','rotatingtweets_api_settings','rotatingtweets_connection_main');
 //	JQuery settings
 	add_settings_section('rotatingtweets_jquery_main', __('JavaScript Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
@@ -633,6 +638,7 @@ function rotatingtweets_option_show_cache_delay() {
 		120 => _x('2 minutes (default)','Cache Delay','rotatingtweets'),
 		300 => _x('5 minutes','Cache Delay','rotatingtweets'),
 		3600 => _x('1 hour','Cache Delay','rotatingtweets'),
+		86400 => _x('24 hours','Cache Delay','rotatingtweets')
 	);
 	echo "\n<select id='rotatingtweets_cache_delay_input' name='rotatingtweets-api-settings[cache_delay]'>";
 	if(!isset($options['cache_delay'])) $options['cache_delay'] = 120;
