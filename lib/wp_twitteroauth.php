@@ -13,11 +13,11 @@
 
 /* Load WP_OAuth lib. You can find it at http://oauth.net */
 if(!class_exists('WP_OAuthException')) require_once('WP_OAuth.php');
-if(!class_exists('wp_TwitterOauth')):
+if(!class_exists('rotatingtweets_TwitterOauth')):
 	/**
 	 * Twitter WP_OAuth class
 	 */
-	class wp_TwitterOAuth {
+	class rotatingtweets_TwitterOAuth {
 	  /* Contains the last HTTP status code returned. */
 	  public $http_code;
 	  /* Contains the last API call. */

@@ -786,7 +786,7 @@ And now the Twitter API itself!
 function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) {
 	if(empty($api)) $api = get_option('rotatingtweets-api-settings');
 	if(!empty($api)):
-		$connection = new wp_TwitterOAuth($api['key'], $api['secret'], $api['token'], $api['token_secret'] );
+		$connection = new rotatingtweets_TwitterOAuth($api['key'], $api['secret'], $api['token'], $api['token_secret'] );
 		//    $result = $connection->get('statuses/user_timeline', $options);
 		if(WP_DEBUG && ! is_admin()):
 			echo "\n<!-- Using OAuth - version 1.1 of API - ".esc_attr($command)." -->\n";
