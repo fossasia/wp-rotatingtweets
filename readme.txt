@@ -172,6 +172,8 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Addition of settings page option for timeout of connection to Twitter
 * Addition of settings page option for placement of JavaScript at the bottom of the page
 * Addition of settings page option for duration of cache
+* Fixed problem with hashtags and accents
+* Improved error messages for connection problems
 * Tidying up settings page text
 
 = 1.5.1 =
