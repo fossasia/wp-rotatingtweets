@@ -1619,9 +1619,9 @@ function rotatingtweets_enqueue_scripts() {
 	'jquery-easing' => 'http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js',
 */		
 		$rt_enqueue_script_list = array(
-			'jquery-cycle2' => plugins_url('js/jquery.cycle2.renamed.js', __FILE__),
-			'jquery-cycle2-scrollvert' => plugins_url('js/jquery.cycle2.scrollVert.renamed.js', __FILE__),
-			'jquery-cycle2-carousel' => plugins_url('js/jquery.cycle2.carousel.renamed.js', __FILE__),
+			'jquery-cycle2-renamed' => plugins_url('js/jquery.cycle2.renamed.js', __FILE__),
+			'jquery-cycle2-scrollvert-renamed' => plugins_url('js/jquery.cycle2.scrollVert.renamed.js', __FILE__),
+			'jquery-cycle2-carousel-renamed' => plugins_url('js/jquery.cycle2.carousel.renamed.js', __FILE__),
 			'rotating_tweet' => plugins_url('js/rotatingtweets_v2.js', __FILE__)
 		);
 //		$dependence[]='jquery-effects-core';
