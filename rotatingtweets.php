@@ -1376,6 +1376,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						# This is designed to find hashtags and turn them into links...
 						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%u";
 						$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
+						if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8'):
+							$main_text = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$main_text);
+						endif;
 						$main_text = preg_replace($before,$after,$main_text);
 						if(isset($args['link_all_text']) && $args['link_all_text']):
 							$main_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
