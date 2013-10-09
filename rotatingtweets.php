@@ -1383,6 +1383,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(isset($args['link_all_text']) && $args['link_all_text']):
 							$main_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
 						endif;
+						// Attempt to deal with a very odd situation where no text is appearing
+						if(empty($main_text)) $main_text = $twitter_object['text'];
 						# Now for the meta text
 						switch ($args['official_format']) {
 						case 0:
