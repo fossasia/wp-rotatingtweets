@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 3.6
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -162,10 +162,15 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.6.1 =
-* New support for reading from multiple accounts. Addition of settings options for timeout and caching.
+= 1.6.2 =
+* Fixing bug for PHP installations that don't support the 'u' modifier. Renaming v2 JavaScript to avoid clash with other plug-ins.
 
 == Changelog ==
+= 1.6.2 =
+* Fixing bug for PHP installations that don't support the 'u' modifier
+* Renaming v2 JavaScript to avoid clash with other plug-ins.
+* Extra diagnostics put in to solve regular expression problem
+
 = 1.6.1 =
 * Move to a more unique class name to avoid clashes with another template.
 
