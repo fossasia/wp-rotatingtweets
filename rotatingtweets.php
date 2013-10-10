@@ -1384,7 +1384,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$main_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
 						endif;
 						// Attempt to deal with a very odd situation where no text is appearing
-						if(empty($main_text)) $main_text = $twitter_object['text'];
+						if(empty($main_text)):
+//							if(WP_DEBUG):
+								echo "<!-- Main Text Empty - Debug Data: \n";print_r($before);print_r($after);print_r($args);echo "\n-->\n";
+//							endif;
+							$main_text = $twitter_object['text'];
+						endif;
 						# Now for the meta text
 						switch ($args['official_format']) {
 						case 0:
