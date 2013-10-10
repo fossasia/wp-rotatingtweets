@@ -1379,19 +1379,25 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8'):
 							$new_text = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$main_text);
 							if(empty($main_text)):
-								echo "<!-- iconv to ".DB_CHARSET." failed -->";
+								if(WP_DEBUG):
+									echo "<!-- iconv to ".DB_CHARSET." failed -->";
+								endif;
 							else:
 								$main_text = $new_text;
 							endif;
 						endif;
 						$new_text = preg_replace($before,$after,$main_text);
 						if(empty($new_text)):
-							echo "<!-- preg_replace failed -->";
+							if(WP_DEBUG):
+								echo "<!-- preg_replace failed -->";
+							endif;
 							array_pop($before);
 							$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
 							$new_text = preg_replace($before,$after,$main_text);
 							if(empty($new_text)):
-								echo "<!-- simplified preg_replace failed -->";
+								if(WP_DEBUG):
+									echo "<!-- simplified preg_replace failed -->";
+								endif;
 							else:
 								$main_text = $new_text;
 							endif;
@@ -1401,16 +1407,18 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(isset($args['link_all_text']) && $args['link_all_text']):
 							$new_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
 							if(empty($new_text)):
-								echo "<!-- linking all text failed -->";
+								if(WP_DEBUG):
+									echo "<!-- linking all text failed -->";
+								endif;
 							else:
 								$main_text = $new_text;
 							endif;
 						endif;
 						// Attempt to deal with a very odd situation where no text is appearing
 						if(empty($main_text)):
-//							if(WP_DEBUG):
+							if(WP_DEBUG):
 								echo "<!-- Main Text Empty - Debug Data: \n";print_r($before);print_r($after);print_r($args);echo "\n-->\n";
-//							endif;
+							endif;
 							$main_text = $twitter_object['text'];
 						endif;
 						# Now for the meta text
