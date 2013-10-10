@@ -1377,11 +1377,33 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%u";
 						$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
 						if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8'):
-							$main_text = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$main_text);
+							$new_text = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$main_text);
+							if(empty($main_text)):
+								echo "<!-- iconv to ".DB_CHARSET." failed -->";
+							else:
+								$main_text = $new_text;
+							endif;
 						endif;
-						$main_text = preg_replace($before,$after,$main_text);
+						$new_text = preg_replace($before,$after,$main_text);
+						if(empty($new_text)):
+							echo "<!-- preg_replace failed -->";
+						else:
+							array_pop($before);
+							$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
+							$new_text = preg_replace($before,$after,$main_text);
+							if(empty($new_text)):
+								echo "<!-- simplified preg_replace failed -->";
+							else:
+								$main_text = $new_text;
+							endif;
+						endif;
 						if(isset($args['link_all_text']) && $args['link_all_text']):
-							$main_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
+							$new_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
+							if(empty($new_text)):
+								echo "<!-- linking all text failed -->";
+							else:
+								$main_text = $new_text;
+							endif;
 						endif;
 						// Attempt to deal with a very odd situation where no text is appearing
 						if(empty($main_text)):
