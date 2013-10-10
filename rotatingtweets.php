@@ -1387,7 +1387,6 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						$new_text = preg_replace($before,$after,$main_text);
 						if(empty($new_text)):
 							echo "<!-- preg_replace failed -->";
-						else:
 							array_pop($before);
 							$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%";
 							$new_text = preg_replace($before,$after,$main_text);
@@ -1396,6 +1395,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							else:
 								$main_text = $new_text;
 							endif;
+						else:
+							$main_text = $new_text;
 						endif;
 						if(isset($args['link_all_text']) && $args['link_all_text']):
 							$new_text = rotatingtweets_user_intent($tweetuser,$twitterlocale,$main_text,$targetvalue);
