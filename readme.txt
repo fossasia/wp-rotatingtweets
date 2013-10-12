@@ -166,6 +166,10 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Fixing bug for PHP installations that don't support the 'u' modifier. Renaming v2 JavaScript to avoid clash with other plug-ins.
 
 == Changelog ==
+= 1.6.3 =
+* Add option to shortern default link length to 20 characters
+* Language update including new German translation from Nils Kroneberg
+
 = 1.6.2 =
 * Fixing bug for PHP installations that don't support the 'u' modifier
 * Renaming v2 JavaScript to avoid clash with other plug-ins.

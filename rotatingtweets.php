@@ -47,7 +47,7 @@ class rotatingtweets_Widget extends WP_Widget {
     function widget($args, $instance) {		
 		extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-		$positive_variables = array('screen_name','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag','search');
+		$positive_variables = array('screen_name','shorten_links','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag','search');
 		foreach($positive_variables as $var) {
 			$newargs[$var] = @$instance['tw_'.$var];
 		}
@@ -111,6 +111,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		$instance['tw_include_rts'] = absint($new_instance['tw_include_rts']);
 		$instance['tw_links_in_new_window'] = absint($new_instance['tw_links_in_new_window']);
 		$instance['tw_exclude_replies'] = absint($new_instance['tw_exclude_replies']);
+		$instance['tw_shorten_links'] = absint($new_instance['tw_shorten_links']);
 		$instance['tw_tweet_count'] = max(1,intval($new_instance['tw_tweet_count']));
 		$instance['tw_show_follow'] = absint($new_instance['tw_show_follow']);
 		$instance['tw_show_type'] = absint($new_instance['tw_show_type']);
@@ -134,6 +135,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			'tw_exclude_replies' => array('tw_exclude_replies', false, 'boolean'),
 			'tw_tweet_count' => array('tw_tweet_count',5,'number'),
 			'tw_show_follow' => array('tw_show_follow',false, 'boolean'),
+			'tw_shorten_links' => array('tw_shorten_links',false, 'boolean'),
 			'tw_official_format' => array('tw_official_format',0,'number'),
 			'tw_show_type' => array('tw_show_type',0,'number'),
 			'tw_links_in_new_window' => array('tw_links_in_new_window',false, 'boolean'),
@@ -220,6 +222,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		?></p>
 		<p><input id="<?php echo $this->get_field_id('tw_include_rts'); ?>" name="<?php echo $this->get_field_name('tw_include_rts'); ?>" type="checkbox" value="1" <?php if($tw_include_rts==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_include_rts'); ?>"> <?php _e('Include retweets?','rotatingtweets'); ?></label></p>
 		<p><input id="<?php echo $this->get_field_id('tw_exclude_replies'); ?>" name="<?php echo $this->get_field_name('tw_exclude_replies'); ?>" type="checkbox" value="1" <?php if($tw_exclude_replies==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_exclude_replies'); ?>"> <?php _e('Exclude replies?','rotatingtweets'); ?></label></p>
+		<p><input id="<?php echo $this->get_field_id('tw_shorten_links'); ?>" name="<?php echo $this->get_field_name('tw_shorten_links'); ?>" type="checkbox" value="1" <?php if(!empty($tw_shorten_links)): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_shorten_links'); ?>"> <?php _e('Shorten links?','rotatingtweets'); ?></label></p>
 		<p><input id="<?php echo $this->get_field_id('tw_links_in_new_window'); ?>" name="<?php echo $this->get_field_name('tw_links_in_new_window'); ?>" type="checkbox" value="1" <?php if($tw_links_in_new_window==1): ?>checked="checked" <?php endif; ?>/><label for="<?php echo $this->get_field_id('tw_links_in_new_window'); ?>"> <?php _e('Open all links in new window or tab?','rotatingtweets'); ?></label></p>
 		<p><label for="<?php echo $this->get_field_id('tw_tweet_count'); ?>"><?php _e('How many tweets?','rotatingtweets'); ?> <select id="<?php echo $this->get_field_id('tw_tweet_count'); ?>" name="<?php echo $this->get_field_name('tw_tweet_count');?>">
 		<?php 
@@ -1152,7 +1155,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		if($urllength < 1):
 			$urllength = $defaulturllength;
 		endif;
-	else: 
+	elseif(isset($args['shorten_links']) && $args['shorten_links']==1 ): 
+		$urllength = 20;
+	else:
 		$urllength = $defaulturllength;
 	endif;
 	# Check that the rotation type is valid. If not, leave it as 'scrollUp'
