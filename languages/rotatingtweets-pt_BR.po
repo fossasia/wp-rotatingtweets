@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 1.3.18\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
 "POT-Creation-Date: 2013-10-12 19:57:13+00:00\n"
-"PO-Revision-Date: 2013-10-12 21:22-0000\n"
+"PO-Revision-Date: 2013-10-12 23:12-0000\n"
 "Last-Translator: Martin Tod <martin@martintod.org.uk>\n"
 "Language-Team: Wilmerson Felipe <will.phelipe@gmail.com>\n"
 "Language: pt_BR\n"
@@ -314,7 +314,6 @@ msgid "You do not have sufficient permissions to access this page."
 msgstr "Você não tem permissões suficientes para acessar esta página."
 
 #: rotatingtweets.php:538
-#, fuzzy
 msgid ""
 "<p>Twitter <a href=\"%s\">has changed</a> the way that they allow people to "
 "use the information in their tweets.</p><p>You need to take the following "
@@ -393,6 +392,9 @@ msgid ""
 "connection setting below to increase the time that Rotating Tweets waits "
 "before trying to get new data from Twitter."
 msgstr ""
+"Se você estiver recebendo problemas com \"limitação de taxa \", tente mudar "
+"a primeira conexão, configuração abaixo para aumentar o tempo que o Rotating "
+"Tweets espera antes de tentar obter novos dados do Twitter."
 
 #: rotatingtweets.php:548
 msgid ""
@@ -400,19 +402,21 @@ msgid ""
 "setting below to increase how long Rotating Tweets waits when connecting to "
 "Twitter before timing out."
 msgstr ""
+"Se você estiver recebendo problemas de limite de tempo, tente mudar a "
+"segunda conexão, configuração abaixo para aumentar o tempo de espera na "
+"conexão com o Twitter antes do tempo limite."
 
 #: rotatingtweets.php:550
-#, fuzzy
 msgid ""
 "If the error message references SSL, try changing the \"Verify SSL "
 "connection to Twitter\" setting below to \"No\"."
 msgstr ""
-"<p>Se as referências de mensagens de erro SSL, tente alterar a \"Verificar "
-"Conexão SSL do Twitter\" abaixo de \"Não\".</p>"
+"Se as referências de mensagens de erro SSL, tente alterar a \"Verificar "
+"Conexão SSL do Twitter\" abaixo de \"Não\"."
 
 #: rotatingtweets.php:552
 msgid "<h3>Getting information from more than one Twitter account</h3>"
-msgstr ""
+msgstr "<h3>Obtendo informações de mais de uma conta no Twitter</h3>"
 
 #: rotatingtweets.php:553
 msgid ""
@@ -450,18 +454,22 @@ msgstr "Twitter API Access Token Secret"
 
 #: rotatingtweets.php:571
 msgid "Connection Settings"
-msgstr ""
+msgstr "Configurações de conexão"
 
 #: rotatingtweets.php:572
 msgid ""
 "How often should Rotating Tweets try to get the latest tweets from Twitter?"
 msgstr ""
+"Quantas vezes o Rotating Tweets deve tentar obter os últimos tweets do "
+"Twitter?"
 
 #: rotatingtweets.php:573
 msgid ""
 "When connecting to Twitter, how long should Rotating Tweets wait before "
 "timing out?"
 msgstr ""
+"Ao se conectar ao Twitter, quanto tempo Rotating Tweets deve esperar antes "
+"do tempo limite?"
 
 #: rotatingtweets.php:574
 msgid "Verify SSL connection to Twitter"
@@ -469,15 +477,15 @@ msgstr "Verifique a conexão SSL para o Twitter"
 
 #: rotatingtweets.php:576
 msgid "JavaScript Settings"
-msgstr ""
+msgstr "Configurações de JavaScript"
 
 #: rotatingtweets.php:577
 msgid "Version of JQuery Cycle"
-msgstr ""
+msgstr "Ciclo de Versão do JQuery"
 
 #: rotatingtweets.php:578
 msgid "Where to load Rotating Tweets JavaScript"
-msgstr ""
+msgstr "Carregar Rotating Tweets para JavaScript"
 
 #: rotatingtweets.php:599
 msgctxt "Verify SSL connection to Twitter"
@@ -517,7 +525,7 @@ msgstr "20 segundos"
 #: rotatingtweets.php:637
 msgctxt "Cache Delay"
 msgid "1 minute"
-msgstr ""
+msgstr "1 minuto"
 
 #: rotatingtweets.php:638
 msgctxt "Cache Delay"
@@ -527,17 +535,17 @@ msgstr "2 minutos (padrão)"
 #: rotatingtweets.php:639
 msgctxt "Cache Delay"
 msgid "5 minutes"
-msgstr ""
+msgstr "5 minutos"
 
 #: rotatingtweets.php:640
 msgctxt "Cache Delay"
 msgid "1 hour"
-msgstr ""
+msgstr "1 hora"
 
 #: rotatingtweets.php:641
 msgctxt "Cache Delay"
 msgid "24 hours"
-msgstr ""
+msgstr "24 horas"
 
 #: rotatingtweets.php:658
 msgctxt "Version of JQuery Cycle"
@@ -552,12 +560,12 @@ msgstr "Versão 2 (beta)"
 #: rotatingtweets.php:676
 msgctxt "Location of JavaScript"
 msgid "Load in header (default)"
-msgstr ""
+msgstr "Coloque no cabeçalho (padrão)"
 
 #: rotatingtweets.php:677
 msgctxt "Location of JavaScript"
 msgid "Load in footer"
-msgstr ""
+msgstr "Carregue no rodapé"
 
 #: rotatingtweets.php:712
 msgid "Error: Twitter API Consumer Key not correctly formatted."
@@ -588,6 +596,8 @@ msgid ""
 "Error message received from Wordpress: %1$s. Please check your connection "
 "settings."
 msgstr ""
+"Error message received from Wordpress: %1$s.  Por favor, verifique suas "
+"configurações de conexão."
 
 #: rotatingtweets.php:1227
 msgid "Problem retrieving data from Twitter"
@@ -695,7 +705,7 @@ msgstr "Esmaecer"
 
 #: rotatingtweets.php:1617
 msgid "Carousel"
-msgstr ""
+msgstr "Carrossel"
 
 #. Plugin Name of the plugin/theme
 msgid "Rotating Tweets (Twitter widget & shortcode)"
