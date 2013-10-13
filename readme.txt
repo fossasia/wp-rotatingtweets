@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 3.6
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,7 @@ Currently the following languages are available:
 * US English *(complete)*
 * British English *(complete - mainly changing 'favorite' to 'favourite'!)*
 * Brazilian Portuguese *(complete - many thanks to Wilmerson Felipe for his help on this)*
-* German *(basic tweet display only)*
+* German *(almost complete - many thanks to Nils Kroneberg for his help on this)*
 * Spanish *(basic tweet display only)*
 * Italian *(basic tweet display only)*
 * Dutch *(public facing translation complete - many thanks to Natasja Weijer for her help on this)*
@@ -162,13 +162,14 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.6.2 =
-* Fixing bug for PHP installations that don't support the 'u' modifier. Renaming v2 JavaScript to avoid clash with other plug-ins.
+= 1.6.3 =
+* Add option to shortern default link length to 20 characters. Language update including new German translation.
 
 == Changelog ==
 = 1.6.3 =
 * Add option to shortern default link length to 20 characters
 * Language update including new German translation from Nils Kroneberg
+* Updated Brazilian Portuguese translation from Wilmerson Felipe
 
 = 1.6.2 =
 * Fixing bug for PHP installations that don't support the 'u' modifier
