@@ -1236,8 +1236,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 				case 88:
 					$rate = rotatingtweets_get_rate_data();
 					# Check if the problem is rate limiting
+					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('This website is currently <a href=\'%s\'>rate-limited by Twitter</a>.','rotatingtweets'),'https://dev.twitter.com/docs/rate-limiting-faq') . "</p></div>";
 					if(isset($rate['hourly_limit']) && $rate['hourly_limit']>0 && $rate['remaining_hits'] == 0):
-						$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('This website is currently <a href=\'%s\'>rate-limited by Twitter</a>.','rotatingtweets'),'https://dev.twitter.com/docs/rate-limiting-faq') . "</p></div>";
 						$waittimevalue = intval(($rate['reset_time_in_seconds'] - time())/60);
 						$waittime = sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue);
 						if($waittimevalue == 0) $waittime = __("Next attempt to get data will be in less than a minute",'rotatingtweets');
@@ -1284,6 +1284,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		} else {
 			$targetvalue = '';
 		}
+		if(count($json)==1):
+			$firstelement = reset($json);
+			$json[] = $firstelement;
+		endif;
 		foreach($json as $twitter_object):
 			if ( ! (  ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@') ||  (!$args['include_rts'] && isset($twitter_object['retweeted_status']))  )  ):
 //			if (! ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@')): // This works to exlude replies
