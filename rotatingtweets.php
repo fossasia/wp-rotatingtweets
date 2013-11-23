@@ -8,7 +8,7 @@ Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
 */
-/*  Copyright 2014 Martin Tod email : martin@martintod.org.uk)
+/*  Copyright 2013 Martin Tod email : martin@martintod.org.uk)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
