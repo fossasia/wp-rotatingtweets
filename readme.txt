@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 3.7
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,7 @@ Currently the following languages are available:
 * Italian *(basic tweet display only)*
 * Dutch *(public facing translation complete - many thanks to Natasja Weijer for her help on this)*
 * French *(almost complete - many thanks to [Alexandre Trudel](http://wordpress.org/support/profile/alexandretrudel) for his help on this)*
+* Serbian (complete - many thanks to Borisa Djuraskovic at [Web Hosting Hub](http://www.webhostinghub.com/) for his help on this)*
 
 If you have made the plug-in work in your language, please send the translations you'd like to see or, even better, the relevant [gettext PO and MO files](http://codex.wordpress.org/I18n_for_WordPress_Developers) to [me](http://www.martintod.org.uk/contact-martin/) and I will then share them with everyone else. You can download [the latest POT file](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/rotatingtweets.pot), and [PO files in each language](http://plugins.svn.wordpress.org/rotatingtweets/trunk/languages/) from this site. You may find [Poedit](http://www.poedit.net/) rather useful for translation and creation of PO and MO files - although the PO files themselves are quite simple text files and can be edited in Notepad or [Notepad++](http://notepad-plus-plus.org/).
 
@@ -162,10 +163,13 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.6.4 =
-* Add option to shorten default link length to 20 characters. Language update including new German translation. Bug fix.
+= 1.6.5 =
+* Language update including new Serbian translation. Solves an unusual styling problem.
 
 == Changelog ==
+= 1.6.5 =
+* Language update including new Serbian translation. Solved an unusual styling problem.
+
 = 1.6.4 =
 * Bug fix when user name not recognised.
 
