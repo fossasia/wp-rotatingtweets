@@ -1462,7 +1462,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						case 1:
 							# This is an attempt to replicate the original Tweet
 							$result .= "\n\t<div class='rtw_info'>";
-							$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/bird_16_blue.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></div>";
+							$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/twitter-bird-16x16.png', __FILE__)."' alt='".__('Twitter','rotatingtweets')."' /></div>";
 							$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
 							$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
 							$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
