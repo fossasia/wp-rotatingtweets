@@ -1185,16 +1185,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	$result = '';
 	# Put in the 'next / prev' buttons - although not very styled!
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
-		if($api['jquery_cycle_version'] == 1):
-			$nextprev = '<a href="#" class="'.$id.'_rtw_prev rtw_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" class="'.$id.'_rtw_next rtw_next">'.wp_kses_post($args['next']).'</a>';
-		else:
-//		elseif(isset($args['np_pos']) && ($args['np_pos']=='top' || $args['np_pos']=='bottom')):
-			$nextprev = '<a href="#" class="'.$id.'_rtw_prev rtw_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" class="'.$id.'_rtw_next rtw_next">'.wp_kses_post($args['next']).'</a>';
-/*
-		else:
-			$nextprev = '<a href="#" class="cycle_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" class="cycle_next">'.wp_kses_post($args['next']).'</a>';
-*/
-		endif;
+		$nextprev = '<a href="#" class="'.$id.'_rtw_prev rtw_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" class="'.$id.'_rtw_next rtw_next">'.wp_kses_post($args['next']).'</a>';
 		if(strtolower($args['np_pos'])=='top'):
 			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
 		endif;
@@ -1216,7 +1207,6 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			'easing' => 'swing',
 			'slides'=> 'div.rotatingtweet'
 		);
-//		if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && isset($args['np_pos']) && ($args['np_pos']=='top'||$args['np_pos']=='bottom')):
 		if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 			$v2options['prev'] = '.'.$id.'_rtw_prev';
 			$v2options['next'] = '.'.$id.'_rtw_next';
