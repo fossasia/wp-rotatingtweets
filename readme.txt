@@ -84,7 +84,7 @@ Possible variables for the shortcode include:
 		* `prev` = content for the prev button (default `'prev'`)
 		* `next` = content for the next button (default `'next'`)
 		* `middot` = content for the space between the buttons (default `' &amp;middot; '`)
-		* `np_pos` = position for 'next' and 'prev' buttons - `'top'` or `'bottom'` (default `'top'`)
+		* `np_pos` = position for 'next' and 'prev' buttons - `'top'`, `'bottom'` or `'tweets'` (default `'top'`)
 * **Twitter follow button**
 	* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
 	* `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
