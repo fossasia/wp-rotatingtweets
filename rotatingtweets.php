@@ -8,7 +8,7 @@ Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
 */
-/*  Copyright 2013 Martin Tod email : martin@martintod.org.uk)
+/*  Copyright 2014 Martin Tod email : martin@martintod.org.uk)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as 
@@ -80,7 +80,7 @@ class rotatingtweets_Widget extends WP_Widget {
 				break;
 			case 2:
 				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['search']);
-				$newargs['screen_name'] = '';
+//				$newargs['screen_name'] = '';   // Originally put in to avoid confusion when people have a 'follow' button and a search tweet
 				break;
 			case 3:
 				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,false,$newargs['list_tag']);
