@@ -109,7 +109,7 @@ Try something like:
 `<?php echo do_shortcode( "[rotatingtweets screen_name='your_twitter']" ) ?>`
 
 = How can I pull information from two accounts into one widget =
-The easiest way is to list more than one account is to list more than one account in the Twitter name box or use something like `screen_name = 'account1 account2'` in the shortcode.
+The easiest way is to list more than one account in the 'Twitter name' box in the widget or use something like `screen_name = 'account1 account2'` in the shortcode.
 
 = How often does the plug-in call Twitter =
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
