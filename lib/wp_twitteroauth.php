@@ -220,9 +220,9 @@ if(!class_exists('rotatingtweets_TwitterOauth')):
 			endif;
 			echo "\n-->\n";
 		endif;
-
+		$startwrrtime = microtime(true);
 		$response = wp_remote_request($url,$args);
-		if(WP_DEBUG && ! is_admin()) echo "<!-- wp_remote_request() in lib/wp_twitteroauth.php successfully completed -->\n";
+		if(WP_DEBUG && ! is_admin()) echo "<!-- wp_remote_request() in lib/wp_twitteroauth.php successfully completed in ".number_format(microtime(true)-$startwrrtime,4)." seconds -->\n";
 		return($response);
 
 	/*
