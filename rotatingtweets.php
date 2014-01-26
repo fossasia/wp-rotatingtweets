@@ -49,7 +49,9 @@ class rotatingtweets_Widget extends WP_Widget {
         $title = apply_filters('widget_title', $instance['title']);
 		$positive_variables = array('screen_name','shorten_links','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag','search');
 		foreach($positive_variables as $var) {
-			$newargs[$var] = @$instance['tw_'.$var];
+			if(isset($instance['tw_'.$var])):
+				$newargs[$var] = $instance['tw_'.$var];
+			endif;
 		}
 		$negative_variables = array('meta_timestamp','meta_screen_name','meta_via');
 		foreach($negative_variables as $var) {
@@ -900,6 +902,8 @@ function rotatingtweets_shrink_cache() {
 
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
+	# Set timer
+	$rt_starttime = microtime(true);
 	# Check cache
 	rotatingtweets_shrink_cache();
 	# Clear up variables
@@ -949,10 +953,12 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		if(isset($option[$stringname]['json'][0])):
 			if(WP_DEBUG) echo "<!-- option[$stringname] exists -->";
 			if(is_array($option[$stringname]['json'][0])):
-				if(WP_DEBUG) echo "<!-- option[$stringname]['json'][0] is an array -->";
 				$latest_json = $option[$stringname]['json'];
 				$latest_json_date = $option[$stringname]['datetime'];
 				$timegap = time()-$latest_json_date;
+				if(WP_DEBUG):
+					echo "<!-- option[$stringname]['json'][0] is an array - $timegap seconds since last load -->";
+				endif;
 			elseif(is_object($option[$stringname]['json'][0])):
 				if(WP_DEBUG) echo "<!-- option[$stringname]['json'][0] is an object -->";
 				unset($option[$stringname]);
@@ -971,7 +977,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>70,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
 		if($tw_search) {
 			$apioptions['q']=$tw_search;
-			$apioptions['result_type']='recent';
+//			$apioptions['result_type']='recent';
 			$twitterdata = rotatingtweets_call_twitter_API('search/tweets',$apioptions);
 		} elseif($tw_get_favorites) {
 			$twitterdata = rotatingtweets_call_twitter_API('favorites/list',$apioptions);
@@ -986,13 +992,15 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body'],TRUE);
 			if(WP_DEBUG):
-				echo "<!-- Rotating Tweets - got new data -->";
+				$rt_time_taken = number_format(microtime(true)-$rt_starttime,4);
+				echo "<!-- Rotating Tweets - got new data - time taken: $rt_time_taken seconds -->";
 			endif;
 		else:
 			set_transient('rotatingtweets_wp_error',$twitterdata->get_error_messages(), 120);
 		endif;
 	elseif(WP_DEBUG):
-		echo "<!-- Rotating Tweets - used cache - ".($cache_delay - $timegap)." seconds remaining -->";
+		$rt_time_taken = number_format(microtime(true)-$rt_starttime,4);
+		echo "<!-- Rotating Tweets - used cache - ".($cache_delay - $timegap)." seconds remaining  - time taken: $rt_time_taken seconds -->";
 	endif;
 	# Checks for errors in the reply
 	if(!empty($twitterjson['errors'])):
@@ -1020,7 +1028,6 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			update_option($optionname,$option);
 		endif;
 	elseif(!empty($twitterjson)):
-		# If there's regular data, then update the cache and return the data
 		unset($firstentry);
 		if(isset($twitterjson['statuses'])):
 			if(WP_DEBUG):
