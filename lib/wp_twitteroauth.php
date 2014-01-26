@@ -201,7 +201,7 @@ if(!class_exists('rotatingtweets_TwitterOauth')):
 	   */
 	  function http($url, $method, $postfields = NULL) {
 
-		if(WP_DEBUG && ! is_admin()) echo "<!-- wp_remote_request() variables in lib/wp_twitteroauth.php: \n\n\$url = ".esc_url($url)."\n";
+		if(WP_DEBUG && ! is_admin()) echo "<!-- wp_remote_request() variables in lib/wp_twitteroauth.php: \n"; // $url = ".esc_url($url)."\n";
 		if(!empty($method)):
 			$args['method']=$method;
 		endif;
