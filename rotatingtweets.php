@@ -887,6 +887,14 @@ function rotatingtweets_shrink_cache() {
 			$totalcachesize = $totalcachesize + $cachesize;
 		endif;
 	};	
+	if($totalcachesize == 0):
+		if(WP_DEBUG):
+			echo "<!-- No valid caches - cache content = \n\n";
+			print_r($option);
+			echo "\n-->";
+		endif;
+		return;
+	endif;
 	if(WP_DEBUG) echo "\n<!-- The youngest age of any cache is ".number_format($minageindays*24*60,2)." minutes (".number_format($minageindays,8)." days) and total cache size is ".$totalcachesize.". -->";
 	if($numberidentities < 10) return;
 	# Set the goal of deleting all the tweets more than 30 days older than the most recent tweets
