@@ -873,7 +873,7 @@ function rotatingtweets_shrink_cache() {
 	$numberidentities = count($option);
 	if(WP_DEBUG) echo "<!-- There are currently ".$numberidentities." identities cached -->";
 	# If there are fewer than 10 sets of information cached - just return (for speed)
-	if($numberidentities < 10) return;
+//	if($numberidentities < 10) return;
 	# Now make sure that we don't overwrite 'live' tweets
 	$minageindays = 1000000;
 	$totalcachesize = 0;
@@ -888,6 +888,7 @@ function rotatingtweets_shrink_cache() {
 		endif;
 	};	
 	if(WP_DEBUG) echo "\n<!-- The youngest age of any cache is ".number_format($minageindays*24*60,2)." minutes (".number_format($minageindays,8)." days) and total cache size is ".$totalcachesize.". -->";
+	if($numberidentities < 10) return;
 	# Set the goal of deleting all the tweets more than 30 days older than the most recent tweets
 	$targetageindays = $minageindays + 30;
 	# Now run through and delete 
@@ -970,6 +971,9 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			echo "<!-- option[$stringname] does not exist -->";
 		endif;
 	else:
+		if(WP_DEBUG):
+			echo "\n<!-- var option is NOT an array -->";
+		endif;
 		unset($option);
 	endif;
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
