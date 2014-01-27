@@ -986,7 +986,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	endif;
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
-		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>70,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
+		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>50,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
 		if($tw_search) {
 			$apioptions['q']=$tw_search;
 //			$apioptions['result_type']='recent';
