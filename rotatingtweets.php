@@ -888,11 +888,7 @@ function rotatingtweets_shrink_cache() {
 		endif;
 	};	
 	if($totalcachesize == 0):
-		if(WP_DEBUG):
-			echo "<!-- No valid caches - cache content = \n\n";
-			print_r($option);
-			echo "\n-->";
-		endif;
+		if(WP_DEBUG) echo "<!-- Cache failed to read successfully -->";
 		return;
 	endif;
 	if(WP_DEBUG) echo "\n<!-- The youngest age of any cache is ".number_format($minageindays*24*60,2)." minutes (".number_format($minageindays,8)." days) and total cache size is ".$totalcachesize.". -->";
@@ -986,7 +982,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	endif;
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
-		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>50,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
+		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>40,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
 		if($tw_search) {
 			$apioptions['q']=$tw_search;
 //			$apioptions['result_type']='recent';
