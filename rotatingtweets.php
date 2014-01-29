@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.6.8
+Version: 1.6.9
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -873,7 +873,7 @@ function rotatingtweets_shrink_cache() {
 	$numberidentities = count($option);
 	if(WP_DEBUG) echo "<!-- There are currently ".$numberidentities." identities cached -->";
 	# If there are fewer than 10 sets of information cached - just return (for speed)
-//	if($numberidentities < 10) return;
+	if ( !is_array($option) or $numberidentities == 0 ) return;
 	# Now make sure that we don't overwrite 'live' tweets
 	$minageindays = 1000000;
 	$totalcachesize = 0;
