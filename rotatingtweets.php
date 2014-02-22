@@ -1050,12 +1050,12 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		endif;
 		if(is_array($twitterjson) && isset($twitterjson[0] )) $firstentry = $twitterjson[0];
 		if(!empty($firstentry['text'])):
+			$latest_json = rotatingtweets_shrink_json($twitterjson);
+			$option[$stringname]['json']=$latest_json;
+			$option[$stringname]['datetime']=time();
 			if(WP_DEBUG):
 				echo "<!-- Storing cache entry for $stringname in $optionname -->";
 			endif;
-			$latest_json = $twitterjson;
-			$option[$stringname]['json']=$latest_json;
-			$option[$stringname]['datetime']=time();
 			update_option($optionname,$option);
 		endif;
 	endif;
@@ -1064,6 +1064,58 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	else:
 		return;
 	endif;
+}
+function rotatingtweets_shrink_json($json) {
+	$return = array();
+	foreach($json as $item):
+		$return[]=rotatingtweets_shrink_element($item);
+	endforeach;
+	if(WP_DEBUG):
+		$startsize = strlen(json_encode($json));
+		$endsize = strlen(json_encode($return));
+		$shrink = (1-$endsize/$startsize)*100;
+		echo  "<!-- Cachesize shrunk by ".number_format($shrink)."% -->";
+	endif;
+	return($return);
+}
+function rotatingtweets_shrink_element($json) {
+	$rt_top_elements = array('text','retweeted_status','user','entities','source','id_str','created_at');
+	$return = array();
+	foreach($rt_top_elements as $rt_element):
+		if(isset($json[$rt_element])):
+			switch($rt_element) {
+			case "user":
+				$return[$rt_element]=rotatingtweets_shrink_user($json[$rt_element]);
+				break;
+			case "entities":
+				$return[$rt_element]=rotatingtweets_shrink_entities($json[$rt_element]);
+				break;
+			case "retweeted_status":
+				$return[$rt_element]=rotatingtweets_shrink_element($json[$rt_element]);
+				break;
+			default:
+				$return[$rt_element]=$json[$rt_element];
+				break;
+			};
+		endif;
+	endforeach;
+	return($return);
+}
+function rotatingtweets_shrink_user($user) {
+	$rt_user_elements = array('screen_name','id','name','profile_image_url_https','profile_image_url');
+	$return = array();
+	foreach($rt_user_elements as $rt_element):
+		if(isset($user[$rt_element])) $return[$rt_element]=$user[$rt_element];
+	endforeach;
+	return($return);
+}
+function rotatingtweets_shrink_entities($json) {
+	$rt_entity_elements = array('urls','media');
+	$return = array();
+	foreach($rt_entity_elements as $rt_element):
+		if(isset($json[$rt_element])) $return[$rt_element]=$json[$rt_element];
+	endforeach;
+	return($return);
 }
 
 # Gets the rate limiting data to see how long it will be before we can tweet again
@@ -1339,7 +1391,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						endif;
 						if(!empty($rt_data)):
 							$rt_user = $rt_data['user'];
-							// These versions remove RT and use the original text
+							// The version numbers in this array remove RT and use the original text
 							$rt_replace_array = array(1,2,3);
 							if(in_array($args['official_format'],$rt_replace_array)):
 								$main_text = $rt_data['text'];
