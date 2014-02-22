@@ -3,8 +3,8 @@ Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
-Tested up to: 3.8
-Stable tag: 1.6.9
+Tested up to: 3.8.1
+Stable tag: 1.6.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -164,11 +164,11 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 
 == Upgrade notice ==
 = 1.6.10 =
-* New code to shrink size of cache by about 2/3rds
+* New code to shrink size of cache by about 70%
 
 == Changelog ==
 = 1.6.10 =
-* New code to shrink size of cache by about 2/3rds
+* New code to shrink size of cache by about 70%
 
 = 1.6.9 =
 * Bug fix.
