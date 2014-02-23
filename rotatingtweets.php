@@ -1441,10 +1441,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(isset($entities['media'])):
 							$media = $entities['media'];
 							$media_data = $media[0];
-//							if(isset($args['show_media']) && $args['show_media']):
+							if(isset($args['show_media']) && $args['show_media']):
 								$alt = esc_html(trim(str_replace($media_data['url'],'',strip_tags($main_text))));
 								$show_media = "<a href='{$media_data['url']}' title='{$alt}'><img src='{$media_data['media_url_https']}' alt='{$alt}' /></a>";
-//							endif;
+							endif;
 						else:
 							unset($media);
 							unset($show_media);
