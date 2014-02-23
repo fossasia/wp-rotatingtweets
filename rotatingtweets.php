@@ -850,7 +850,11 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 				delete_option('rotatingtweets_api_error');
 			endif;
 		else:
-			if(WP_DEBUG  && ! is_admin() ) echo "<!-- Failed to read valid data from Twitter: problem with wp_remote_request() -->";
+			if(WP_DEBUG  && ! is_admin() ):
+				echo "<!-- Failed to read valid data from Twitter: problem with wp_remote_request(). Data read was: ";
+				print_r($result);
+				echo "\n-->";
+			endif;
 			$errorstring[0]['code']= 999;
 			$errorstring[0]['message']= 'Failed to read valid data from Twitter: problem with wp_remote_request()';
 			$errorstring[0]['type'] = 'Wordpress';
