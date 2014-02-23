@@ -485,7 +485,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'middot' => ' &middot; ',
 			'np_pos' => 'top',
 			'link_all_text' => FALSE,
-			'no_rotate' => FALSE
+			'no_rotate' => FALSE,
+			'show_media' => FALSE
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1439,8 +1440,14 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						endif;
 						if(isset($entities['media'])):
 							$media = $entities['media'];
+							$media_data = $media[0];
+//							if(isset($args['show_media']) && $args['show_media']):
+								$alt = esc_html(trim(str_replace($media_data['url'],'',strip_tags($main_text))));
+								$show_media = "<a href='{$media_data['url']}' title='{$alt}'><img src='{$media_data['media_url_https']}' alt='{$alt}' /></a>";
+//							endif;
 						else:
 							unset($media);
+							unset($show_media);
 						endif;
 						if(!empty($media)):
 							foreach($media as $medium):
@@ -1508,6 +1515,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							# This is the original Rotating Tweets display routine
 							$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
 							$meta = '';
+							if(isset($args['show_media']) && !empty($show_media)):
+								$result .= "<div class='rtw_media'>$show_media</div>";
+							endif;
 							if($args['show_meta_timestamp']):
 								$meta .= rotatingtweets_timestamp_link($twitter_object,'default',$targetvalue);
 							endif;
@@ -1540,6 +1550,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
 							$result .= "\n\t</div>";
 							$result .= "\n\t<p class='rtw_main'>".$main_text."</p>";
+							if(isset($args['show_media']) && !empty($show_media)):
+								$result .= "<div class='rtw_media'>$show_media</div>";
+							endif;
 							$result .= "\n\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
 							$result .= "\n\t<div class='rtw_timestamp'>".rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
 							if(isset($retweeter)) {
@@ -1562,6 +1575,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
 							$result .= "\n\t\t</div>";
 							$result .= "\n\t\t<p class='rtw_main'>".$main_text."</p>";
+							if(isset($args['show_media']) && !empty($show_media)):
+								$result .= "<div class='rtw_media'>$show_media</div>";
+							endif;
 	//						$result .= "\n\t\t<div class='rtw_meta'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1).'</div>';
 							if(isset($retweeter)) {
 								$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";

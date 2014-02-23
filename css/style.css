@@ -84,6 +84,14 @@ div.rtw_timestamp {
 	border-bottom: 1px solid #DDD;
 }
 
+.rtw_media {
+	clear: both;
+}
+.rtw_media img {
+	margin: auto;
+	height: 150px;
+	max-height: 150px;
+}
 
 /* This sets the style for tweets in articles or posts */
 #content .rotatingtweets,
