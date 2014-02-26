@@ -1755,12 +1755,16 @@ function rotatingtweets_enqueue_scripts() {
 	$api = get_option('rotatingtweets-api-settings');
 	if(!isset($api['js_in_footer'])) $api['js_in_footer'] = FALSE;
 	$style = strtolower(get_stylesheet());
+	$rt_data = get_plugin_data( __FILE__ );
+	$rt_cycleversion = $rt_data;
 	// Fixes a problem with the magazino template
 	if($style == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2)):
 /*
 	'jquery-easing' => 'http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js',
 */			
 		if (is_plugin_active('cyclone-slider-2/cyclone-slider.php')):
+			$cyclepath = str_replace('rotatingtweets/','cyclone-slider-2/cyclone-slider.php',plugin_dir_path( __FILE__ ));
+			$rt_cycleversion = get_plugin_data( $cyclepath );
 			$rt_enqueue_script_list = array(
 				'jquery-cycle2' => plugins_url('cyclone-slider-2/libs/cycle2/jquery.cycle2.min.js'),
 				'jquery-cycle2-carousel' => plugins_url('cyclone-slider-2/libs/cycle2/jquery.cycle2.carousel.min.js'),
@@ -1777,7 +1781,12 @@ function rotatingtweets_enqueue_scripts() {
 	//		$dependence[]='jquery-effects-core';
 		endif;
 		foreach($rt_enqueue_script_list as $scriptname => $scriptlocation):
-			wp_enqueue_script($scriptname,$scriptlocation,$dependence,FALSE,$api['js_in_footer']);
+			if( $scriptname == 'rotating_tweet' ):
+				$scriptver = $rt_data['Version'];
+			else:
+				$scriptver = $rt_cycleversion['Version'];
+			endif;
+			wp_enqueue_script($scriptname,$scriptlocation,$dependence,$scriptver,$api['js_in_footer']);
 			$dependence[] = $scriptname;
 		endforeach;
 	else:
@@ -1809,7 +1818,7 @@ function rotatingtweets_enqueue_scripts() {
 				$dependence[]='jquery-cycle';
 				break;
 		endswitch;
-		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,FALSE,$api['js_in_footer'] );
+		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,$rt_data['Version'],$api['js_in_footer'] );
 	endif;
 }
 function rotatingtweets_enqueue_style() {
