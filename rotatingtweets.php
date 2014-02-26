@@ -1759,14 +1759,23 @@ function rotatingtweets_enqueue_scripts() {
 	if($style == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==2)):
 /*
 	'jquery-easing' => 'http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js',
-*/		
-		$rt_enqueue_script_list = array(
-			'jquery-cycle2-renamed' => plugins_url('js/jquery.cycle2.renamed.js', __FILE__),
-			'jquery-cycle2-scrollvert-renamed' => plugins_url('js/jquery.cycle2.scrollVert.renamed.js', __FILE__),
-			'jquery-cycle2-carousel-renamed' => plugins_url('js/jquery.cycle2.carousel.renamed.js', __FILE__),
-			'rotating_tweet' => plugins_url('js/rotatingtweets_v2.js', __FILE__)
-		);
-//		$dependence[]='jquery-effects-core';
+*/			
+		if (is_plugin_active('cyclone-slider-2/cyclone-slider.php')):
+			$rt_enqueue_script_list = array(
+				'jquery-cycle2' => plugins_url('cyclone-slider-2/libs/cycle2/jquery.cycle2.min.js'),
+				'jquery-cycle2-carousel' => plugins_url('cyclone-slider-2/libs/cycle2/jquery.cycle2.carousel.min.js'),
+				'jquery-cycle2-scrollvert' => plugins_url('cyclone-slider-2/libs/cycle2/jquery.cycle2.scrollVert.min.js'),
+				'rotating_tweet' => plugins_url('js/rotatingtweets_v2_cyclone.js', __FILE__)
+			);
+		else:
+			$rt_enqueue_script_list = array(
+				'jquery-cycle2-renamed' => plugins_url('js/jquery.cycle2.renamed.js', __FILE__),
+				'jquery-cycle2-scrollvert-renamed' => plugins_url('js/jquery.cycle2.scrollVert.renamed.js', __FILE__),
+				'jquery-cycle2-carousel-renamed' => plugins_url('js/jquery.cycle2.carousel.renamed.js', __FILE__),
+				'rotating_tweet' => plugins_url('js/rotatingtweets_v2.js', __FILE__)
+			);
+	//		$dependence[]='jquery-effects-core';
+		endif;
 		foreach($rt_enqueue_script_list as $scriptname => $scriptlocation):
 			wp_enqueue_script($scriptname,$scriptlocation,$dependence,FALSE,$api['js_in_footer']);
 			$dependence[] = $scriptname;
