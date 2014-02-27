@@ -94,7 +94,7 @@ Possible variables for the shortcode include:
 Most of this is my own work, but special thanks are owed to:
 
 * The [jQuery](http://jquery.com/) team
-* [Mike Alsup](http://jquery.malsup.com/cycle/) for [jQuery.Cycle](http://jquery.malsup.com/cycle/)
+* [Mike Alsup](http://jquery.malsup.com/cycle/) for [jQuery.Cycle](http://jquery.malsup.com/cycle/) and [jQuery.Cycle2](http://jquery.malsup.com/cycle2/)
 * [Syd Lawrence](http://sydlawrence.com/) for introducing me to jQuery and jQuery.Cycle
 * [Abraham Williams](http://abrah.am) for [TwitterOAuth](https://github.com/abraham/twitteroauth)
 * [Liam Gaddy](http://profiles.wordpress.org/lgladdy/) at [Storm Consultancy](http://www.stormconsultancy.co.uk/) for [his work](http://www.stormconsultancy.co.uk/blog/development/tools-plugins/oauth-twitter-feed-for-developers-library-and-wordpress-plugin/) on [oAuth Twitter Feed for Developers](http://wordpress.org/extend/plugins/oauth-twitter-feed-for-developers/) (although I ended up using it for inspiration rather than plugging it in directly).
