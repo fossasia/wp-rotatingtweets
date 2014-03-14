@@ -484,6 +484,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'prev' => __('prev','rotatingtweets'),
 			'middot' => ' &middot; ',
 			'np_pos' => 'top',
+			'speed' => '1000',
 			'link_all_text' => FALSE,
 			'no_rotate' => FALSE,
 			'show_media' => FALSE
@@ -1233,6 +1234,11 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	else:
 		$urllength = $defaulturllength;
 	endif;
+	if(isset($args['speed'])):
+		$speed = max(100,intval($args['speed']));
+	else:
+		$speed = 1000;
+	endif;
 	# Check that the rotation type is valid. If not, leave it as 'scrollUp'
 	$rotation_type = 'scrollUp';
 	# Get Twitter language string
@@ -1276,7 +1282,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			'fx' => $rotation_type,
 			'pause-on-hover' => 'true',
 			'timeout' => $timeout,
-			'speed' => 1000,
+			'speed' => $speed,
 			'easing' => 'swing',
 			'slides'=> 'div.rotatingtweet'
 		);
