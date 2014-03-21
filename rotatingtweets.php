@@ -484,7 +484,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'prev' => __('prev','rotatingtweets'),
 			'middot' => ' &middot; ',
 			'np_pos' => 'top',
-			'speed' => '1000',
+			'speed' => 1000,
+			'offset' => 0,
 			'link_all_text' => FALSE,
 			'no_rotate' => FALSE,
 			'show_media' => FALSE
@@ -1370,6 +1371,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		if(count($json)==1):
 			$firstelement = reset($json);
 			$json[] = $firstelement;
+		endif;
+		if(isset($args['offset']) && $args['offset']>=1 && count($json)>1):
+			for ($i = 1; $i <= $args['offset']; $i++) {
+				$firstelement = array_shift($json);
+				array_push($json,$firstelement);
+			}
 		endif;
 		foreach($json as $twitter_object):
 			if ( ! (  ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@') ||  (!$args['include_rts'] && isset($twitter_object['retweeted_status']))  )  ):
