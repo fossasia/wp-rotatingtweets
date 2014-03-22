@@ -69,6 +69,7 @@ Possible variables for the shortcode include:
 	* `tweet_count` = number of tweets to show - optional - default is `5`
 	* `get_favorites` = `'0'` or `'1'` - show someone's favorites rather than their timeline - default is `'0'`
 	* `list` = `'list-slug'` - the 'slug' used by someone's list (something like `my-list`)
+	* `offset` = ''number'' - default is `'0'` - enables you to start on a later tweet - `'1'` starts on the 2nd tweet, `'2'` starts on the 3rd tweet, etc.
 * **Display options**
 	* `official_format` = `'1'` or `'2'` - show official format - optional - default is `'0'`
 	* `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
@@ -86,6 +87,7 @@ Possible variables for the shortcode include:
 		* `next` = content for the next button (default `'next'`)
 		* `middot` = content for the space between the buttons (default `' &middot; '`)
 		* `np_pos` = position for 'next' and 'prev' buttons - `'top'`, `'bottom'` or `'tweets'` (default `'top'`)
+	* `show_media` = `'0'` or `'1'` - experimental option that shows images with the tweet - default is `'0'`
 * **Twitter follow button**
 	* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
 	* `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
@@ -168,6 +170,11 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * New code to shrink size of cache by about 70%
 
 == Changelog ==
+= 1.6.12 =
+* Adding `offset`, `speed` and `show_media` options to the shortcode
+* Solves clash with [Cyclone Slider 2](http://wordpress.org/plugins/cyclone-slider-2/)
+* Adds script version details to the JavaScript
+
 = 1.6.11 =
 * Fixing cache bug with 'user_mentions'
 
