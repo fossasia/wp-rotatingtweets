@@ -88,6 +88,7 @@ Possible variables for the shortcode include:
 		* `middot` = content for the space between the buttons (default `' &middot; '`)
 		* `np_pos` = position for 'next' and 'prev' buttons - `'top'`, `'bottom'` or `'tweets'` (default `'top'`)
 	* `show_media` = `'0'` or `'1'` - experimental option that shows images with the tweet - default is `'0'`
+	* `screen_name_plural` = `'0'` or `'1'` - experimental option that allows you to have a plural possessive in the default display format (e.g. *British Lions' Twitter*) - default is `'0'`
 * **Twitter follow button**
 	* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
 	* `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
