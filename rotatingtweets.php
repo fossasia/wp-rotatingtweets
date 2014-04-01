@@ -488,7 +488,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'offset' => 0,
 			'link_all_text' => FALSE,
 			'no_rotate' => FALSE,
-			'show_media' => FALSE
+			'show_media' => FALSE,
+			'screen_name_plural' => 0
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1540,7 +1541,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							endif;
 							if($args['show_meta_screen_name']):
 								if(!empty($meta)) $meta .= ' ';
-								$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+								if(isset($args['screen_name_plural'])):
+									$screennamecount = max(1,$args['screen_name_plural']+1);
+								else:
+									$screennamecount = 1;
+								endif;
+								$meta .= sprintf(_n('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','from <a href=\'%1$s\' title=\'%2$s\'>%2$s\' Twitter</a>',$screennamecount,'rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
 							endif;
 							if($args['show_meta_via']):
 								if(!empty($meta)) $meta .= ' ';
