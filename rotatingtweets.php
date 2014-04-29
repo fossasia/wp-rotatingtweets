@@ -1411,7 +1411,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(!empty($rt_data)):
 							$rt_user = $rt_data['user'];
 							// The version numbers in this array remove RT and use the original text
-							$rt_replace_array = array(1,2,3);
+							$rt_replace_array = array(1,2,3,'custom');
 							if(in_array($args['official_format'],$rt_replace_array)):
 								$main_text = $rt_data['text'];
 								$retweeter = $user;
@@ -1527,8 +1527,15 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							endif;
 							$main_text = $twitter_object['text'];
 						endif;
-						# Now for the meta text
+						# Now for the different display options
 						switch ($args['official_format']) {
+						case 'custom':
+							# This first option lets you use your own function to display tweets
+							if (function_exists('rotatingtweets_display_override')) {
+								$result .= rotatingtweets_display_override(
+									$args, $tweetuser, $main_text, $twitter_object, $twitterlocale, $targetvalue, $retweeter = array(), $show_media='', $nextprev='' );
+								break;
+							}
 						case 0:
 							# This is the original Rotating Tweets display routine
 							$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";

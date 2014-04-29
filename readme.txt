@@ -175,6 +175,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Adding `offset`, `speed` and `show_media` options to the shortcode
 * Solves clash with [Cyclone Slider 2](http://wordpress.org/plugins/cyclone-slider-2/)
 * Adds script version details to the JavaScript
+* Adds option for user function to override display `rotatingtweets_display_override()`
 
 = 1.6.11 =
 * Fixing cache bug with 'user_mentions'
