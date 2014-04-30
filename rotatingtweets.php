@@ -138,7 +138,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			'tw_tweet_count' => array('tw_tweet_count',5,'number'),
 			'tw_show_follow' => array('tw_show_follow',false, 'boolean'),
 			'tw_shorten_links' => array('tw_shorten_links',false, 'boolean'),
-			'tw_official_format' => array('tw_official_format',0,'number'),
+			'tw_official_format' => array('tw_official_format',0,'format'),
 			'tw_show_type' => array('tw_show_type',0,'number'),
 			'tw_links_in_new_window' => array('tw_links_in_new_window',false, 'boolean'),
 			'tw_hide_meta_timestamp' => array('tw_show_meta_timestamp',true, 'notboolean',true),
@@ -154,6 +154,13 @@ class rotatingtweets_Widget extends WP_Widget {
 				switch($val[2]):
 					case "string":
 						$$val[0] = esc_attr(trim($instance[$var]));
+						break;
+					case "format":
+						if($instance[$var]==='custom'):
+							$$val[0] = 'custom';
+						else:
+							$$val[0] = absint($instance[$var]);
+						endif;
 						break;
 					case "number":
 					case "boolean":
