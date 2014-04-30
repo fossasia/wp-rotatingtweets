@@ -271,6 +271,9 @@ class rotatingtweets_Widget extends WP_Widget {
 			1 => __("<a target='_blank' href='https://dev.twitter.com/terms/display-guidelines'>Official Twitter guidelines</a> (regular)",'rotatingtweets'),
 			2 => __("<a target='_blank' href='https://dev.twitter.com/terms/display-guidelines'>Official Twitter guidelines</a> (wide)",'rotatingtweets'),
 		);
+		if (function_exists('rotatingtweets_display_override')) {
+			$officialoptions['custom'] = __('Custom display layout','rotatingtweets');  
+		}
 		foreach ($officialoptions as $val => $html) {
 			echo "<input type='radio' value='$val' id='".$this->get_field_id('tw_official_format_'.$val)."' name= '".$this->get_field_name('tw_official_format')."'";
 			if($tw_official_format==$val): ?> checked="checked" <?php endif; 
@@ -387,6 +390,7 @@ function rotatingtweets_intents($twitter_object,$lang, $icons = 1,$targetvalue='
 }
 // Produces a link to someone's name, icon or screen name (or to the text of your choice) using the 'intent' format for linking
 function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') {
+	if(!is_array($person)) return;
 	$return = "<a href='https://twitter.com/intent/user?user_id={$person['id']}' title='".esc_attr($person['name'])."' lang='{$lang}'{$targetvalue}>";
 	switch($linkcontent){
 	case 'icon':
@@ -1402,7 +1406,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						# Fix up retweets, links, hashtags and use names
 						unset($before);
 						unset($after);
-						$retweeter='';
+						unset($retweeter);
 						# First clean up the retweets
 						if(isset($twitter_object['retweeted_status'])):
 							$rt_data = $twitter_object['retweeted_status'];
@@ -1412,8 +1416,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						if(!empty($rt_data)):
 							$rt_user = $rt_data['user'];
 							// The version numbers in this array remove RT and use the original text
-							$rt_replace_array = array(1,2,3,'custom');
-							if(in_array($args['official_format'],$rt_replace_array)):
+							$rt_replace_array = array(1,2,3);
+							if(in_array($args['official_format'],$rt_replace_array) || $args['official_format'] === 'custom' ):
 								$main_text = $rt_data['text'];
 								$retweeter = $user;
 								$tweetuser = $rt_user;
@@ -1533,7 +1537,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						case 'custom':
 							# This first option lets you use your own function to display tweets
 							if (function_exists('rotatingtweets_display_override')) {
-								$result .= rotatingtweets_display_override(
+								if(!isset($retweeter)) $retweeter = '';
+								$result .= rotatingtweets_display_override(	
 									$args, $tweetuser, $main_text, $twitter_object, $twitterlocale, $targetvalue, $retweeter, $show_media, $nextprev );
 								break;
 							}
