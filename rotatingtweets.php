@@ -1264,6 +1264,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	# Create an ID that has all the relevant info in - rotation type and speed of rotation
 	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
 	$result = '';
+	$nextprev = '';
 	# Put in the 'next / prev' buttons - although not very styled!
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 		$nextprev = '<a href="#" class="'.$id.'_rtw_prev rtw_prev">'.wp_kses_post($args['prev']).'</a> '.wp_kses_post($args['middot']).' <a href="#" class="'.$id.'_rtw_next rtw_next">'.wp_kses_post($args['next']).'</a>';
@@ -1401,7 +1402,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						# Fix up retweets, links, hashtags and use names
 						unset($before);
 						unset($after);
-						unset($retweeter);
+						$retweeter='';
 						# First clean up the retweets
 						if(isset($twitter_object['retweeted_status'])):
 							$rt_data = $twitter_object['retweeted_status'];
@@ -1465,7 +1466,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							endif;
 						else:
 							unset($media);
-							unset($show_media);
+							$show_media='';
 						endif;
 						if(!empty($media)):
 							foreach($media as $medium):
@@ -1533,7 +1534,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							# This first option lets you use your own function to display tweets
 							if (function_exists('rotatingtweets_display_override')) {
 								$result .= rotatingtweets_display_override(
-									$args, $tweetuser, $main_text, $twitter_object, $twitterlocale, $targetvalue, $retweeter = array(), $show_media='', $nextprev='' );
+									$args, $tweetuser, $main_text, $twitter_object, $twitterlocale, $targetvalue, $retweeter, $show_media, $nextprev );
 								break;
 							}
 						case 0:
