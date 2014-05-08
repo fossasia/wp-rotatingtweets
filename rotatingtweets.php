@@ -500,7 +500,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'link_all_text' => FALSE,
 			'no_rotate' => FALSE,
 			'show_media' => FALSE,
-			'screen_name_plural' => 0
+			'screen_name_plural' => 0,
+			'tweet_length' => 0
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1436,6 +1437,25 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$entities = $rt_data['entities'];
 						endif;
 						# First the user mentions
+						if(isset($args['tweet_length']) && $args['tweet_length']>0 ):
+							$tweetwords = explode(" ",$main_text);
+							$new_main_text = array_shift($tweetwords);
+							foreach($tweetwords as $tweetword):
+								if(strlen($new_main_text." ".$tweetword)<$args['tweet_length']):
+									$new_main_text .= " ".$tweetword;
+									if(WP_DEBUG):
+										echo "<!-- adding '$tweetword' -->";
+									endif;
+								else:
+									$new_main_text .= "&hellip;";
+									if(WP_DEBUG):
+										echo "<!-- finishing and adding '&hellip;' -->";
+									endif;
+									break;
+								endif;
+							endforeach;
+							$main_text = $new_main_text;
+						endif;
 						if(isset($entities['user_mentions'])):
 							$user_mentions = $entities['user_mentions'];
 						else:
