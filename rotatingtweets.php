@@ -501,7 +501,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'no_rotate' => FALSE,
 			'show_media' => FALSE,
 			'screen_name_plural' => 0,
-			'tweet_length' => 0
+			'tweet_length' => 0,
+			'carousel_horizontal' => 0
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1306,7 +1307,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$v2options['next'] = '.'.$id.'_rtw_next';
 		endif;
 		if(! WP_DEBUG) $v2options['log'] = 'false';
-		if($rotation_type == 'carousel'):
+		if($rotation_type == 'carousel' && !isset($args['carousel_horizontal'])):
 			$v2options['carousel-vertical'] = 'true';
 			$v2options['carousel-visible'] = 3;
 		endif;
