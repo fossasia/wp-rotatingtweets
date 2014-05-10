@@ -1307,7 +1307,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$v2options['next'] = '.'.$id.'_rtw_next';
 		endif;
 		if(! WP_DEBUG) $v2options['log'] = 'false';
-		if($rotation_type == 'carousel' && !isset($args['carousel_horizontal'])):
+		if($rotation_type == 'carousel' && empty($args['carousel_horizontal'])):
 			$v2options['carousel-vertical'] = 'true';
 			$v2options['carousel-visible'] = 3;
 		endif;
