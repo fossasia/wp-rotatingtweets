@@ -502,7 +502,9 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'show_media' => FALSE,
 			'screen_name_plural' => 0,
 			'tweet_length' => 0,
-			'carousel_horizontal' => 0
+			'carousel_horizontal' => 0,
+			'carousel_count' => 0,
+			'carousel_responsive' => 0
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1307,9 +1309,22 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$v2options['next'] = '.'.$id.'_rtw_next';
 		endif;
 		if(! WP_DEBUG) $v2options['log'] = 'false';
-		if($rotation_type == 'carousel' && empty($args['carousel_horizontal'])):
-			$v2options['carousel-vertical'] = 'true';
-			$v2options['carousel-visible'] = 3;
+		if($rotation_type == 'carousel'):
+			if(empty($args['carousel_horizontal'])):
+				$v2options['carousel-vertical'] = true;
+				if(isset($args['carousel_count'])):
+					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
+				else:
+					$v2options['carousel-visible'] = 3;
+				endif;
+			else:
+				if(isset($args['carousel_count'])):
+					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
+				endif;
+				if(isset($args['carousel_responsive'])):
+					$v2options['carousel-fluid'] = true;
+				endif;
+			endif;
 		endif;
 		$v2stringelements = array();
 		foreach ($v2options as $name => $value) {
