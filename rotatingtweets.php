@@ -1103,6 +1103,7 @@ function rotatingtweets_shrink_json($json) {
 	return($return);
 }
 function rotatingtweets_shrink_element($json) {
+	global $args;
 	$rt_top_elements = array('text','retweeted_status','user','entities','source','id_str','created_at');
 	$return = array();
 	foreach($rt_top_elements as $rt_element):
@@ -1118,6 +1119,11 @@ function rotatingtweets_shrink_element($json) {
 				$return[$rt_element]=rotatingtweets_shrink_element($json[$rt_element]);
 				break;
 			default:
+				if(isset($args['no_emoji']) && $args['no_emoji']):
+					$before='/\\p{C}/u'; # Removed all 'other' characters - http://php.net/manual/en/regexp.reference.unicode.php
+					$after='';
+					$json[$rt_element] = str_replace($before,$after,$json[$rt_element]);
+				endif;		
 				if(function_exists("mb_convert_encoding")):
 					$return[$rt_element]=mb_convert_encoding($json[$rt_element], "UTF-8");
 				else:
@@ -1535,10 +1541,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						# This is designed to find hashtags and turn them into links...
 						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%u";
 						$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
-						# Attempts to remove emoji - see http://www.regular-expressions.info/unicode.html https://en.wikipedia.org/wiki/Emoji and 
+						# Attempts to remove emoji - see http://www.regular-expressions.info/unicode.html https://en.wikipedia.org/wiki/Emoji
 						if(isset($args['no_emoji']) && $args['no_emoji']):
 							// $before[]='/\\p{InGreek_Extended}/u'; #Not supported by PCRE http://php.net/manual/en/regexp.reference.unicode.php
-							$before[]='/\\p{C}/u';
+							$before[]='/\\p{C}/u'; # Removed all 'other' characters - http://php.net/manual/en/regexp.reference.unicode.php
 							$after[]='';
 						endif;						
 						if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8' && strtoupper(DB_CHARSET)!= '' ):
