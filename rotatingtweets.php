@@ -504,7 +504,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'tweet_length' => 0,
 			'carousel_horizontal' => 0,
 			'carousel_count' => 0,
-			'carousel_responsive' => 0
+			'carousel_responsive' => 0,
+			'no_emoji' => 0
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1534,6 +1535,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 						# This is designed to find hashtags and turn them into links...
 						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%u";
 						$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.'>#$1</a>';
+						# Attempts to remove emoji - see http://www.regular-expressions.info/unicode.html https://en.wikipedia.org/wiki/Emoji and 
+						if(isset($args['no_emoji']) && $args['no_emoji']):
+							// $before[]='/\\p{InGreek_Extended}/u'; #Not supported by PCRE http://php.net/manual/en/regexp.reference.unicode.php
+							$before[]='/\\p{C}/u';
+							$after[]='';
+						endif;						
 						if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8' && strtoupper(DB_CHARSET)!= '' ):
 							$new_text = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$main_text);
 							if(empty($main_text)):
