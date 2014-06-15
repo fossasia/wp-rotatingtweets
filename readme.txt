@@ -3,8 +3,8 @@ Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
-Tested up to: 3.9
-Stable tag: 1.6.11
+Tested up to: 3.9.1
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,7 @@ Possible variables for the shortcode include:
 	* `official_format` = `'1'` or `'2'` - show official format - optional - default is `'0'`
 	* `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
 	* `speed` = time it takes to change from one tweet to the next in milliseconds - optional - default is `'1000'` (i.e. 1 second)
+	* `offset` = start displaying an earlier tweet one or more places before the current tweet - option - default is `'0'`
 	* `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
 	* `rotation_type` = If you are using version 1 of the JavaScript, you can use any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'.`  If you are using version 2 of the JavaScript, then the options are `'scrollUp'`,`'scrollDown'`,`'scrollHorz'`,`'scrollLeft'`,`'scrollRight'`,`'toss'`,`'scrollVert'`,`'fade'` and `'carousel'`
 	* `url_length` = sets the length that the URL should be trimmed to...
@@ -89,6 +90,8 @@ Possible variables for the shortcode include:
 		* `np_pos` = position for 'next' and 'prev' buttons - `'top'`, `'bottom'` or `'tweets'` (default `'top'`)
 	* `show_media` = `'0'` or `'1'` - experimental option that shows images with the tweet - default is `'0'`
 	* `screen_name_plural` = `'0'` or `'1'` - experimental option that allows you to have a plural possessive in the default display format (e.g. *British Lions' Twitter*) - default is `'0'`
+	* `tweet_length` = maximum number of characters to show in tweet - experimental - default is `'0'` which allows whole tweet to be shown
+	* `no_emoji` = `'0'` or `'1'` - experimental option that removes emoji from the feed - default is `'0'`
 * **Twitter follow button**
 	* `show_follow` = `'0'` or `'1'` - show follow button - optional - default is `'0'`
 	* `no_show_count` = `'0'` or `'1'` - remove the follower count from the Twitter follow button - optional - default is `'0'`
@@ -167,15 +170,16 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.6.11 =
-* New code to shrink size of cache by about 70%
+= 1.7.0 =
+* Adding `offset`, `speed`, `tweet_length`, `no_emoji` and `show_media` options to the shortcode
 
 == Changelog ==
-= 1.6.12 =
-* Adding `offset`, `speed` and `show_media` options to the shortcode
+= 1.7.0 =
+* Adding `offset`, `speed`, `tweet_length`, `no_emoji` and `show_media` options to the shortcode
 * Solves clash with [Cyclone Slider 2](http://wordpress.org/plugins/cyclone-slider-2/)
 * Adds script version details to the JavaScript
-* Adds option for user function to override display `rotatingtweets_display_override()`
+* Removal of excess spaces from `middot` shortcode option
+* Adds option for 'custom' display layoot  with user-defined display function `rotatingtweets_display_override()`
 
 = 1.6.11 =
 * Fixing cache bug with 'user_mentions'

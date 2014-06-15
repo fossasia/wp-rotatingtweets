@@ -1124,11 +1124,13 @@ function rotatingtweets_shrink_element($json) {
 					$after='';
 					$json[$rt_element] = str_replace($before,$after,$json[$rt_element]);
 				endif;		
+/*	Experiment to deal with problem caused by emoji crashing a poorly configured database
 				if(function_exists("mb_convert_encoding")):
 					$return[$rt_element]=mb_convert_encoding($json[$rt_element], "UTF-8");
 				else:
-					$return[$rt_element]=$json[$rt_element];
-				endif;
+*/
+				$return[$rt_element]=$json[$rt_element];
+//				endif;
 				break;
 			};
 		endif;
