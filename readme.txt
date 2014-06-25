@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 3.9.1
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -170,10 +170,13 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.0 =
-* Adding `offset`, `speed`, `tweet_length`, `no_emoji` and `show_media` options to the shortcode
+= 1.7.1 =
+* Improved CSS support for horizontal carousel scrolling
 
 == Changelog ==
+= 1.7.1 =
+* Improved CSS support for horizontal carousel scrolling
+
 = 1.7.0 =
 * Adding `offset`, `speed`, `tweet_length`, `no_emoji` and `show_media` options to the shortcode
 * Solves clash with [Cyclone Slider 2](http://wordpress.org/plugins/cyclone-slider-2/)
