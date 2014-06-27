@@ -75,9 +75,9 @@ jQuery(document).ready(function() {
 		var clearOutHovers = /_hover.png/;
 		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
 	});
-	jQuery('.rtw_wide .rtw_intents').hide();
-	jQuery('.rtw_expand').show();
-	jQuery('.rotatingtweets').has('.rtw_wide').hover(function() {
+	jQuery('.rotatingtweets').children().not('.cycle-carousel-wrap').has('.rtw_wide').find('.rtw_wide .rtw_intents').hide();
+	jQuery('.rotatingtweets').children().not('.cycle-carousel-wrap').has('.rtw_wide').find('.rtw_expand').show();
+	jQuery('.rotatingtweets').children().not('.cycle-carousel-wrap').has('.rtw_wide').hover(function() {
 		jQuery(this).find('.rtw_intents').show();
 	},function() {
 		jQuery(this).find('.rtw_intents').hide();
