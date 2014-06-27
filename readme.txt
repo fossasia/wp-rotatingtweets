@@ -71,10 +71,10 @@ Possible variables for the shortcode include:
 	* `list` = `'list-slug'` - the 'slug' used by someone's list (something like `my-list`)
 	* `offset` = ''number'' - default is `'0'` - enables you to start on a later tweet - `'1'` starts on the 2nd tweet, `'2'` starts on the 3rd tweet, etc.
 * **Display options**
-	* `official_format` = `'1'`, `'2'` or `'custom'` - show official format or custom format if you have written your own `rotatingtweets_display_override()` function - optional - default is `'0'`
+	* `official_format` = `'1'`, `'2'` or `'custom'` - show one of the two official formats or a custom format if you have written your own `rotatingtweets_display_override()` function - optional - default is `'0'`
 	* `timeout` = time that each tweet is shown in milliseconds - optional - default is `'4000'` (i.e. 4 seconds)
 	* `speed` = time it takes to change from one tweet to the next in milliseconds - optional - default is `'1000'` (i.e. 1 second)
-	* `offset` = start displaying an earlier tweet one or more places before the current tweet - option - default is `'0'`
+	* `offset` = start displaying an earlier tweet one or more places before the current tweet - default is `'0'`
 	* `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
 	* `rotation_type` = If you are using version 1 of the JavaScript, you can use any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'.`  If you are using version 2 of the JavaScript, then the options are `'scrollUp'`,`'scrollDown'`,`'scrollHorz'`,`'scrollLeft'`,`'scrollRight'`,`'toss'`,`'scrollVert'`,`'fade'` and `'carousel'`
 		*	`carousel_horizontal` = `0` or `1` - if you've chosen 'carousel' as a rotation type, allow horizontal scrolling - default is `0`
