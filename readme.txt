@@ -77,8 +77,8 @@ Possible variables for the shortcode include:
 	* `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
 	* `rotation_type` = If you are using version 1 of the JavaScript, you can use any of the options listed on the [jQuery.cycle website](http://jquery.malsup.com/cycle/browser.html) - default is `'scrollUp'.`  If you are using version 2 of the JavaScript, then the options are `'scrollUp'`,`'scrollDown'`,`'scrollHorz'`,`'scrollLeft'`,`'scrollRight'`,`'toss'`,`'scrollVert'`,`'fade'` and `'carousel'`
 		*	`carousel_horizontal` = `0` or `1` - if you've chosen 'carousel' as a rotation type, allow horizontal scrolling - default is `0`
-		*	'carousel_count' => ''number'' - if you've chosen 'carousel' as a rotation type, set the number of slides to appear in the carousel - default is 3 for vertical carousel and enough to fill the width of the page for horizontal carousel
-		*	'carousel_responsive' => `0` or `1` - if you've chosen a 'horizontal carousel' as a rotation type, makes the carousel responsive to the size of the page - default is `0`
+		*	`carousel_count` = ''number'' - if you've chosen 'carousel' as a rotation type, set the number of slides to appear in the carousel - default is 3 for vertical carousel and enough to fill the width of the page for horizontal carousel
+		*	`carousel_responsive` = `0` or `1` - if you've chosen a 'horizontal carousel' as a rotation type, makes the carousel responsive to the size of the page - default is `0`
 	* `url_length` = sets the length that the URL should be trimmed to... - optional
 	* `show_meta_timestamp` = `'0'` or `'1'` - show the time and date of each tweet - default is `'1'`
 	* `show_meta_screen_name` = `'0'` or `'1'` - show who posted each tweet - default is `'1'`
@@ -177,9 +177,12 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Removes 'expand' for carousel rotation.  Adds new 'insidebottom' option for 'next / prev' buttons.
 
 == Changelog ==
+= 1.7.3 =
+* Adds `show_tco_link` shortcode variable to allow people to show t.co.links.
+
 = 1.7.2 =
-* Removes 'expand' for carousel rotation. 
-* Adds new `insidebottom` option for position of 'next / prev' buttons
+* Switches off JavaScript expansion of 'expand' to 'reply retweet favorite' for carousel rotation. 
+* Adds new `insidebottom` option for `np_pos` shortcode variable
 
 = 1.7.1 =
 * Improved CSS support for horizontal carousel scrolling

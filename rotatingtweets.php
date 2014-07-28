@@ -505,7 +505,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'carousel_horizontal' => 0,
 			'carousel_count' => 0,
 			'carousel_responsive' => 0,
-			'no_emoji' => 0
+			'no_emoji' => 0,
+			'show_tco_link' => 0
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1104,7 +1105,7 @@ function rotatingtweets_shrink_json($json) {
 }
 function rotatingtweets_shrink_element($json) {
 	global $args;
-	$rt_top_elements = array('text','retweeted_status','user','entities','source','id_str','created_at');
+	$rt_top_elements = array('text','retweeted_status','user','entities','source','id_str','created_at','coordinates');
 	$return = array();
 	foreach($rt_top_elements as $rt_element):
 		if(isset($json[$rt_element])):
@@ -1514,7 +1515,11 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 									$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
 									$displayurl = substr($displayurl,0,$urllength)."&hellip;";
 								endif;
-								$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
+								if(isset($args['show_tco_link']) && $args['show_tco_link']):
+									$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue.">".esc_html($url['url'])."</a>";								
+								else:
+									$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
+								endif;
 							endforeach;
 						endif;
 						if(isset($entities['media'])):
