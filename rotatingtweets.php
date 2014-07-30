@@ -1873,6 +1873,13 @@ function rotatingtweets_enqueue_scripts() {
 				'jquery-cycle2-scrollvert' => plugins_url('cyclone-slider-2/libs/cycle2/jquery.cycle2.scrollVert.min.js'),
 				'rotating_tweet' => plugins_url('js/rotatingtweets_v2_cyclone.js', __FILE__)
 			);
+		elseif ( function_exists( 'newswire_custom_scripts' ) ):
+			$rt_enqueue_script_list = array(
+				'cycle2' => get_template_directory_uri() . '/library/js/jquery.cycle2.min.js' ,
+				'cycle2_scrollvert' => get_template_directory_uri() . '/library/js/jquery.cycle2.scrollVert.min.js' ,
+				'cycle2_carousel' => plugins_url('js/jquery.cycle2.carousel.js', __FILE__),
+				'rotating_tweet' => plugins_url('js/rotatingtweets_v2_cyclone.js', __FILE__)
+			);		
 		else:
 			$rt_enqueue_script_list = array(
 				'jquery-cycle2-renamed' => plugins_url('js/jquery.cycle2.renamed.js', __FILE__),

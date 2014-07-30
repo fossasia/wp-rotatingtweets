@@ -179,6 +179,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 == Changelog ==
 = 1.7.3 =
 * Adds `show_tco_link` shortcode variable to allow people to show t.co.links.
+* Support for Newswire template
 
 = 1.7.2 =
 * Switches off JavaScript expansion of 'expand' to 'reply retweet favorite' for carousel rotation. 
