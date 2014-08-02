@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 3.9.1
-Stable tag: 1.7.2
+Stable tag: 1.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,7 +79,8 @@ Possible variables for the shortcode include:
 		*	`carousel_horizontal` = `0` or `1` - if you've chosen 'carousel' as a rotation type, allow horizontal scrolling - default is `0`
 		*	`carousel_count` = ''number'' - if you've chosen 'carousel' as a rotation type, set the number of slides to appear in the carousel - default is 3 for vertical carousel and enough to fill the width of the page for horizontal carousel
 		*	`carousel_responsive` = `0` or `1` - if you've chosen a 'horizontal carousel' as a rotation type, makes the carousel responsive to the size of the page - default is `0`
-	* `url_length` = sets the length that the URL should be trimmed to... - optional
+	* `url_length` = sets the length that the URL of links should be trimmed to... - optional
+	* `show_tco_link` = `'0'` or `'1'` allows you to show Twitter's t.co link instead of the original link - optional
 	* `show_meta_timestamp` = `'0'` or `'1'` - show the time and date of each tweet - default is `'1'`
 	* `show_meta_screen_name` = `'0'` or `'1'` - show who posted each tweet - default is `'1'`
 	* `show_meta_via` = `'0'` or `'1'` - show how each tweet was posted - default is `'1'`
@@ -173,13 +174,14 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.2 =
-* Removes 'expand' for carousel rotation.  Adds new 'insidebottom' option for 'next / prev' buttons.
+= 1.7.3 =
+* Adds `show_tco_link` shortcode variable to allow people to show t.co.links. Support for Newswire template.
 
 == Changelog ==
 = 1.7.3 =
 * Adds `show_tco_link` shortcode variable to allow people to show t.co.links.
 * Support for Newswire template
+* Restores the caching of Tweet co-ordinates
 
 = 1.7.2 =
 * Switches off JavaScript expansion of 'expand' to 'reply retweet favorite' for carousel rotation. 
