@@ -401,11 +401,11 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 	$return = "<a href='https://twitter.com/intent/user?user_id={$person['id']}' title='".esc_attr($person['name'])."' lang='{$lang}'{$targetvalue}>";
 	switch($linkcontent){
 	case 'icon':
-		if(isset($_SERVER['HTTPS'])):
+//		if(isset($_SERVER['HTTPS'])):
 			$return .= "<img src='{$person['profile_image_url_https']}' alt='".esc_attr($person['name'])."' /></a>";
-		else:
+/*		else:
 			$return .= "<img src='{$person['profile_image_url']}' alt='".esc_attr($person['name'])."' /></a>";		
-		endif;
+		endif; */
 		break;
 	case 'name':
 		$return .= $person['name']."</a>";
