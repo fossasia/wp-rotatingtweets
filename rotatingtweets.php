@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.7.3
+Version: 1.7.4
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -401,11 +401,7 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') 
 	$return = "<a href='https://twitter.com/intent/user?user_id={$person['id']}' title='".esc_attr($person['name'])."' lang='{$lang}'{$targetvalue}>";
 	switch($linkcontent){
 	case 'icon':
-//		if(isset($_SERVER['HTTPS'])):
-			$return .= "<img src='{$person['profile_image_url_https']}' alt='".esc_attr($person['name'])."' /></a>";
-/*		else:
-			$return .= "<img src='{$person['profile_image_url']}' alt='".esc_attr($person['name'])."' /></a>";		
-		endif; */
+		$return .= "<img src='{$person['profile_image_url_https']}' alt='".esc_attr($person['name'])."' /></a>";
 		break;
 	case 'name':
 		$return .= $person['name']."</a>";
