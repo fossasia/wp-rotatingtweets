@@ -1843,11 +1843,13 @@ function rotatingtweets_enqueue_scripts() {
 	if ( ! function_exists( 'is_plugin_active' ) )
 		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 //		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	$dependence = array('jquery');
 	if (is_plugin_active('wsi/wp-splash-image.php')) {
 		//plugin is activated
-		$dependence = array('jquery','jquery.tools.front');
-	} else {
-		$dependence = array('jquery');
+		$dependence[] = 'jquery.tools.front';
+	};
+	if(function_exists('pwc_theme_name_scripts')) {
+		$dependence[] = 'global-js';
 	}
 	# Check if we're using jQuery Cycle 1 or 2
 	$api = get_option('rotatingtweets-api-settings');
