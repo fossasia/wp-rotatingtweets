@@ -1856,7 +1856,7 @@ function rotatingtweets_enqueue_scripts() {
 	# Check if we're using jQuery Cycle 1 or 2
 	$api = get_option('rotatingtweets-api-settings');
 	if(!isset($api['js_in_footer'])) $api['js_in_footer'] = FALSE;
-	$style = strtolower(get_stylesheet());
+	$style = trim(strtolower(get_stylesheet()));
 	$rt_data = get_plugin_data( __FILE__ );
 	$rt_cycleversion = $rt_data;
 	// Fixes a problem with the magazino template
@@ -1915,8 +1915,8 @@ function rotatingtweets_enqueue_scripts() {
 				break;		
 			case 'avada':
 			case 'avada child':
-			case 'avada-child-theme':
-			case 'avada child theme':
+//			case 'avada-child-theme':
+//			case 'avada child theme':
 			case 'a52cars':
 				wp_dequeue_script( 'jquery.cycle');
 				wp_enqueue_script( 'jquery.cycle', plugins_url($cyclejsfile, __FILE__),$dependence,FALSE,$api['js_in_footer'] );
