@@ -60,7 +60,7 @@ Options include:
 Possible variables for the shortcode include:
 
 * **Required settings** - at least one of the following three settings is required for the short-code to function:
-	* `screen_name` = Twitter user name
+	* `screen_name` = one or more Twitter user names e.g. `[rotatingtweets screen_name="mpntod"]` or `[rotatingtweets screen_name="mpntod twitter"]`
 	* `url` = Twitter user URL. If `screen_name` is empty and this link is valid, `screen_name` will be set to the user name included in `url`
 	* `search` = a term to search for. There's a useful guide to using Twitter's search function at https://support.twitter.com/articles/71577-using-advanced-search
 * **Twitter options**
@@ -120,7 +120,7 @@ Try something like:
 `<?php echo do_shortcode( "[rotatingtweets screen_name='your_twitter']" ) ?>`
 
 = How can I pull information from two accounts into one widget =
-The easiest way is to list more than one account in the 'Twitter name' box in the widget or use something like `screen_name = 'account1 account2'` in the shortcode.
+The easiest way is to list more than one account in the 'Twitter name' box in the widget or use something like `screen_name='account1 account2'` in the shortcode.
 
 = How often does the plug-in call Twitter =
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
