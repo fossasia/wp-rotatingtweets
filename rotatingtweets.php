@@ -1700,9 +1700,14 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t\t<p class='rtw_main'>$main_text</p>";
 							$result .= "\n\t<div class='rtw_meta rtw_info'><div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
 							if($args['show_meta_screen_name']):
-								$result .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']).' &middot; ';
-							endif;
-							$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
+								if(!empty($meta)) $meta .= ' ';
+								if(isset($args['screen_name_plural'])):
+									$screennamecount = max(1,$args['screen_name_plural']+1);
+								else:
+									$screennamecount = 1;
+								endif;
+								$meta .= sprintf(_n('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','from <a href=\'%1$s\' title=\'%2$s\'>%2$s\' Twitter</a>',$screennamecount,'rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+							endif;							$result .= rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
 							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
 								$result .= ' &middot; '.$nextprev;
 							endif;
@@ -1717,7 +1722,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							endif;
 							if($args['show_meta_screen_name']):
 								if(!empty($meta)) $meta .= ' ';
-								$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+								if(isset($args['screen_name_plural'])):
+									$screennamecount = max(1,$args['screen_name_plural']+1);
+								else:
+									$screennamecount = 1;
+								endif;
+								$meta .= sprintf(_n('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','from <a href=\'%1$s\' title=\'%2$s\'>%2$s\' Twitter</a>',$screennamecount,'rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
 							endif;
 							if($args['show_meta_via']):
 								if(!empty($meta)) $meta .= ' ';
@@ -1742,7 +1752,12 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							endif;
 							if($args['show_meta_screen_name']):
 								if(!empty($meta)) $meta .= ' ';
-								$meta .= sprintf(__('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
+								if(isset($args['screen_name_plural'])):
+									$screennamecount = max(1,$args['screen_name_plural']+1);
+								else:
+									$screennamecount = 1;
+								endif;
+								$meta .= sprintf(_n('from <a href=\'%1$s\' title=\'%2$s\'>%2$s\'s Twitter</a>','from <a href=\'%1$s\' title=\'%2$s\'>%2$s\' Twitter</a>',$screennamecount,'rotatingtweets'),'https://twitter.com/intent/user?user_id='.$user['id'],$user['name']);
 							endif;
 							if($args['show_meta_via']):
 								if(!empty($meta)) $meta .= ' ';
