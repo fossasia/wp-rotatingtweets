@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Rotating Tweets (Twitter widget & shortcode) 1.7.4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/rotatingtweets\n"
-"POT-Creation-Date: 2014-09-28 15:21:53+00:00\n"
+"POT-Creation-Date: 2014-09-28 15:35:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -269,7 +269,7 @@ msgstr ""
 msgid "favorite"
 msgstr ""
 
-#: rotatingtweets.php:413 rotatingtweets.php:1794
+#: rotatingtweets.php:413 rotatingtweets.php:1809
 msgid "Follow @%s"
 msgstr ""
 
@@ -597,14 +597,14 @@ msgstr ""
 msgid "No Tweet results for search <a href=\"%2$s\"><strong>%1$s</strong></a>"
 msgstr ""
 
-#: rotatingtweets.php:1625 rotatingtweets.php:1703 rotatingtweets.php:1720
-#: rotatingtweets.php:1745
+#: rotatingtweets.php:1625 rotatingtweets.php:1709 rotatingtweets.php:1730
+#: rotatingtweets.php:1760
 msgid "from <a href='%1$s' title='%2$s'>%2$s's Twitter</a>"
 msgid_plural "from <a href='%1$s' title='%2$s'>%2$s' Twitter</a>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: rotatingtweets.php:1629 rotatingtweets.php:1724 rotatingtweets.php:1749
+#: rotatingtweets.php:1629 rotatingtweets.php:1734 rotatingtweets.php:1764
 msgid "via %s"
 msgstr ""
 
@@ -616,35 +616,35 @@ msgstr ""
 msgid "Expand"
 msgstr ""
 
-#: rotatingtweets.php:1765
+#: rotatingtweets.php:1780
 msgid "Problem retrieving data from Twitter."
 msgstr ""
 
-#: rotatingtweets.php:1767
+#: rotatingtweets.php:1782
 msgid "Please check the comments on this page's HTML to understand more."
 msgstr ""
 
-#: rotatingtweets.php:1813 rotatingtweets.php:1826
+#: rotatingtweets.php:1828 rotatingtweets.php:1841
 msgid "Scroll Up"
 msgstr ""
 
-#: rotatingtweets.php:1814 rotatingtweets.php:1827
+#: rotatingtweets.php:1829 rotatingtweets.php:1842
 msgid "Scroll Down"
 msgstr ""
 
-#: rotatingtweets.php:1815 rotatingtweets.php:1828
+#: rotatingtweets.php:1830 rotatingtweets.php:1843
 msgid "Scroll Left"
 msgstr ""
 
-#: rotatingtweets.php:1816 rotatingtweets.php:1829
+#: rotatingtweets.php:1831 rotatingtweets.php:1844
 msgid "Scroll Right"
 msgstr ""
 
-#: rotatingtweets.php:1817 rotatingtweets.php:1830
+#: rotatingtweets.php:1832 rotatingtweets.php:1845
 msgid "Fade"
 msgstr ""
 
-#: rotatingtweets.php:1818
+#: rotatingtweets.php:1833
 msgid "Carousel"
 msgstr ""
 
