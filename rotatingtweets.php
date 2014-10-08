@@ -1871,10 +1871,11 @@ function rotatingtweets_possible_rotations($dropbox = FALSE) {
 				'scrollLeft' => __('Scroll Left','rotatingtweets'),
 				'scrollRight' => __('Scroll Right','rotatingtweets'),
 				'fade' => __('Fade','rotatingtweets'),
-				'carousel' => __('Carousel','rotatingtweets')
+				'carousel' => __('Carousel','rotatingtweets'),
+				'scrollLeftGap' => __('Scroll Left (with gap)','rotatingtweets')
 			);
 		else:
-			$possibleRotations = array('scrollUp','scrollDown','scrollHorz','scrollLeft','scrollRight','toss','scrollVert','fade','carousel');
+			$possibleRotations = array('scrollUp','scrollDown','scrollHorz','scrollLeft','scrollRight','toss','scrollVert','fade','carousel','scrollLeftGap');
 		endif;
 	else:
 		if($dropbox):
