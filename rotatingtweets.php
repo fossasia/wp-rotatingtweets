@@ -503,7 +503,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'carousel_count' => 0,
 			'carousel_responsive' => 0,
 			'no_emoji' => 0,
-			'show_tco_link' => 0
+			'show_tco_link' => 0,
+			'w3tc_render_to' => FALSE,
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1825,6 +1826,31 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$args['screen_name']."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
 	rotatingtweets_enqueue_scripts();
+	if(function_exists('w3_instance')):
+		$w3config = w3_instance('W3_Config');
+		$w3_late_init = $w3config->get_boolean('pgcache.late_init');
+		if( defined ('W3TC_DYNAMIC_SECURITY' ) && isset($args['w3tc_render_to'])):
+			if ($w3_late_init ):
+				$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
+				set_transient('rt_transient_name',$result, 60*60*24);
+				$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' -->$rt=get_transient('.$rt_transient_name.');echo $rt;<!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
+//			elseif(WP_DEBUG):
+			else:
+				$result .= "<!-- 'Late Initialization' not enabled on the Page Cache settings page -->";
+			endif;
+//		elseif(WP_DEBUG):
+		else:
+			if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
+				$result .= "<!-- W3TC_DYNAMIC_SECURITY not defined -->";
+			endif;
+			if (!isset($args['w3tc_render_to'])):
+				$result .= "<!-- Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
+			endif;
+			if (!$w3_late_init ):
+				$result .= "<!-- 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";			
+			endif;
+		endif;
+	endif;
 	if($print) echo $result;
 	return($result);
 }

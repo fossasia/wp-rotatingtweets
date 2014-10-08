@@ -55,6 +55,16 @@ $.fn.cycle2.transitions.toss = {
     }
 };
 
+$.fn.cycle2.transitions.scrollLeftWithGap = {
+    before: function( opts, curr, next, fwd ) {
+        opts.API.stackSlides( opts, curr, next, fwd );
+        var width = opts.container.css('overflow','hidden').width();
+        opts.cssBefore = { width: width, left : width+100, top: 0, opacity: 1, display: 'block' };
+        opts.animIn = { left: 0 };
+        opts.animOut = { left : -width-20,width:width };
+    }
+};
+
 })(jQuery);
 /*
  Script to cycle the rotating tweets
