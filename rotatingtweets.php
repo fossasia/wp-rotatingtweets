@@ -1832,8 +1832,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		if( defined ('W3TC_DYNAMIC_SECURITY' ) && isset($args['w3tc_render_to'])):
 			if ($w3_late_init ):
 				$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
-				set_transient('rt_transient_name',$result, 60*60*24);
-				$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
+				set_transient($rt_transient_name,$result, 60*60*24);
+				$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: cacheing of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
 //			elseif(WP_DEBUG):
 			else:
 				$result .= "<!-- 'Late Initialization' not enabled on the Page Cache settings page -->";
