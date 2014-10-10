@@ -49,6 +49,7 @@ class rotatingtweets_Widget extends WP_Widget {
         $title = apply_filters('widget_title', $instance['title']);
 		$positive_variables = array('screen_name','shorten_links','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag','search');
 		$newargs['displaytype']='widget';
+		$newargs['w3tc_render_to']=$args['widget_id'];
 		foreach($positive_variables as $var) {
 			if(isset($instance['tw_'.$var])):
 				$newargs[$var] = $instance['tw_'.$var];
@@ -504,7 +505,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'carousel_responsive' => 0,
 			'no_emoji' => 0,
 			'show_tco_link' => 0,
-			'w3tc_render_to' => FALSE,
+			'w3tc_render_to' => '',
+			'official_format_override'=>FALSE
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -514,6 +516,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			echo "<!-- $url => $screen_name -->";
 		}
 	endif;
+	$args['w3tc_render_to']=str_replace('widget','shortcode',$args['w3tc_render_to']);
 	$args['displaytype']='shortcode';
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
@@ -1656,10 +1659,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 								$result .= "<div class='rtw_media'>$show_media</div>";
 							endif;
 							$result .= "\n\t<div class='rtw_meta'>";
-							if($args['show_meta_reply_retweet_favorite'] || $args['displaytype']=='widget' ):
+							if($args['show_meta_reply_retweet_favorite']  && isset($args['official_format_override']) && $args['official_format_override'] ):
 								$result .= "<div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
 							endif;
-							if($args['show_meta_timestamp'] || $args['displaytype']=='widget' ):						
+							if($args['show_meta_timestamp'] && isset($args['official_format_override']) && $args['official_format_override'] ):						
 								$result .= "\n\t<div class='rtw_timestamp'>".rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
 								if(isset($retweeter)) {
 									$result .= " &middot; </div>".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
@@ -1677,7 +1680,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							$result .= "\n\t\t<div class='rtw_wide'>";
 							$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
 							$result .= "\n\t\t<div class='rtw_wide_block'><div class='rtw_info'>";
-							if($args['show_meta_timestamp'] || $args['displaytype']=='widget' ):						
+							if($args['show_meta_timestamp']  && isset($args['official_format_override']) && $args['official_format_override'] ):						
 								$result .= "\n\t\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short',$targetvalue).'</div>';
 							endif;
 							$result .= "\n\t\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
@@ -1692,7 +1695,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 								$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
 							}
 							$result .= "\n\t\t<div class='rtw_meta'>";
-							if($args['show_meta_reply_retweet_favorite'] || $args['displaytype']=='widget' ):
+							if($args['show_meta_reply_retweet_favorite']  && isset($args['official_format_override']) && $args['official_format_override']  ):
 								$result .= "<span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
 							endif;
 							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
@@ -1828,27 +1831,36 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	rotatingtweets_enqueue_scripts();
 	if(function_exists('w3_instance')):
 		$w3config = w3_instance('W3_Config');
-		$w3_late_init = $w3config->get_boolean('pgcache.late_init');
-		if( defined ('W3TC_DYNAMIC_SECURITY' ) && isset($args['w3tc_render_to'])):
-			if ($w3_late_init ):
-				$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
-				set_transient($rt_transient_name,$result, 60*60*24);
-				$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: cacheing of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
-//			elseif(WP_DEBUG):
-			else:
-				$result .= "<!-- 'Late Initialization' not enabled on the Page Cache settings page -->";
+		if(WP_DEBUG):
+			$result .= "<!-- \n";print_r($w3config);echo " -->";
+		endif;
+		$w3_pgcache_enabled = $w3config->get_boolean('pgcache.enabled');
+		if($w3_pgcache_enabled):
+			$w3_late_init = $w3config->get_boolean('pgcache.late_init');
+			if( defined ('W3TC_DYNAMIC_SECURITY' ) && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to'])):
+				if ($w3_late_init ):
+					$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
+					set_transient($rt_transient_name,$result, 60*60*72);
+					$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: cacheing of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
+					if(WP_DEBUG):
+						$result .= "<!-- Rotating Tweets W3TC Fragment Caching Success ! -->";
+					endif;
+				elseif(WP_DEBUG):
+					$result .= "<!-- Rotating Tweets W3TC Fragment Caching Not Functioning: 'Late Initialization' not enabled on the Page Cache settings page -->";
+				endif;
+			elseif(WP_DEBUG):
+				if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
+					$result .= "<!--  Rotating Tweets W3TC Fragment Caching Not Functioning: W3TC_DYNAMIC_SECURITY not defined -->";
+				endif;
+				if (!isset($args['w3tc_render_to'])):
+					$result .= "<!--  Rotating Tweets W3TC Fragment Caching Not Functioning: Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
+				endif;
+				if (!$w3_late_init ):
+					$result .= "<!-- Rotating Tweets W3TC Fragment Caching Not Functioning: 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";			
+				endif;
 			endif;
-//		elseif(WP_DEBUG):
-		else:
-			if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
-				$result .= "<!-- W3TC_DYNAMIC_SECURITY not defined -->";
-			endif;
-			if (!isset($args['w3tc_render_to'])):
-				$result .= "<!-- Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
-			endif;
-			if (!$w3_late_init ):
-				$result .= "<!-- 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";			
-			endif;
+		elseif(WP_DEBUG):
+			$result .= "<!-- Rotating Tweets W3TC Fragment Caching Not Functioning: Page Cache not enabled on the W3 Total Cache settings page -->";					
 		endif;
 	endif;
 	if($print) echo $result;
