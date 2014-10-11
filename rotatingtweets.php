@@ -1829,38 +1829,41 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$args['screen_name']."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
 	rotatingtweets_enqueue_scripts();
-	if(function_exists('w3_instance')):
+	if( defined('W3TC_DYNAMIC_SECURITY') && function_exists('w3_instance')):
 		$w3config = w3_instance('W3_Config');
+		$w3_pgcache_enabled = $w3config->get_boolean('pgcache.enabled');
+		$w3_pgcache_engine = $w3config->get_string('pgcache.engine');
+		$w3_late_init = $w3config->get_boolean('pgcache.late_init');
+
 		if(WP_DEBUG):
 			$result .= "<!-- \n".print_r($w3config,true)." -->";
 		endif;
-		$w3_pgcache_enabled = $w3config->get_boolean('pgcache.enabled');
-		if($w3_pgcache_enabled):
-			$w3_late_init = $w3config->get_boolean('pgcache.late_init');
-			if( defined ('W3TC_DYNAMIC_SECURITY' ) && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to'])):
-				if ($w3_late_init ):
-					$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
-					set_transient($rt_transient_name,$result, 60*60*72);
-					$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: caching of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
-					if(WP_DEBUG):
-						$result .= "<!-- Rotating Tweets W3TC Fragment Caching Success ! -->";
-					endif;
-				elseif(WP_DEBUG):
-					$result .= "<!-- Rotating Tweets W3TC Fragment Caching Not Functioning: 'Late Initialization' not enabled on the Page Cache settings page -->";
-				endif;
-			elseif(WP_DEBUG):
-				if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
-					$result .= "<!--  Rotating Tweets W3TC Fragment Caching Not Functioning: W3TC_DYNAMIC_SECURITY not defined -->";
-				endif;
-				if (!isset($args['w3tc_render_to'])):
-					$result .= "<!--  Rotating Tweets W3TC Fragment Caching Not Functioning: Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
-				endif;
-				if (!$w3_late_init ):
-					$result .= "<!-- Rotating Tweets W3TC Fragment Caching Not Functioning: 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";			
-				endif;
+
+		if( $w3_pgcache_enabled && ($w3_pgcache_engine == 'file') && $w3_late_init && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to'])):
+			$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
+			set_transient($rt_transient_name,$result, 60*60*72);
+			$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: caching of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
+			if(WP_DEBUG):
+				$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Success ! -->";
 			endif;
 		elseif(WP_DEBUG):
-			$result .= "<!-- Rotating Tweets W3TC Fragment Caching Not Functioning: Page Cache not enabled on the W3 Total Cache settings page -->";					
+			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Start Diagnostics -->";
+			if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
+				$result .= "<!-- W3TC_DYNAMIC_SECURITY not defined -->";
+			endif;
+			if( !$w3_pgcache_enabled ):
+				$result .= "<!-- Page Cache not enabled on the W3 Total Cache settings page -->";					
+			endif;
+			if( $w3_pgcache_engine != 'file' ):
+				$result .= "<!-- Page Cache Method not equal to 'Disk: Basic' -->";					
+			endif;
+			if (!isset($args['w3tc_render_to'])):
+				$result .= "<!-- Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
+			endif;
+			if (!$w3_late_init ):
+				$result .= "<!-- 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";			
+			endif;
+			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: End Diagnostics -->";
 		endif;
 	endif;
 	if($print) echo $result;
