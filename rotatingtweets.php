@@ -1841,7 +1841,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 				if ($w3_late_init ):
 					$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
 					set_transient($rt_transient_name,$result, 60*60*72);
-					$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: cacheing of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
+					$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: caching of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
 					if(WP_DEBUG):
 						$result .= "<!-- Rotating Tweets W3TC Fragment Caching Success ! -->";
 					endif;
