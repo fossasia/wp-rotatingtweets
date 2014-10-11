@@ -1832,7 +1832,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 	if(function_exists('w3_instance')):
 		$w3config = w3_instance('W3_Config');
 		if(WP_DEBUG):
-			$result .= "<!-- \n";print_r($w3config);echo " -->";
+			$result .= "<!-- \n".print_r($w3config,true)." -->";
 		endif;
 		$w3_pgcache_enabled = $w3config->get_boolean('pgcache.enabled');
 		if($w3_pgcache_enabled):
