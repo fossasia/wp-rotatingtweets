@@ -506,7 +506,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'no_emoji' => 0,
 			'show_tco_link' => 0,
 			'w3tc_render_to' => '',
-			'official_format_override'=>FALSE
+			'official_format_override'=>FALSE,
+			'no_cache'=>FALSE
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1829,20 +1830,23 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$args['screen_name']."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
 	rotatingtweets_enqueue_scripts();
-	if( defined('W3TC_DYNAMIC_SECURITY') && function_exists('w3_instance')):
+	if( defined('W3TC_DYNAMIC_SECURITY') && function_exists('w3_instance') && !( isset($args['no_cache']) && $args['no_cache']==TRUE )):
 		$w3config = w3_instance('W3_Config');
 		$w3_pgcache_enabled = $w3config->get_boolean('pgcache.enabled');
 		$w3_pgcache_engine = $w3config->get_string('pgcache.engine');
 		$w3_late_init = $w3config->get_boolean('pgcache.late_init');
-
+/*
 		if(WP_DEBUG):
 			$result .= "<!-- \n".print_r($w3config,true)." -->";
 		endif;
-
+*/
 		if( $w3_pgcache_enabled && ($w3_pgcache_engine == 'file') && $w3_late_init && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to'])):
 			$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
-			set_transient($rt_transient_name,$result, 60*60*72);
-			$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){$rt="Rotating Tweets Error: caching of new data failed";} echo $rt; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
+			$rt_cached_args = $args;
+			$rt_cached_args['no_cache']=TRUE;
+			$rt_w3tc_cache_lifetime = $w3config->get_integer('pgcache.lifetime');
+			set_transient($rt_transient_name,$rt_cached_args, $rt_w3tc_cache_lifetime * 2 );
+			$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){echo "Rotating Tweets Error: no data in cache";}else{rotatingtweets_display($rt);}; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
 			if(WP_DEBUG):
 				$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Success ! -->";
 			endif;
