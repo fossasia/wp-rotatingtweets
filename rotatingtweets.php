@@ -101,7 +101,7 @@ class rotatingtweets_Widget extends WP_Widget {
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
 					break;
 			}
-			$rt_tweet_string = rotating_tweets_display($tweets,$newargs);
+			$rt_tweet_string = rotating_tweets_display($tweets,$newargs,false);
 		elseif(WP_DEBUG):
 			$rt_tweet_string .= "<!-- Transient ".$newargs['text_cache_id']." loaded -->";
 		endif;
@@ -1298,7 +1298,7 @@ function rotatingtweets_convert_charset($string) {
 	return $string;
 }
 # Displays the tweets
-function rotating_tweets_display($json,$args,$print=TRUE) {
+function rotating_tweets_display($json,$args,$print=FALSE) {
 	unset($result);
 	$rt_cache_delay = rotatingtweets_get_cache_delay();
 	$tweet_count = max(1,intval($args['tweet_count']));
