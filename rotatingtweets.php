@@ -78,30 +78,34 @@ class rotatingtweets_Widget extends WP_Widget {
 			break;
 		}
 		if(empty($newargs['timeout'])) $newargs['timeout'] = 4000;
-		switch($newargs['show_type']) {
-			case 1:
-				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],true);
-				break;
-			case 2:
-				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['search']);
-//				$newargs['screen_name'] = '';   // Originally put in to avoid confusion when people have a 'follow' button and a search tweet
-				break;
-			case 3:
-				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,false,$newargs['list_tag']);
-				break;			
-			case 0:
-			default:
-				$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
-				break;
-		}
-        ?>
-              <?php echo $before_widget; 
-						if ( $title )
-							echo $before_title . $title . $after_title; 
-						rotating_tweets_display($tweets,$newargs,TRUE);
-					echo $after_widget;
-					?>
-        <?php
+		$newargs['text_cache_id'] = "rt-wg-".md5(serialize($newargs));
+		$rt_tweet_string = get_transient($newargs['text_cache_id']);
+		echo $before_widget;
+		if ( $title ):
+				echo $before_title . $title . $after_title; 
+		endif;		
+		if(empty($rt_tweet_string)):
+			switch($newargs['show_type']) {
+				case 1:
+					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],true);
+					break;
+				case 2:
+					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['search']);
+	//				$newargs['screen_name'] = '';   // Originally put in to avoid confusion when people have a 'follow' button and a search tweet
+					break;
+				case 3:
+					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,false,$newargs['list_tag']);
+					break;			
+				case 0:
+				default:
+					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
+					break;
+			}
+			$rt_tweet_string = rotating_tweets_display($tweets,$newargs);
+		elseif(WP_DEBUG):
+			$rt_tweet_string .= "<!-- Transient ".$newargs['text_cache_id']." loaded -->";
+		endif;
+		echo $rt_tweet_string.$after_widget;
     }
 
     /** @see WP_Widget::update */
@@ -507,7 +511,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'show_tco_link' => 0,
 			'w3tc_render_to' => '',
 			'official_format_override'=>FALSE,
-			'no_cache'=>FALSE
+			'no_cache'=>FALSE,
+			'text_cache_id'=>FALSE
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -518,13 +523,18 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 		}
 	endif;
 	$args['w3tc_render_to']=str_replace('widget','shortcode',$args['w3tc_render_to']);
-//	$args['text_cache_id'] = "rt-".md5(serialize($atts));
+	if(!$args['text_cache_id']) $args['text_cache_id'] = "rt-sc-".md5(serialize($args));
 	$args['displaytype']='shortcode';
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
-	$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list);
-	$returnstring = rotating_tweets_display($tweets,$args,$print);
+	$returnstring = get_transient($args['text_cache_id']);
+	if(strlen($returnstring)==0):
+		$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list);
+		$returnstring = rotating_tweets_display($tweets,$args,$print);
+	elseif(WP_DEBUG):
+		$returnstring .= "<!-- Transient ".$args['text_cache_id']." loaded -->";
+	endif;
 	return $returnstring;
 }
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display_shortcode' );
@@ -933,7 +943,15 @@ function rotatingtweets_shrink_cache() {
 	if(WP_DEBUG) echo "<!-- There are now ".$numberidentities." identities cached -->";
 	update_option($optionname,$option);
 }
-
+function rotatingtweets_get_cache_delay() {
+	$cacheoption = get_option('rotatingtweets-api-settings');
+	if(!isset($cacheoption['cache_delay'])):
+		$cache_delay = 120;
+	else:
+		$cache_delay = max(60,intval($cacheoption['cache_delay']));
+	endif;
+	return($cache_delay);
+}
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
 	# Set timer
@@ -955,12 +973,15 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	else:
 		$tw_search = trim($tw_search);
 	endif;
+	$cache_delay = rotatingtweets_get_cache_delay();
+/*
 	$cacheoption = get_option('rotatingtweets-api-settings');
 	if(!isset($cacheoption['cache_delay'])):
 		$cache_delay = 120;
 	else:
 		$cache_delay = max(60,intval($cacheoption['cache_delay']));
 	endif;
+*/
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
 	
@@ -1115,7 +1136,7 @@ function rotatingtweets_shrink_json($json) {
 	endif;
 	return($return);
 }
-function rotatingtweets_shrink_element($json) {
+function rotatingtweets_shrink_element($json,$no_emoji=0) {
 	global $args;
 	$rt_top_elements = array('text','retweeted_status','user','entities','source','id_str','created_at','coordinates');
 	$return = array();
@@ -1131,8 +1152,10 @@ function rotatingtweets_shrink_element($json) {
 			case "retweeted_status":
 				$return[$rt_element]=rotatingtweets_shrink_element($json[$rt_element]);
 				break;
+			case "text":
+				$json[$rt_element] = rotatingtweets_convert_charset($json[$rt_element]);			
 			default:
-				if(isset($args['no_emoji']) && $args['no_emoji']):
+				if($no_emoji):
 					$before='/\\p{C}/u'; # Removed all 'other' characters - http://php.net/manual/en/regexp.reference.unicode.php
 					$after='';
 					$json[$rt_element] = str_replace($before,$after,$json[$rt_element]);
@@ -1260,10 +1283,24 @@ function rotatingtweets_trigger_rate_limiting() {
 		$ratedata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apidata);
 	}
 }
-
+function rotatingtweets_convert_charset($string) {
+	if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8' && strtoupper(DB_CHARSET)!= '' ):
+		$new_string = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$string);
+		if(empty($new_string)):
+			if(WP_DEBUG):
+				echo "<!-- iconv to ".DB_CHARSET." failed -->";
+			endif;
+			return $string;
+		else:
+			return $new_string;
+		endif;
+	endif;
+	return $string;
+}
 # Displays the tweets
 function rotating_tweets_display($json,$args,$print=TRUE) {
 	unset($result);
+	$rt_cache_delay = rotatingtweets_get_cache_delay();
 	$tweet_count = max(1,intval($args['tweet_count']));
 	$timeout = max(intval($args['timeout']),0);
 	$defaulturllength = 29;
@@ -1372,6 +1409,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$result .= "\n\t<div class = 'rotatingtweet'><p class='rtw_main'>". __('Problem retrieving data from Twitter','rotatingtweets'). "</p></div>";
 		if(!empty($error)):
 			$result .= "\n<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>".sprintf(__('%3$s error code: %1$s - %2$s','rotatingtweets'), esc_html($error[0]['code']), esc_html($error[0]['message']),esc_html($error[0]['type'])). "</p></div>";
+			$rt_cache_delay = 10;
 			switch($error[0]['code']) {
 				case 88:
 					$rate = rotatingtweets_get_rate_data();
@@ -1379,6 +1417,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 					$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>". sprintf(__('This website is currently <a href=\'%s\'>rate-limited by Twitter</a>.','rotatingtweets'),'https://dev.twitter.com/docs/rate-limiting-faq') . "</p></div>";
 					if(isset($rate['hourly_limit']) && $rate['hourly_limit']>0 && $rate['remaining_hits'] == 0):
 						$waittimevalue = intval(($rate['reset_time_in_seconds'] - time())/60);
+						$rt_cache_delay = $rate['reset_time_in_seconds'] - time();
 						$waittime = sprintf(_n('Next attempt to get data will be in %d minute','Next attempt to get data will be in %d minutes',$waittimevalue,'rotatingtweets'),$waittimevalue);
 						if($waittimevalue == 0) $waittime = __("Next attempt to get data will be in less than a minute",'rotatingtweets');
 						$result .= "\n\t<div class = 'rotatingtweet' style='display:none'><p class='rtw_main'>{$waittime}.</p></div>";
@@ -1565,7 +1604,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 							// $before[]='/\\p{InGreek_Extended}/u'; #Not supported by PCRE http://php.net/manual/en/regexp.reference.unicode.php
 							$before[]='/\\p{C}/u'; # Removed all 'other' characters - http://php.net/manual/en/regexp.reference.unicode.php
 							$after[]='';
-						endif;						
+						endif;	
+/*
 						if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8' && strtoupper(DB_CHARSET)!= '' ):
 							$new_text = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$main_text);
 							if(empty($main_text)):
@@ -1576,6 +1616,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 								$main_text = $new_text;
 							endif;
 						endif;
+*/
+						$main_text = rotatingtweets_convert_charset($main_text);
 						$new_text = preg_replace($before,$after,$main_text);
 						if(empty($new_text)):
 							if(WP_DEBUG):
@@ -1839,6 +1881,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$result .= "\n<div class='rtw_follow follow-button'><a href='http://twitter.com/".$args['screen_name']."' class='twitter-follow-button'{$shortenvariables} title='".$followUserText."' data-lang='{$twitterlocale}'>".$followUserText."</a></div>";
 	endif;
 	rotatingtweets_enqueue_scripts();
+	$rt_cache_delay = max($rt_cache_delay,20);
 	if( defined('W3TC_DYNAMIC_SECURITY') && function_exists('w3_instance') && !( isset($args['no_cache']) && $args['no_cache']==TRUE )):
 		$w3config = w3_instance('W3_Config');
 		$w3_pgcache_enabled = $w3config->get_boolean('pgcache.enabled');
@@ -1854,8 +1897,10 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$rt_cached_args = $args;
 			$rt_cached_args['no_cache']=TRUE;
 			$rt_w3tc_cache_lifetime = $w3config->get_integer('pgcache.lifetime');
+			$rt_cached_args['text_cache_id'] = "rt-mf-".substr($args['text_cache_id'],6,1000);
 			set_transient($rt_transient_name,$rt_cached_args, $rt_w3tc_cache_lifetime * 2 );
-			$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){echo "Rotating Tweets Error: no data in cache";}else{rotatingtweets_display($rt);}; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
+			set_transient($rt_cached_args['text_cache_id'],$result,$rt_cache_delay);	
+			$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_cached_args['text_cache_id'].'");if(!empty($rt)){echo $rt;}else{$args=get_transient("'.$rt_transient_name.'");rotatingtweets_display($args);}; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
 //			if(WP_DEBUG):
 				$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Success ! -->";
 //			endif;
@@ -1877,6 +1922,14 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 				$result .= "<!-- 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";			
 			endif;
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: End Diagnostics -->";
+		endif;
+	endif;
+	$rt_set_transient = set_transient($args['text_cache_id'],$result,$rt_cache_delay);	
+	if(WP_DEBUG):
+		if($rt_set_transient):
+			echo "<!-- Transient ".$args['text_cache_id']." stored for $rt_cache_delay seconds -->";
+		else:
+			echo "<!-- Transient ".$args['text_cache_id']." FAILED to store for $rt_cache_delay seconds -->";
 		endif;
 	endif;
 	if($print) echo $result;
