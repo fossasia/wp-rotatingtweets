@@ -977,6 +977,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	$optionname = "rotatingtweets-cache";
 	$option = delete_option($optionname);
 	$transientname = substr('rtc-'.sanitize_file_name($stringname),0,45);
+//	$transientname = str_replace(array('#','_'),'-',$transientname);
 	$option = get_transient($transientname);
 
 	if(WP_DEBUG && !$option):
@@ -1855,9 +1856,9 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$rt_w3tc_cache_lifetime = $w3config->get_integer('pgcache.lifetime');
 			set_transient($rt_transient_name,$rt_cached_args, $rt_w3tc_cache_lifetime * 2 );
 			$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_transient_name.'");if(empty($rt)){echo "Rotating Tweets Error: no data in cache";}else{rotatingtweets_display($rt);}; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
-			if(WP_DEBUG):
+//			if(WP_DEBUG):
 				$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Success ! -->";
-			endif;
+//			endif;
 		elseif(WP_DEBUG):
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Start Diagnostics -->";
 			if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
