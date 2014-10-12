@@ -1892,7 +1892,7 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			$result .= "<!-- \n".print_r($w3config,true)." -->";
 		endif;
 */
-		if( $w3_pgcache_enabled && ($w3_pgcache_engine == 'file') && $w3_late_init && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to'])):
+		if( $w3_pgcache_enabled && ($w3_pgcache_engine != 'file_generic') && $w3_late_init && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to'])):
 			$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
 			$rt_cached_args = $args;
 			$rt_cached_args['no_cache']=TRUE;
@@ -1912,8 +1912,8 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 			if( !$w3_pgcache_enabled ):
 				$result .= "<!-- Page Cache not enabled on the W3 Total Cache settings page -->";					
 			endif;
-			if( $w3_pgcache_engine != 'file' ):
-				$result .= "<!-- Page Cache Method not equal to 'Disk: Basic' -->";					
+			if( $w3_pgcache_engine == 'file_generic' ):
+				$result .= "<!-- Fragment Caching does not work if Page Cache Method is 'Disk: Enhanced' -->";					
 			endif;
 			if (!isset($args['w3tc_render_to'])):
 				$result .= "<!-- Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
