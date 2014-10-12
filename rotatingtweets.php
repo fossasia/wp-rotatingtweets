@@ -1887,12 +1887,13 @@ function rotating_tweets_display($json,$args,$print=TRUE) {
 		$w3_pgcache_enabled = $w3config->get_boolean('pgcache.enabled');
 		$w3_pgcache_engine = $w3config->get_string('pgcache.engine');
 		$w3_late_init = $w3config->get_boolean('pgcache.late_init');
+		$w3_browsercompression =$w3config->get_boolean('browsercache.enabled') && $w3config->get_boolean('browsercache.html.compression') && function_exists('gzencode') && isset($_SERVER['HTTP_ACCEPT_ENCODING']) && (stristr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false);
 /*
 		if(WP_DEBUG):
 			$result .= "<!-- \n".print_r($w3config,true)." -->";
 		endif;
 */
-		if( $w3_pgcache_enabled && ($w3_pgcache_engine != 'file_generic') && $w3_late_init && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to'])):
+		if( $w3_pgcache_enabled && ($w3_pgcache_engine != 'file_generic') && $w3_late_init && isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to']) && !$w3_browsercompression):
 			$rt_transient_name = substr(sanitize_file_name('rt_w3tc_'.$args['w3tc_render_to']),0,44);
 			$rt_cached_args = $args;
 			$rt_cached_args['no_cache']=TRUE;
