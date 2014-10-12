@@ -21,6 +21,7 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 * Replaces [t.co](http://t.co) links with the original link
 * Caches the most recent data from Twitter to avoid problems with rate limiting
 * Uses [jQuery](http://jquery.com/), [jQuery.Cycle](http://jquery.malsup.com/cycle/) and [jQuery.Cycle2](http://jquery.malsup.com/cycle2/) to produce a nice smooth result.
+* Compatible with [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/).
 * **Multi-lingual** - now set up to be multi-lingual. The Twitter 'follow' button is automatically translated to match your site's language setting [if Twitter has made the appropriate language available](https://dev.twitter.com/docs/api/1.1/get/help/languages). Also uses [Wordpress's multi-lingual capability](http://codex.wordpress.org/I18n_for_WordPress_Developers) to enable translation of all the other text used by the plug-in via language packs.
 
 Currently the following languages are available:
@@ -95,6 +96,10 @@ Possible variables for the shortcode include:
 	* `screen_name_plural` = `'0'` or `'1'` - experimental option that allows you to have a plural possessive in the default display format (e.g. *British Lions' Twitter*) - default is `'0'`
 	* `tweet_length` = maximum number of characters to show in tweet - default is `'0'` which allows whole tweet to be shown
 	* `no_emoji` = `'0'` or `'1'` - experimental option that removes emoji from the feed - default is `'0'`
+	* `official_format_override` = `'0'` or `'1'` - enables you to change the settings for `show_meta_reply_retweet_favorite` and `show_meta_timestamp` on the 'official formats'.
+
+* **Caching**
+	* `w3tc_render_to` = 'your_choice_of_random_string' - used to support 'fragment caching' by [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/).  For this to work, you also need to ensure that `W3TC_DYNAMIC_SECURITY` is defined in your `wp-config.php` file and that you not using 'HTTP Compression' on the 'Browser Cache' settings page or 'Enhanced Disk caching' on the 'Page Cache' settings page.
 	
 * **Twitter follow button**
 	* `show_follow` = `'0'` or `'1'` - show follow button - default is `'0'`
@@ -174,10 +179,15 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.4 =
-* Ensures all images use `https://` link for compatibility with SSL-secured sites
+= 1.7.5 =
+* Much faster caching. Compatibility with W3 Total Cache.
 
 == Changelog ==
+= 1.7.5 =
+* Much faster and more reliable caching. 
+* Compatibility with W3 Total Cache.
+* New `scrollLeftGap` transition 
+
 = 1.7.4 =
 * Ensures all images use `https://` link for compatibility with SSL-secured sites
 
