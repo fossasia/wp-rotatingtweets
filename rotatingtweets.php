@@ -518,6 +518,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 		}
 	endif;
 	$args['w3tc_render_to']=str_replace('widget','shortcode',$args['w3tc_render_to']);
+//	$args['text_cache_id'] = "rt-".md5(serialize($atts));
 	$args['displaytype']='shortcode';
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
@@ -899,7 +900,7 @@ function rotatingtweets_shrink_cache() {
 	$optionname = "rotatingtweets-cache";
 	$option = get_option($optionname);
 	$numberidentities = count($option);
-	if(WP_DEBUG) echo "<!-- There are currently ".$numberidentities." identities cached -->";
+	if(WP_DEBUG) echo "<!-- There are currently ".$numberidentities." Rotating Tweets identities cached -->";
 	# If there are fewer than 10 sets of information cached - just return (for speed)
 	if ( !is_array($option) or $numberidentities == 0 ) return;
 	# Now make sure that we don't overwrite 'live' tweets
@@ -937,8 +938,6 @@ function rotatingtweets_shrink_cache() {
 function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
 	# Set timer
 	$rt_starttime = microtime(true);
-	# Check cache
-	rotatingtweets_shrink_cache();
 	# Clear up variables
 	$tw_screen_name = trim(remove_accents(str_replace('@','',$tw_screen_name)));
 	if($tw_list):
@@ -967,7 +966,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	
 	# Get the option strong
 	if($tw_search) {
-		$stringname = 'search-'.$tw_include_rts.$tw_exclude_replies.'-'.sanitize_file_name($tw_search);
+		$stringname = 'search-'.$tw_include_rts.$tw_exclude_replies.'-'.$tw_search;
 	} elseif ($tw_get_favorites) {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies.'favorites';
 	} elseif ($tw_list) {
@@ -976,13 +975,18 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	}
 	$optionname = "rotatingtweets-cache";
-	$option = get_option($optionname);
+	$option = delete_option($optionname);
+	$transientname = substr('rtc-'.sanitize_file_name($stringname),0,45);
+	$option = get_transient($transientname);
+
+	if(WP_DEBUG && !$option):
+		echo "<!-- Option failed to load -->";
+//		echo "<!-- Option \n";print_r($option);echo " -->";
+	endif;
+
 	# Attempt to deal with 'Cannot use string offset as an array' error
 	$timegap = $cache_delay + 1;
 	if(is_array($option)):
-		if(WP_DEBUG):
-			echo "\n<!-- var option is an array -->";
-		endif;
 		if(isset($option[$stringname]['json'][0])):
 			if(WP_DEBUG) echo "<!-- option[$stringname] exists -->";
 			if(is_array($option[$stringname]['json'][0])):
@@ -1004,7 +1008,9 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		endif;
 	else:
 		if(WP_DEBUG):
-			echo "\n<!-- var option is NOT an array -->";
+			echo "\n<!-- var option is NOT an array\n";
+			print_r($option);
+			echo "\n-->";
 		endif;
 		unset($option);
 	endif;
@@ -1046,14 +1052,14 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			$rate = rotatingtweets_get_rate_data();
 			if($rate && $rate['remaining_hits'] == 0):
 				$option[$stringname]['datetime']= $rate['reset_time_in_seconds'] - $cache_delay + 1;
-				update_option($optionname,$option);
+				set_transient($transientname,$option,60*60*24*7);
 			else:
 				$option[$stringname]['datetime']=time();
-				update_option($optionname,$option);
+				set_transient($transientname,$option,60*60*24*7);
 			endif;
 		else:
 			$option[$stringname]['datetime']=time();
-			update_option($optionname,$option);
+			set_transient($transientname,$option,60*60*24*7);
 		endif;
 	elseif(!empty($twitterjson['error'])):
 		# If Twitter is being rate limited, delays the next load until the reset time
@@ -1061,7 +1067,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$rate = rotatingtweets_get_rate_data();
 		if($rate && $rate['remaining_hits'] == 0):
 			$option[$stringname]['datetime']= $rate['reset_time_in_seconds'] - $cache_delay + 1;
-			update_option($optionname,$option);
+			set_transient($transientname,$option,60*60*24*7);
 		endif;
 	elseif(!empty($twitterjson)):
 		unset($firstentry);
@@ -1081,10 +1087,12 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			$latest_json = rotatingtweets_shrink_json($twitterjson);
 			$option[$stringname]['json']=$latest_json;
 			$option[$stringname]['datetime']=time();
-			if(WP_DEBUG):
-				echo "<!-- Storing cache entry for $stringname in $optionname -->";
+			$rtcacheresult = set_transient($transientname,$option,60*60*24*7);
+			if($rtcacheresult && WP_DEBUG):
+				echo "<!-- Successfully stored cache entry for $stringname in $transientname -->";
+			elseif(WP_DEBUG):
+				echo "<!-- Failed to store cache entry for $stringname in $transientname -->";
 			endif;
-			update_option($optionname,$option);
 		endif;
 	endif;
 	if(isset($latest_json)):
