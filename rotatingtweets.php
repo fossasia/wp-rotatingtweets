@@ -1921,7 +1921,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 				$result .= "<!-- 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";
 			endif;
 			if ( $w3_browsercompression ):
-				$result .= "<!-- Browser Compression needs to be disabled on the W3 Total Cache Browser Cache settings page -->";
+				$result .= "<!-- HTTP Compression needs to be disabled on the W3 Total Cache Browser Cache settings page -->";
 			endif;
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: End Diagnostics -->";
 		endif;
