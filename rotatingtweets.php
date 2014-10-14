@@ -1904,33 +1904,26 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 				$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Success ! -->";
 			endif;
 		elseif(WP_DEBUG || $w3_debug ):
-			$w3_minifyhtml = $w3config->get_boolean('minify.html.enable');
-			if($w3_minifyhtml) {
-				$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' echo "';
-			}
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Start Diagnostics -->";
 			if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
 				$result .= "<!-- W3TC_DYNAMIC_SECURITY not defined -->";
 			endif;
 			if( !$w3_pgcache_enabled ):
-				$result .= "<!-- Page Cache not enabled on the W3 Total Cache settings page -->";					
+				$result .= "<!-- Page Cache not enabled on the W3 Total Cache settings page -->";
 			endif;
 			if( $w3_pgcache_engine == 'file_generic' ):
-				$result .= "<!-- Fragment Caching does not work if Page Cache Method is 'Disk: Enhanced' -->";					
+				$result .= "<!-- Fragment Caching does not work if Page Cache Method is 'Disk: Enhanced' -->";
 			endif;
 			if (!isset($args['w3tc_render_to'])):
 				$result .= "<!-- Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
 			endif;
 			if (!$w3_late_init ):
-				$result .= "<!-- 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";			
+				$result .= "<!-- 'Late Initialization' not enabled on the W3 Total Cache Page Cache settings page -->";
 			endif;
 			if ( $w3_browsercompression ):
-				$result .= "<!-- Browser Compression needs to be disabled on the W3 Total Cache Browser Cache settings page -->";			
+				$result .= "<!-- Browser Compression needs to be disabled on the W3 Total Cache Browser Cache settings page -->";
 			endif;
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: End Diagnostics -->";
-			if($w3_minifyhtml) {
-				$result = '" --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';
-			}
 		endif;
 	endif;
 	$rt_set_transient = set_transient($args['text_cache_id'],$result,$rt_cache_delay);	
