@@ -904,7 +904,8 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 	endif;
 	return($result);
 }
-# Clear tweets (if too much memory used)
+/*
+# Clear tweets (if too much memory used) // now handled by using separate transients
 function rotatingtweets_shrink_cache() {
 	# Solves a problem that 40+ caches can overload the memory - cuts it to fewer without risking deletion of the tweets on display
 	$optionname = "rotatingtweets-cache";
@@ -943,6 +944,7 @@ function rotatingtweets_shrink_cache() {
 	if(WP_DEBUG) echo "<!-- There are now ".$numberidentities." identities cached -->";
 	update_option($optionname,$option);
 }
+*/
 function rotatingtweets_get_cache_delay() {
 	$cacheoption = get_option('rotatingtweets-api-settings');
 	if(!isset($cacheoption['cache_delay'])):
@@ -995,8 +997,8 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	} else {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	}
-	$optionname = "rotatingtweets-cache";
-	$option = delete_option($optionname);
+//	$optionname = "rotatingtweets-cache";
+//	$option = delete_option($optionname);
 	$transientname = substr('rtc-'.sanitize_file_name($stringname),0,45);
 //	$transientname = str_replace(array('#','_'),'-',$transientname);
 	$option = get_transient($transientname);
@@ -1902,6 +1904,10 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 				$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Success ! -->";
 			endif;
 		elseif(WP_DEBUG || $w3_debug ):
+			$w3_minifyhtml = $w3config->get_boolean('minify.html.enable');
+			if($w3_minifyhtml) {
+				$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' echo "';
+			}
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Start Diagnostics -->";
 			if( !defined ('W3TC_DYNAMIC_SECURITY' ) ):
 				$result .= "<!-- W3TC_DYNAMIC_SECURITY not defined -->";
@@ -1922,6 +1928,9 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 				$result .= "<!-- Browser Compression needs to be disabled on the W3 Total Cache Browser Cache settings page -->";			
 			endif;
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: End Diagnostics -->";
+			if($w3_minifyhtml) {
+				$result = '" --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';
+			}
 		endif;
 	endif;
 	$rt_set_transient = set_transient($args['text_cache_id'],$result,$rt_cache_delay);	
