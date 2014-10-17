@@ -1914,7 +1914,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			if( $w3_pgcache_engine == 'file_generic' ):
 				$result .= "<!-- Fragment Caching does not work if Page Cache Method is 'Disk: Enhanced' -->";
 			endif;
-			if (!isset($args['w3tc_render_to'])):
+			if (!(isset($args['w3tc_render_to']) && !empty($args['w3tc_render_to']))):
 				$result .= "<!-- Rotating Tweets shortcode option 'w3tc_render_to' not defined -->";
 			endif;
 			if (!$w3_late_init ):
