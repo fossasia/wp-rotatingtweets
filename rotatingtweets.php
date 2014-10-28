@@ -1713,10 +1713,10 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 								$result .= "<div class='rtw_media'>$show_media</div>";
 							endif;
 							$result .= "\n\t<div class='rtw_meta'>";
-							if($args['show_meta_reply_retweet_favorite']  && isset($args['official_format_override']) && $args['official_format_override'] ):
+							if($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override'] ):
 								$result .= "<div class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 1,$targetvalue).'</div>';
 							endif;
-							if($args['show_meta_timestamp'] && isset($args['official_format_override']) && $args['official_format_override'] ):						
+							if($args['show_meta_timestamp'] || !isset($args['official_format_override']) || !$args['official_format_override'] ):						
 								$result .= "\n\t<div class='rtw_timestamp'>".rotatingtweets_timestamp_link($twitter_object,'long',$targetvalue);
 								if(isset($retweeter)) {
 									$result .= " &middot; </div>".rotatingtweets_user_intent($retweeter,$twitterlocale,sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue);
@@ -1749,11 +1749,11 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 								$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
 							}
 							$result .= "\n\t\t<div class='rtw_meta'>";
-							if($args['show_meta_reply_retweet_favorite']  && isset($args['official_format_override']) && $args['official_format_override']  ):
+							if($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override']  ):
 								$result .= "<span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
 							endif;
-							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-								if(!$args['show_meta_reply_retweet_favorite']):
+							if(isset($args['show_meta_prev_next']) || !$args['show_meta_prev_next'] || !$args['np_pos']=='tweets'):
+								if(!$args['show_meta_reply_retweet_favorite'] && isset($args['official_format_override']) && $args['official_format_override'] ):
 									echo "<span class='rtw_intents'>";
 								endif;
 								$result .= wp_kses_post($args['middot']).$nextprev."</span>";
