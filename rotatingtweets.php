@@ -2018,6 +2018,13 @@ function rotatingtweets_enqueue_scripts() {
 				'jquery-cycle2-scrollvert' => plugins_url('cyclone-slider-2/libs/cycle2/jquery.cycle2.scrollVert.min.js'),
 				'rotating_tweet' => plugins_url('js/rotatingtweets_v2_cyclone.js', __FILE__)
 			);
+		elseif ( $style == 'digital catapult' || $style == 'digitalcatapult' ):
+			$rt_enqueue_script_list = array(
+				'jquery-cycle2' => get_template_directory_uri() . '/scripts/jquery.cycle2.min.js' ,
+				'jquery-cycle2_scrollvert' => plugins_url('js/jquery.cycle2.scrollVert.js', __FILE__),
+				'jquery-cycle2_carousel' => plugins_url('js/jquery.cycle2.carousel.js', __FILE__),
+				'rotating_tweet' => plugins_url('js/rotatingtweets_v2_cyclone.js', __FILE__)
+			);		
 		elseif ( function_exists( 'newswire_custom_scripts' ) ):
 			$rt_enqueue_script_list = array(
 				'cycle2' => get_template_directory_uri() . '/library/js/jquery.cycle2.min.js' ,
