@@ -1757,19 +1757,20 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 							if(isset($retweeter)) {
 								$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
 							}
-							$result .= "\n\t\t<div class='rtw_meta'>";
-							if($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override'] || $args['displaytype']=='widget' ):
-								$result .= "<span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
-							endif;
-							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
-								if(!$args['show_meta_reply_retweet_favorite'] && isset($args['official_format_override']) && $args['official_format_override'] ):
-									echo "<span class='rtw_intents'>";
+							if($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override'] || $args['displaytype']=='widget' || (isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets') ):
+								$result .= "\n\t\t<div class='rtw_meta'><span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>";
+								if($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override'] || $args['displaytype']=='widget' ):
+									$result .= rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
 								endif;
-								$result .= wp_kses_post($args['middot']).$nextprev."</span>";
-							elseif((isset($args['show_meta_prev_next']) && $args['show_meta_reply_retweet_favorite']) || !isset($args['official_format_override']) || !$args['official_format_override'] || $args['displaytype']=='widget' ):
-								$result .= "</span>";
+								if(($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override'] || $args['displaytype']=='widget' ) && (isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets')):
+									$result .= wp_kses_post($args['middot']);
+								endif;
+								if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
+									$result .= $nextprev;
+								endif;
+								$result .= "</span></div>";
 							endif;
-							$result .= "</div></div></div>";
+							$result .= "</div></div>";
 							break;
 						case 3:
 							# This one uses the twitter standard approach for embedding via their javascript API - unfortunately I can't work out how to make it work with the rotating tweet javascript!  If anyone can work out how to calculate the height of a oEmbed Twitter tweet, I will be very grateful! :-)
