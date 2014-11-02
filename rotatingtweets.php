@@ -1348,9 +1348,13 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 	$nextprev = '';
 	# Put in the 'next / prev' buttons - although not very styled!
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
-		$nextprev = '<a href="#" class="'.$id.'_rtw_prev rtw_prev">'.wp_kses_post($args['prev']).'</a>'.wp_kses_post($args['middot']).'<a href="#" class="'.$id.'_rtw_next rtw_next">'.wp_kses_post($args['next']).'</a>';
+		$nextprev_prev = '<a href="#" class="'.$id.'_rtw_prev rtw_prev">'.wp_kses_post($args['prev']).'</a>';
+		$nextprev_next = '<a href="#" class="'.$id.'_rtw_next rtw_next">'.wp_kses_post($args['next']).'</a>';
+		$nextprev = $nextprev_prev.wp_kses_post($args['middot']).$nextprev_next;
 		if(strtolower($args['np_pos'])=='top'):
 			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
+		elseif(strtolower($args['np_pos'])=='beforeafter'):
+			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev_prev.'</div>';		
 		endif;
 	endif;
 	if(isset($args['no_rotate']) && $args['no_rotate']):
@@ -1693,7 +1697,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 								if(!empty($meta)) $meta .= ' &middot; ';
 								$meta .= rotatingtweets_intents($twitter_object,$twitterlocale, 0,$targetvalue);
 							endif;
-							if($args['show_meta_tweet_counter']):
+							if(isset($args['show_meta_tweet_counter']) && $args['show_meta_tweet_counter']):
 								if(!empty($meta)) $meta .= ' &middot; ';
 								$meta .= sprintf(__('%1$s of %2$s','rotatingtweets'),$tweet_counter,$tweet_count);
 							endif;
@@ -1754,15 +1758,15 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 								$result .= "\n\t\t<div class='rtw_rt_meta'>".rotatingtweets_user_intent($retweeter,$twitterlocale,"<img src='".plugins_url('images/retweet_on.png',__FILE__)."' width='16' height='16' alt='".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name'])."' />".sprintf(__('Retweeted by %s','rotatingtweets'),$retweeter['name']),$targetvalue)."</div>";
 							}
 							$result .= "\n\t\t<div class='rtw_meta'>";
-							if($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override']  ):
+							if($args['show_meta_reply_retweet_favorite'] || !isset($args['official_format_override']) || !$args['official_format_override'] || $args['displaytype']=='widget' ):
 								$result .= "<span class='rtw_expand' style='display:none;'>".__('Expand','rotatingtweets')."</span><span class='rtw_intents'>".rotatingtweets_intents($twitter_object,$twitterlocale, 2,$targetvalue);
 							endif;
-							if(isset($args['show_meta_prev_next']) || !$args['show_meta_prev_next'] || !$args['np_pos']=='tweets'):
+							if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
 								if(!$args['show_meta_reply_retweet_favorite'] && isset($args['official_format_override']) && $args['official_format_override'] ):
 									echo "<span class='rtw_intents'>";
 								endif;
 								$result .= wp_kses_post($args['middot']).$nextprev."</span>";
-							elseif($args['show_meta_reply_retweet_favorite'] || $args['displaytype']=='widget' ):
+							elseif((isset($args['show_meta_prev_next']) && $args['show_meta_reply_retweet_favorite']) || !isset($args['official_format_override']) || !$args['official_format_override'] || $args['displaytype']=='widget' ):
 								$result .= "</span>";
 							endif;
 							$result .= "</div></div></div>";
@@ -1864,12 +1868,16 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			endif;
 		endforeach;
 	endif;
-	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='insidebottom'):
+	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && isset($args['np_pos']) && $args['np_pos']=='insidebottom'):
 		$result .= $nextprev;
 	endif;
 	$result .= "\n</div>";
-	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='bottom'):
-		$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
+	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && isset($args['np_pos'])):
+		if(strtolower($args['np_pos'])=='bottom'):
+			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
+		elseif(strtolower($args['np_pos'])=='beforeafter'):
+			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev_next.'</div>';		
+		endif;
 	endif;
 /*
 	if($args['show_meta_progress_blobs']):
