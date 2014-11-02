@@ -91,7 +91,7 @@ Possible variables for the shortcode include:
 		* `prev` = content for the prev button (default `'prev'`)
 		* `next` = content for the next button (default `'next'`)
 		* `middot` = content for the space between the buttons (default `' &middot; '`)
-		* `np_pos` = position for 'next' and 'prev' buttons - `'top'`, `'bottom'`, `'insidebottom'` or `'tweets'` (default `'top'`)
+		* `np_pos` = position for 'next' and 'prev' buttons - `'top'`, `'bottom'`, `'insidebottom'`, `'beforeafter'` or `'tweets'` (default `'top'`)
 	* `show_media` = `'0'` or `'1'` - experimental option that shows images with the tweet - default is `'0'`
 	* `screen_name_plural` = `'0'` or `'1'` - experimental option that allows you to have a plural possessive in the default display format (e.g. *British Lions' Twitter*) - default is `'0'`
 	* `tweet_length` = maximum number of characters to show in tweet - default is `'0'` which allows whole tweet to be shown
