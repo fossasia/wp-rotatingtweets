@@ -3,8 +3,8 @@ Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
-Tested up to: 4.0
-Stable tag: 1.7.4
+Tested up to: 4.0.1
+Stable tag: 1.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -187,6 +187,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Much faster and more reliable caching. 
 * Compatibility with W3 Total Cache.
 * New `scrollLeftGap` transition 
+* Ability to put 'prev' and 'next' buttons before and after the main rotating tweets
 
 = 1.7.4 =
 * Ensures all images use `https://` link for compatibility with SSL-secured sites
