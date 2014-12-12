@@ -508,7 +508,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'carousel_horizontal' => 0,
 			'carousel_count' => 0,
 			'carousel_responsive' => 0,
-			'no_emoji' => 0,
+			'no_emoji' => 1,
 			'show_tco_link' => 0,
 			'w3tc_render_to' => '',
 			'official_format_override'=>FALSE,
@@ -1139,7 +1139,7 @@ function rotatingtweets_shrink_json($json) {
 	endif;
 	return($return);
 }
-function rotatingtweets_shrink_element($json,$no_emoji=0) {
+function rotatingtweets_shrink_element($json,$no_emoji=1) {
 	global $args;
 	$rt_top_elements = array('text','retweeted_status','user','entities','source','id_str','created_at','coordinates');
 	$return = array();
