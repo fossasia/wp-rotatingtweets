@@ -1139,7 +1139,7 @@ function rotatingtweets_shrink_json($json) {
 	endif;
 	return($return);
 }
-function rotatingtweets_shrink_element($json,$no_emoji=0) {
+function rotatingtweets_shrink_element($json,$no_emoji=1) {
 	global $args;
 	$rt_top_elements = array('text','retweeted_status','user','entities','source','id_str','created_at','coordinates');
 	$return = array();
