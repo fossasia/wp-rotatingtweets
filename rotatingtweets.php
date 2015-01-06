@@ -78,13 +78,13 @@ class rotatingtweets_Widget extends WP_Widget {
 			break;
 		}
 		if(empty($newargs['timeout'])) $newargs['timeout'] = 4000;
-		$newargs['text_cache_id'] = "rt-wg-".md5(serialize($newargs));
-		$rt_tweet_string = get_transient($newargs['text_cache_id']);
+//		$newargs['text_cache_id'] = "rt-wg-".md5(serialize($newargs));
+//		$rt_tweet_string = get_transient($newargs['text_cache_id']);
 		echo $before_widget;
 		if ( $title ):
 				echo $before_title . $title . $after_title; 
 		endif;		
-		if(empty($rt_tweet_string)):
+//		if(empty($rt_tweet_string)):
 			switch($newargs['show_type']) {
 				case 1:
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],true);
@@ -102,9 +102,9 @@ class rotatingtweets_Widget extends WP_Widget {
 					break;
 			}
 			$rt_tweet_string = rotating_tweets_display($tweets,$newargs,false);
-		elseif(WP_DEBUG):
-			$rt_tweet_string .= "<!-- Transient ".$newargs['text_cache_id']." loaded -->";
-		endif;
+//		elseif(WP_DEBUG):
+//			$rt_tweet_string .= "<!-- Transient ".$newargs['text_cache_id']." loaded -->";
+//		endif;
 		echo $rt_tweet_string.$after_widget;
     }
 
@@ -529,13 +529,13 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	if(empty($screen_name)) $screen_name = 'twitter';
 	# Makes sure the scripts are listed
 	rotatingtweets_enqueue_scripts(); 
-	$returnstring = get_transient($args['text_cache_id']);
-	if(strlen($returnstring)==0):
+//	$returnstring = get_transient($args['text_cache_id']);
+//	if(strlen($returnstring)==0):
 		$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list);
 		$returnstring = rotating_tweets_display($tweets,$args,$print);
-	elseif(WP_DEBUG):
-		$returnstring .= "<!-- Transient ".$args['text_cache_id']." loaded -->";
-	endif;
+//	elseif(WP_DEBUG):
+//		$returnstring .= "<!-- Transient ".$args['text_cache_id']." loaded -->";
+//	endif;
 	return $returnstring;
 }
 add_shortcode( 'rotatingtweets', 'rotatingtweets_display_shortcode' );
@@ -1912,7 +1912,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			$rt_w3tc_cache_lifetime = $w3config->get_integer('pgcache.lifetime');
 			$rt_cached_args['text_cache_id'] = "rt-mf-".substr($args['text_cache_id'],6,1000);
 			set_transient($rt_transient_name,$rt_cached_args, $rt_w3tc_cache_lifetime * 2 );
-			set_transient($rt_cached_args['text_cache_id'],$result,$rt_cache_delay);	
+		//	set_transient($rt_cached_args['text_cache_id'],$result,$rt_cache_delay);	
 			$result = '<!-- mfunc '.W3TC_DYNAMIC_SECURITY.' $rt=get_transient("'.$rt_cached_args['text_cache_id'].'");if(!empty($rt)){echo $rt;}else{$args=get_transient("'.$rt_transient_name.'");rotatingtweets_display($args);}; --><!-- /mfunc '.W3TC_DYNAMIC_SECURITY.' -->';	
 			if(WP_DEBUG || $w3_debug ):
 				$result .= "<!-- Rotating Tweets W3TC Fragment Caching: Success ! -->";
@@ -1940,6 +1940,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			$result .= "<!-- Rotating Tweets W3TC Fragment Caching: End Diagnostics -->";
 		endif;
 	endif;
+/*
 	$rt_set_transient = set_transient($args['text_cache_id'],$result,$rt_cache_delay);	
 	if(WP_DEBUG):
 		if($rt_set_transient):
@@ -1948,6 +1949,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			echo "<!-- Transient ".$args['text_cache_id']." FAILED to store for $rt_cache_delay seconds -->";
 		endif;
 	endif;
+*/
 	if($print) echo $result;
 	return($result);
 }

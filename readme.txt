@@ -179,12 +179,13 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.5/6 =
-* Addition of Italian. Much faster caching. Compatibility with W3 Total Cache.
+= 1.7.6 =
+* Addition of Italian. Removal of new caching problems. Compatibility with W3 Total Cache.
 
 == Changelog ==
 = 1.7.6 =
 * Addition of Italian language
+* Removal of transient-based caching
 
 = 1.7.5 =
 * Much faster and more reliable caching. 
