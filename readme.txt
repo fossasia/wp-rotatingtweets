@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 2.6
 Tested up to: 4.1
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -180,12 +180,12 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 
 == Upgrade notice ==
 = 1.7.6 =
-* Addition of Italian. Removal of new caching problems. Compatibility with W3 Total Cache.
+* Important upgrade that fixes caching bug. Also addition of Italian!
 
 == Changelog ==
 = 1.7.6 =
 * Addition of Italian language
-* Removal of transient-based caching
+* Fixes transient-based caching - many thanks to to [jensnilsson](https://wordpress.org/support/profile/jensnilsson) and [Moondrop](https://wordpress.org/support/profile/moondrop) for highlighting the solution [here](https://wordpress.org/support/topic/no-tweets-available-mostly?replies=30).
 
 = 1.7.5 =
 * Much faster and more reliable caching. 
