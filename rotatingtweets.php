@@ -435,7 +435,12 @@ function rotatingtweets_get_transient($transient) {
 	if(!$return):
 		return $return;
 	else:
-		return unserialize(base64_decode($return));
+		$data = base64_decode($return);
+		if (is_serialized($data)):
+			return @unserialize($data);
+		else:
+			return $return;
+		endif;
 	endif;
 }
 
