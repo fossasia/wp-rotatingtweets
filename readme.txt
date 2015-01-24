@@ -123,6 +123,7 @@ All the options are listed on the [Rotating Tweets installation page](http://wor
 = How can I include Rotating Tweets in my template? =
 Try something like:
 `<?php echo do_shortcode( "[rotatingtweets screen_name='your_twitter']" ) ?>`
+A common mistake with `do_shortcode` shortcodes is to use single-quotes or double-quotes all the way through without 'escaping' them.  This will normally break your site! It's best to use double-quotes to enclose the shortcode string and single-quotes inside the shortcode string (or vice-versa!).
 
 = How can I pull information from two accounts into one widget =
 The easiest way is to list more than one account in the 'Twitter name' box in the widget or use something like `screen_name='account1 account2'` in the shortcode.
