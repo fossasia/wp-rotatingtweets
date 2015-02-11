@@ -720,7 +720,8 @@ function rotatingtweets_option_show_cycle_version() {
 	$options = get_option('rotatingtweets-api-settings');
 	$choice = array(
 		1 => _x('Version 1 (default)','Version of JQuery Cycle','rotatingtweets'),
-		2 => _x('Version 2 (beta)','Version of JQuery Cycle','rotatingtweets')
+		2 => _x('Version 2 (beta)','Version of JQuery Cycle','rotatingtweets'),
+		3 => _x('None (advanced users who want to write their own JavaScript only)','Version of JQuery Cycle','rotatingtweets')
 	);
 	echo "\n<select id='rotatingtweets_api_jquery_cycle_version_input' name='rotatingtweets-api-settings[jquery_cycle_version]'>";
 	if(!isset($options['jquery_cycle_version']))	$options['jquery_cycle_version'] = 1;
@@ -814,7 +815,7 @@ function rotatingtweets_api_validate($input) {
 	endif;
 	// Check 'jquery_cycle_version'
 	if(isset($input['jquery_cycle_version'])):
-		$options['jquery_cycle_version']=max(min(absint($input['jquery_cycle_version']),2),1);
+		$options['jquery_cycle_version']=max(min(absint($input['jquery_cycle_version']),3),1);
 	else:
 		$options['jquery_cycle_version']=1;
 	endif;
@@ -2034,6 +2035,7 @@ function rotatingtweets_enqueue_scripts() {
 	}
 	# Check if we're using jQuery Cycle 1 or 2
 	$api = get_option('rotatingtweets-api-settings');
+	if(isset($api['jquery_cycle_version']) && $api['jquery_cycle_version']==3) return;
 	if(!isset($api['js_in_footer'])) $api['js_in_footer'] = FALSE;
 	$style = trim(strtolower(get_stylesheet()));
 	$rt_data = get_plugin_data( __FILE__ );
