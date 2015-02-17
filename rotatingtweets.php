@@ -1598,9 +1598,9 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 									$displayurl = substr($displayurl,0,$urllength)."&hellip;";
 								endif;
 								if(isset($args['show_tco_link']) && $args['show_tco_link']):
-									$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue.">".esc_html($url['url'])."</a>";								
+									$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue." class='rtw_url_link'>".esc_html($url['url'])."</a>";								
 								else:
-									$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
+									$after[] = "<a href='".$url['url']."' title='".$url['expanded_url']."'".$targetvalue." class='rtw_url_link'>".esc_html($displayurl)."</a>";
 								endif;
 							endforeach;
 						endif;
@@ -1609,7 +1609,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 							$media_data = $media[0];
 							if(isset($args['show_media']) && $args['show_media']):
 								$alt = esc_html(trim(str_replace($media_data['url'],'',strip_tags($main_text))));
-								$show_media = "<a href='{$media_data['url']}' title='{$alt}'><img src='{$media_data['media_url_https']}' alt='{$alt}' /></a>";
+								$show_media = "<a href='{$media_data['url']}' title='{$alt}'><img src='{$media_data['media_url_https']}' alt='{$alt}' class='rtw_media_image' /></a>";
 							endif;
 						else:
 							unset($media);
@@ -1623,7 +1623,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 									$displayurl = str_replace(json_decode('"\u2026"'),"",$displayurl);
 									$displayurl = substr($displayurl,0,$urllength)."&hellip;";
 								endif;
-								$after[] = "<a href='".$medium['url']."' title='".$medium['expanded_url']."'".$targetvalue.">".esc_html($displayurl)."</a>";
+								$after[] = "<a href='".$medium['url']."' title='".$medium['expanded_url']."'".$targetvalue." class='rtw_media_link'>".esc_html($displayurl)."</a>";
 							endforeach;			
 						endif;
 	//					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
