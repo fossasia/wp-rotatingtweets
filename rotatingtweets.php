@@ -1767,7 +1767,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 							$result .= "\n\t\t<div class='rtw_wide'>";
 							$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
 							$result .= "\n\t\t<div class='rtw_wide_block'><div class='rtw_info'>";
-							if($args['show_meta_timestamp']  && isset($args['official_format_override']) && $args['official_format_override'] ):						
+							if($args['show_meta_timestamp'] || !isset($args['official_format_override']) || !$args['official_format_override'] ):
 								$result .= "\n\t\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short',$targetvalue).'</div>';
 							endif;
 							$result .= "\n\t\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
