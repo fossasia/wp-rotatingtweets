@@ -458,7 +458,7 @@ function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default',$ta
 			$string .= rotatingtweets_contextualtime_short($tweettimestamp);
 			break;
 		case 'long':
-			$string .= date_i18n(get_option('time_format'),$tweettimestamp + ( get_option('gmt_offset') * 60 * 60 ) )." &middot; ".date_i18n(get_option('date_format') ,$tweettimestamp + ( get_option('gmt_offset') * 60 * 60 ) );
+			$string .= date_i18n(get_option('time_format'),$tweettimestamp )." &middot; ".date_i18n(get_option('date_format') ,$tweettimestamp );
 			break;
 		default:
 			$string .= ucfirst(rotatingtweets_contextualtime($tweettimestamp));
