@@ -97,7 +97,14 @@ div.rtw_timestamp {
 	height: 150px;
 	max-height: 150px;
 }
-
+/* Pager CSS */
+.rtw_pager {
+	text-align: center;
+	font-size: 2.5em;
+} 
+.rtw_pager .cycle-pager-active {
+	color: #DDD;
+}
 /* This sets the style for tweets in articles or posts */
 #content .rotatingtweets,
 #content .norotatingtweets  {

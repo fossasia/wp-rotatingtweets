@@ -509,6 +509,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'show_meta_reply_retweet_favorite' => FALSE,
 			'show_meta_prev_next' => FALSE,
 			'show_meta_tweet_counter' => FALSE,
+			'show_meta_pager' => FALSE,
+			'show_meta_pager_blob' => '<span>&bull;</span>',
 			'rotation_type' => 'scrollUp',
 			'official_format' => FALSE,
 			'links_in_new_window' => FALSE,
@@ -1402,7 +1404,12 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			$v2options['prev'] = '.'.$id.'_rtw_prev';
 			$v2options['next'] = '.'.$id.'_rtw_next';
 		endif;
+		if(isset($args['show_meta_pager']) && $args['show_meta_pager']):
+			$v2options['pager'] = '#'.$id.'_rtw_pager';
+			$v2options['pager-template'] = wp_kses_post($args['show_meta_pager_blob']);
+		endif;
 		if(! WP_DEBUG) $v2options['log'] = 'false';
+		
 		if($rotation_type == 'carousel'):
 			if(empty($args['carousel_horizontal'])):
 				$v2options['carousel-vertical'] = true;
@@ -1897,6 +1904,16 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 		$result .= $nextprev;
 	endif;
 	$result .= "\n</div>";
+	// Show meta progress blobs 
+	if(isset($args['show_meta_pager']) && $args['show_meta_pager']):
+		$result .= "<div id='".$id."_rtw_pager' class='rtw_pager'>";
+		/*
+		for ($i = 1; $i <= $tweet_count; $i++) {
+			$result .= '<a href="#">&bull;</a> ';
+		}
+		*/
+		$result .= "</div>";
+	endif;
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && isset($args['np_pos'])):
 		if(strtolower($args['np_pos'])=='bottom'):
 			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev.'</div>';
@@ -1904,15 +1921,6 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			$result .= '<div class="rotatingtweets_nextprev">'.$nextprev_next.'</div>';		
 		endif;
 	endif;
-/*
-	if($args['show_meta_progress_blobs']):
-		$result .= "<div id='".$id."_nav' class='rtw_nav'>";
-		for ($i = 1; $i <= $tweet_count; $i++) {
-			$result .= '<a href="#">&bull;</a> ';
-		}
-		$result .= "</div>";
-	endif;
-*/
 	if($args['show_follow'] && !empty($args['screen_name']) && !strpos($args['screen_name'],' ') && !strpos($args['screen_name'],',') && !strpos($args['screen_name'],';')):
 		$shortenvariables = '';
 		if($args['no_show_count']) $shortenvariables = ' data-show-count="false"';
