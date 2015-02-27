@@ -9,6 +9,7 @@ jQuery(document).ready(function() {
 		var rotate_class = "."+this.id;
 		var rotate_timeout = rotate_id_split[1];
 		var rotate_fx = rotate_id_split[2];
+		var rotate_speed = rotate_id_split[3];
 		var rotate_wp_debug = jQuery(this).hasClass('wp_debug');
 		if( typeof console == "undefined" || typeof console.log == "undefined" ) {
 			rotate_wp_debug = false;
@@ -39,6 +40,8 @@ jQuery(document).ready(function() {
 			console.log('rt_target_container_width = '+rt_target_container_width);
 			console.log('rt_target_width = '+rt_target_width);
 			console.log('rotate_timeout = '+rotate_timeout);
+			console.log('rotate_speed = '+rotate_speed);
+			console.log('rotate_fx = '+rotate_fx);
 		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
@@ -54,7 +57,8 @@ jQuery(document).ready(function() {
 			prev: rotate_class + '_rtw_prev',
 			next: rotate_class + '_rtw_next',
 			fx: rotate_fx,
-			fit: rt_fit
+			fit: rt_fit,
+			speed: rotate_speed
 		});
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
@@ -86,7 +90,8 @@ jQuery(document).ready(function() {
 				fit: rt_fit,
 				prev: rotate_class + '_rtw_prev',
 				next: rotate_class + '_rtw_next',
-				fx: rotate_fx
+				fx: rotate_fx,
+				speed: rotate_speed
 			});
 		}
 

@@ -1369,7 +1369,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 		if(strtolower($args['rotation_type']) == strtolower($possibleRotation)) $rotation_type = $possibleRotation;
 	endforeach;
 	# Create an ID that has all the relevant info in - rotation type and speed of rotation
-	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_');
+	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_'.$speed."_");
 	$result = '';
 	$nextprev = '';
 	# Put in the 'next / prev' buttons - although not very styled!
