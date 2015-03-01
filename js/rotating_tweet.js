@@ -7,9 +7,11 @@ jQuery(document).ready(function() {
 		var rotate_id = "#"+this.id;
 		var rotate_id_split = rotate_id.split('_');
 		var rotate_class = "."+this.id;
-		var rotate_timeout = rotate_id_split[1];
-		var rotate_fx = rotate_id_split[2];
-		var rotate_speed = rotate_id_split[3];
+		var rotate_timeout = jQuery(this).data('cycle-timeout');
+		var rotate_fx = jQuery(this).data('cycle-fx');
+		var rotate_speed = jQuery(this).data('cycle-speed');
+		var rotate_pager = jQuery(this).data('cycle-pager');
+		var rotate_pager_template = jQuery(this).data('cycle-pager-template');
 		var rotate_wp_debug = jQuery(this).hasClass('wp_debug');
 		if( typeof console == "undefined" || typeof console.log == "undefined" ) {
 			rotate_wp_debug = false;
@@ -41,13 +43,14 @@ jQuery(document).ready(function() {
 			console.log('rotate_timeout = '+rotate_timeout);
 			console.log('rotate_speed = '+rotate_speed);
 			console.log('rotate_fx = '+rotate_fx);
+			console.log('rotate_pager = '+rotate_pager);
+			console.log('rotate_pager_template = '+rotate_pager_template);
 		};
 		/* If we're displaying an 'official' tweet, reset all the heights - this option is currently switched off! */
 //		var rt_official_child = rotate_id + ' .twitter-tweet';
 //		var rt_official_num = jQuery(rt_official_child).length;
 //		if (rt_official_num > 0) rt_height_px = '211px';
-		/* Call the rotation */
-		jQuery(rotate_id).cycle({
+		var rotate_vars = {	
 			pause: 1,
 			height: rt_height_px,
 			timeout: rotate_timeout,
@@ -57,9 +60,21 @@ jQuery(document).ready(function() {
 			next: rotate_class + '_rtw_next',
 			fx: rotate_fx,
 			fit: rt_fit,
-			speed: rotate_speed,
-			pager: rotate_id + '_rtw_pager'
-		});
+			speed: rotate_speed
+		}
+		if(typeof rotate_pager !== "undefined" ) {
+			rotate_vars.pager = rotate_id + '_rtw_pager';
+			if(typeof rotate_pager_template !== "undefined") {
+				rotate_vars.pagerAnchorBuilder = function(idx, slide) { 
+					return rotate_pager_template; 
+				} 
+			}
+		}
+		if(rotate_wp_debug) {
+			console.log(rotate_vars);
+		};
+		/* Call the rotation */
+		jQuery(rotate_id).cycle(rotate_vars);
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
 		if(rotate_wp_debug) {
@@ -77,23 +92,12 @@ jQuery(document).ready(function() {
 			});
 			rt_height = rt_height + 20;
 			var rt_height_px = rt_height + 'px';
+			rotate_vars.rt_height_px = rt_height_px;
 			if(rotate_wp_debug) {
 				console.log('Resetting height to rt_height_px '+rt_height_px);
 			};
 			jQuery(rotate_id).cycle('destroy');
-			jQuery(rotate_id).cycle({
-				pause: 1,
-				height: rt_height_px,
-				timeout: rotate_timeout,
-				width: rt_target_width,
-				cleartypeNoBg: true,
-				fit: rt_fit,
-				prev: rotate_class + '_rtw_prev',
-				next: rotate_class + '_rtw_next',
-				fx: rotate_fx,
-				speed: rotate_speed,
-				pager: rotate_id + '_rtw_pager'
-			});
+			jQuery(rotate_id).cycle(rotate_vars);
 		}
 
 		/* Only do this if we're showing the official tweets - the first select is the size of the info box at the top of the tweet */

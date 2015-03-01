@@ -102,7 +102,8 @@ div.rtw_timestamp {
 	text-align: center;
 	font-size: 2.5em;
 } 
-.rtw_pager .cycle-pager-active {
+.rtw_pager .cycle-pager-active,
+.rtw_pager .activeSlide {
 	color: #DDD;
 }
 /* This sets the style for tweets in articles or posts */

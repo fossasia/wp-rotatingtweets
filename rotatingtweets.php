@@ -1369,7 +1369,8 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 		if(strtolower($args['rotation_type']) == strtolower($possibleRotation)) $rotation_type = $possibleRotation;
 	endforeach;
 	# Create an ID that has all the relevant info in - rotation type and speed of rotation
-	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_'.$speed."_");
+//	$id = uniqid('rotatingtweets_'.$timeout.'_'.$rotation_type.'_'.$speed."_");
+	$id = uniqid('rotatingtweets_');
 	$result = '';
 	$nextprev = '';
 	# Put in the 'next / prev' buttons - although not very styled!
@@ -1390,7 +1391,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 	endif;
 	# Now set all the version 2 options
 	$v2string = '';
-	if( strtolower(get_stylesheet()) == 'magazino' || isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
+//	if( strtolower(get_stylesheet()) == 'magazino' || isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
 		$v2options = array(
 			'auto-height' => 'calc',
 			'fx' => $rotation_type,
@@ -1432,7 +1433,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			$v2stringelements[] = ' data-cycle-'.$name.'="'.$value.'"';
 		}
 		$v2string = implode(' ',$v2stringelements);
-	endif;
+//	endif;
 	# Now finalise things
 	if(WP_DEBUG):
 		$result .= "\n<div class='$rotclass wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'$v2string>";
