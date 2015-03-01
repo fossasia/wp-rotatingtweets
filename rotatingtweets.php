@@ -510,7 +510,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'show_meta_prev_next' => FALSE,
 			'show_meta_tweet_counter' => FALSE,
 			'show_meta_pager' => FALSE,
-			'show_meta_pager_blob' => '<span>&bull;</span>',
+			'show_meta_pager_blob' => '<a href="#">&bull;</a>',
 			'rotation_type' => 'scrollUp',
 			'official_format' => FALSE,
 			'links_in_new_window' => FALSE,
@@ -1431,7 +1431,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 		endif;
 		if(isset($args['show_meta_pager']) && $args['show_meta_pager']):
 			$v2options['pager'] = '#'.$id.'_rtw_pager';
-			$v2options['pager-template'] = wp_kses_post($args['show_meta_pager_blob']);
+			$v2options['pager-template'] = esc_attr($args['show_meta_pager_blob']);
 		endif;
 		if(! WP_DEBUG) $v2options['log'] = 'false';
 		
