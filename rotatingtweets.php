@@ -1401,6 +1401,11 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			'easing' => 'swing',
 			'slides'=> 'div.rotatingtweet'
 		);
+		// Uses the continuous settings recommended at http://jquery.malsup.com/cycle2/demo/continuous.php for cycle2
+		if($timeout==0 && ( strtolower(get_stylesheet()) == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2))):
+			$v2options['timeout'] = 1;
+			$v2options['easing'] = 'linear';
+		endif;
 		if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 			$v2options['prev'] = '.'.$id.'_rtw_prev';
 			$v2options['next'] = '.'.$id.'_rtw_next';
