@@ -92,6 +92,8 @@ Possible variables for the shortcode include:
 		* `next` = content for the next button (default `'next'`)
 		* `middot` = content for the space between the buttons (default `' &middot; '`)
 		* `np_pos` = position for 'next' and 'prev' buttons - `'top'`, `'bottom'`, `'insidebottom'`, `'beforeafter'` or `'tweets'` (default `'top'`)
+	* `show_meta_pager` = `'0'` or `'1'` - show pager blobs below the tweets - default is `'0'`
+	* `show_meta_pager_blob` = content for your pager blob - default is `<span>&bull;</span>`
 	* `show_media` = `'0'` or `'1'` - experimental option that shows images with the tweet - default is `'0'`
 	* `screen_name_plural` = `'0'` or `'1'` - experimental option that allows you to have a plural possessive in the default display format (e.g. *British Lions' Twitter*) - default is `'0'`
 	* `tweet_length` = maximum number of characters to show in tweet - default is `'0'` which allows whole tweet to be shown
@@ -181,14 +183,14 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 
 == Upgrade notice ==
 = 1.7.10 =
-* Addition of 'pager' (via `show_meta_pager` variable)
-* Support for 'speed' variable in v1 of JavaScript
-* Addition of `rtw_hashtag_link` class to hashtag links
-
-= 1.7.9 =
-* Fixing Tweet time/date display problems.
+* Addition of 'pager' option. Fix 'speed' bug.
 
 == Changelog ==
+= 1.7.10 =
+* Move to using `data()` functions to transfer variable values to version 1 of JavaScript - including 'speed' function
+* Addition of 'pager' via `show_meta_pager` and `show_meta_pager_blob` variables
+* Addition of `rtw_hashtag_link` class to hashtag links
+
 = 1.7.9 =
 * Fixing Tweet timezone display problem 
 * Restoring Tweet time display by default for 'Official Twitter Guidelines (wide)'
