@@ -1391,61 +1391,59 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 	endif;
 	# Now set all the version 2 options
 	$v2string = '';
-//	if( strtolower(get_stylesheet()) == 'magazino' || isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2):
-		$v2options = array(
-			'auto-height' => 'calc',
-			'fx' => $rotation_type,
-			'pause-on-hover' => 'true',
-			'timeout' => $timeout,
-			'speed' => $speed,
-			'easing' => 'swing',
-			'slides'=> 'div.rotatingtweet'
-		);
-		// Uses the continuous settings recommended at http://jquery.malsup.com/cycle2/demo/continuous.php for cycle2
-		if ( strtolower(get_stylesheet()) == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2) ):
-			if($timeout == 0):
-				$v2options['timeout'] = 1;
-				$v2options['easing'] = 'linear';
-			endif;
-			if($rotation_type == 'carousel'):
-				if(empty($args['carousel_horizontal'])):
-					$v2options['carousel-vertical'] = true;
-					if(isset($args['carousel_count'])):
-						$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
-					else:
-						$v2options['carousel-visible'] = 3;
-					endif;
+	$v2options = array(
+		'auto-height' => 'calc',
+		'fx' => $rotation_type,
+		'pause-on-hover' => 'true',
+		'timeout' => $timeout,
+		'speed' => $speed,
+		'easing' => 'swing',
+		'slides'=> 'div.rotatingtweet'
+	);
+	// Uses the continuous settings recommended at http://jquery.malsup.com/cycle2/demo/continuous.php for cycle2
+	if ( strtolower(get_stylesheet()) == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2) ):
+		if($timeout == 0):
+			$v2options['timeout'] = 1;
+			$v2options['easing'] = 'linear';
+		endif;
+		if($rotation_type == 'carousel'):
+			if(empty($args['carousel_horizontal'])):
+				$v2options['carousel-vertical'] = true;
+				if(isset($args['carousel_count'])):
+					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
 				else:
-					if(isset($args['carousel_count'])):
-						$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
-					endif;
-					if(isset($args['carousel_responsive'])):
-						$v2options['carousel-fluid'] = true;
-					endif;
+					$v2options['carousel-visible'] = 3;
+				endif;
+			else:
+				if(isset($args['carousel_count'])):
+					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
+				endif;
+				if(isset($args['carousel_responsive'])):
+					$v2options['carousel-fluid'] = true;
 				endif;
 			endif;
 		endif;
-		if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
-			$v2options['prev'] = '.'.$id.'_rtw_prev';
-			$v2options['next'] = '.'.$id.'_rtw_next';
-		endif;
-		if(isset($args['show_meta_pager']) && $args['show_meta_pager']):
-			$v2options['pager'] = '#'.$id.'_rtw_pager';
-			$v2options['pager-template'] = esc_attr($args['show_meta_pager_blob']);
-		endif;
-		if(! WP_DEBUG) $v2options['log'] = 'false';
-		
-		$v2stringelements = array();
-		foreach ($v2options as $name => $value) {
-			$v2stringelements[] = ' data-cycle-'.$name.'="'.$value.'"';
-		}
-		$v2string = implode(' ',$v2stringelements);
-//	endif;
+	endif;
+	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
+		$v2options['prev'] = '.'.$id.'_rtw_prev';
+		$v2options['next'] = '.'.$id.'_rtw_next';
+	endif;
+	if(isset($args['show_meta_pager']) && $args['show_meta_pager']):
+		$v2options['pager'] = '#'.$id.'_rtw_pager';
+		$v2options['pager-template'] = $args['show_meta_pager_blob'];
+	endif;
+	if(! WP_DEBUG) $v2options['log'] = 'false';
+	
+	$v2stringelements = array();
+	foreach ($v2options as $name => $value) {
+		$v2stringelements[] = 'data-cycle-'.$name.'="'.esc_attr($value).'"';
+	}
+	$v2string = implode(' ',$v2stringelements);
 	# Now finalise things
 	if(WP_DEBUG):
-		$result .= "\n<div class='$rotclass wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id'$v2string>";
+		$result .= "\n<div class='$rotclass wp_debug rotatingtweets_format_".+intval($args['official_format'])."' id='$id' $v2string>";
 	else:
-		$result .= "\n<div class='$rotclass rotatingtweets_format_".+intval($args['official_format'])."' id='$id'$v2string>";
+		$result .= "\n<div class='$rotclass rotatingtweets_format_".+intval($args['official_format'])."' id='$id' $v2string>";
 	endif;
 	$error = get_option('rotatingtweets_api_error');
 	if(!empty($error)):
