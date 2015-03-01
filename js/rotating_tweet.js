@@ -62,6 +62,11 @@ jQuery(document).ready(function() {
 			fit: rt_fit,
 			speed: rotate_speed
 		}
+		if( rotate_timeout > 0) {
+			rotate_vars.timeout = rotate_timeout;
+		} else {
+			rotate_vars.continuous = true;
+		}
 		if(typeof rotate_pager !== "undefined" ) {
 			rotate_vars.pager = rotate_id + '_rtw_pager';
 			if(typeof rotate_pager_template !== "undefined") {
