@@ -1402,9 +1402,28 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			'slides'=> 'div.rotatingtweet'
 		);
 		// Uses the continuous settings recommended at http://jquery.malsup.com/cycle2/demo/continuous.php for cycle2
-		if($timeout==0 && ( strtolower(get_stylesheet()) == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2))):
-			$v2options['timeout'] = 1;
-			$v2options['easing'] = 'linear';
+		if ( strtolower(get_stylesheet()) == 'magazino' || (isset($api['jquery_cycle_version']) && $api['jquery_cycle_version'] == 2) ):
+			if($timeout == 0):
+				$v2options['timeout'] = 1;
+				$v2options['easing'] = 'linear';
+			endif;
+			if($rotation_type == 'carousel'):
+				if(empty($args['carousel_horizontal'])):
+					$v2options['carousel-vertical'] = true;
+					if(isset($args['carousel_count'])):
+						$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
+					else:
+						$v2options['carousel-visible'] = 3;
+					endif;
+				else:
+					if(isset($args['carousel_count'])):
+						$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
+					endif;
+					if(isset($args['carousel_responsive'])):
+						$v2options['carousel-fluid'] = true;
+					endif;
+				endif;
+			endif;
 		endif;
 		if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next']):
 			$v2options['prev'] = '.'.$id.'_rtw_prev';
@@ -1416,23 +1435,6 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 		endif;
 		if(! WP_DEBUG) $v2options['log'] = 'false';
 		
-		if($rotation_type == 'carousel'):
-			if(empty($args['carousel_horizontal'])):
-				$v2options['carousel-vertical'] = true;
-				if(isset($args['carousel_count'])):
-					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
-				else:
-					$v2options['carousel-visible'] = 3;
-				endif;
-			else:
-				if(isset($args['carousel_count'])):
-					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
-				endif;
-				if(isset($args['carousel_responsive'])):
-					$v2options['carousel-fluid'] = true;
-				endif;
-			endif;
-		endif;
 		$v2stringelements = array();
 		foreach ($v2options as $name => $value) {
 			$v2stringelements[] = ' data-cycle-'.$name.'="'.$value.'"';

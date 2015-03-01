@@ -66,6 +66,7 @@ jQuery(document).ready(function() {
 			rotate_vars.timeout = rotate_timeout;
 		} else {
 			rotate_vars.continuous = true;
+			rotate_vars.easing = 'linear';
 		}
 		if(typeof rotate_pager !== "undefined" ) {
 			rotate_vars.pager = rotate_id + '_rtw_pager';
