@@ -180,6 +180,11 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
+= 1.7.10 =
+* Addition of 'pager' (via `show_meta_pager` variable)
+* Support for 'speed' variable in v1 of JavaScript
+* Addition of `rtw_hashtag_link` class to hashtag links
+
 = 1.7.9 =
 * Fixing Tweet time/date display problems.
 

@@ -25,7 +25,6 @@ jQuery(document).ready(function() {
 			rt_parent.innerWidth() - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')),
 			rt_grandparent.innerWidth() - parseFloat(rt_grandparent.css('padding-left')) - parseFloat(rt_grandparent.css('padding-right'))  - parseFloat(rt_parent.css('padding-left')) - parseFloat(rt_parent.css('padding-right')) - parseFloat(rt_parent.css('margin-left')) - parseFloat(rt_parent.css('margin-right'))
 		);
-		
 		// Get the size of the parent box and subtract any padding
 		var rt_target_width = rt_target_container_width - parseFloat(jQuery(this).css('padding-left')) - parseFloat(jQuery(this).css('padding-right'))  - parseFloat(jQuery(this).css('margin-left')) - parseFloat(jQuery(this).css('margin-right'))  - parseFloat(jQuery(this).css('border-left')) - parseFloat(jQuery(this).css('border-right') ) ;
 		var rt_fit = 1;
@@ -58,7 +57,8 @@ jQuery(document).ready(function() {
 			next: rotate_class + '_rtw_next',
 			fx: rotate_fx,
 			fit: rt_fit,
-			speed: rotate_speed
+			speed: rotate_speed,
+			pager: rotate_id + '_rtw_pager'
 		});
 		/* If the height of the rotating tweet box is zero - kill the box and start again */
 		var rt_height = jQuery(rotate_id).height();
@@ -91,7 +91,8 @@ jQuery(document).ready(function() {
 				prev: rotate_class + '_rtw_prev',
 				next: rotate_class + '_rtw_next',
 				fx: rotate_fx,
-				speed: rotate_speed
+				speed: rotate_speed,
+				pager: rotate_id + '_rtw_pager'
 			});
 		}
 

@@ -1906,13 +1906,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 	$result .= "\n</div>";
 	// Show meta progress blobs 
 	if(isset($args['show_meta_pager']) && $args['show_meta_pager']):
-		$result .= "<div id='".$id."_rtw_pager' class='rtw_pager'>";
-		/*
-		for ($i = 1; $i <= $tweet_count; $i++) {
-			$result .= '<a href="#">&bull;</a> ';
-		}
-		*/
-		$result .= "</div>";
+		$result .= "<div id='".$id."_rtw_pager' class='rtw_pager'></div>";
 	endif;
 	if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && isset($args['np_pos'])):
 		if(strtolower($args['np_pos'])=='bottom'):
