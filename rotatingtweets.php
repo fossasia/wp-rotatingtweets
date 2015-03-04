@@ -37,14 +37,19 @@ require_once('lib/wp_twitteroauth.php');
  */
 class rotatingtweets_Widget extends WP_Widget {
     /** constructor */
-    function rotatingtweets_Widget() {
-        parent::WP_Widget(false, $name = 'Rotating Tweets',array('description'=>__('A widget to show tweets for a particular user in rotation.','rotatingtweets')));	
-		if ( is_active_widget( false, false, $this->id_base ) )
+    public function __construct() {
+		parent::__construct(
+			'rotatingtweets_widget', // Base ID
+			__( 'Rotating Tweets', 'rotatingtweets' ), // Name
+			array( 'description' => __('A widget to show tweets for a particular user in rotation.', 'rotatingtweets'), ) // Args
+		);
+		if ( is_active_widget( false, false, 'rotatingtweets_widget', true ) ) {
 			rotatingtweets_enqueue_scripts(); 
 		}
+	}
 
     /** @see WP_Widget::widget */
-    function widget($args, $instance) {		
+    public function widget($args, $instance) {		
 		extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
 		$positive_variables = array('screen_name','shorten_links','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag','search');
@@ -109,7 +114,7 @@ class rotatingtweets_Widget extends WP_Widget {
     }
 
     /** @see WP_Widget::update */
-    function update($new_instance, $old_instance) {				
+	public function update($new_instance, $old_instance) {				
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['tw_screen_name'] = strip_tags(trim($new_instance['tw_screen_name']));
@@ -134,7 +139,7 @@ class rotatingtweets_Widget extends WP_Widget {
     }
 	
     /** @see WP_Widget::form */
-    function form($instance) {				
+    public function form($instance) {				
 		$variables = array( 
 			'title' => array('title','','string'),
 			'tw_screen_name' => array ('tw_screen_name','', 'string'),
@@ -341,7 +346,9 @@ class rotatingtweets_Widget extends WP_Widget {
 } // class rotatingtweets_Widget
 
 // register rotatingtweets_Widget widget
-add_action('widgets_init', create_function('', 'return register_widget("rotatingtweets_Widget");'));
+add_action('widgets_init', 
+	create_function('', 'return register_widget("rotatingtweets_Widget");')
+);
 
 # Converts Tweet timestamp into a time description
 function rotatingtweets_contextualtime($small_ts, $large_ts=false) {

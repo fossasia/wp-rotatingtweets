@@ -72,18 +72,15 @@ $.fn.cycle2.transitions.scrollLeftGap = {
 jQuery(document).ready(function() {
 	// Not at all sure we need this
 	jQuery('.rotatingtweets').cycle2();
-//	alert(opts.container.width);
+	var rtw_src,
+		clearOutHovers = /_hover.png$/,
+		srcReplacePattern = /.png$/;
 	// Script to show mouseover effects when going over the Twitter intents
 	jQuery('.rtw_intents a').hover(function() {
-		var rtw_src = jQuery(this).find('img').attr('src');
-		var clearOutHovers = /_hover.png$/;
+		rtw_src = jQuery(this).find('img').attr('src'),
 		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
-		var rtw_src = jQuery(this).find('img').attr('src');
-		var srcReplacePattern = /.png$/;
 		jQuery(this).find('img').attr('src',rtw_src.replace(srcReplacePattern,"_hover.png"));
 	},function() {
-		var rtw_src = jQuery(this).find('img').attr('src');
-		var clearOutHovers = /_hover.png/;
 		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
 	});
 	jQuery('.rotatingtweets').children().not('.cycle-carousel-wrap').has('.rtw_wide').find('.rtw_wide .rtw_intents').hide();
