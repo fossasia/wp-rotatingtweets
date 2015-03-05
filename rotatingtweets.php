@@ -43,7 +43,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			__( 'Rotating Tweets', 'rotatingtweets' ), // Name
 			array( 'description' => __('A widget to show tweets for a particular user in rotation.', 'rotatingtweets'), ) // Args
 		);
-		if ( is_active_widget( false, false, 'rotatingtweets_widget', true ) ) {
+		if ( is_active_widget( false, false, $this->id_base, true ) ) {
 			rotatingtweets_enqueue_scripts(); 
 		}
 	}
