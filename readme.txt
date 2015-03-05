@@ -101,7 +101,7 @@ Possible variables for the shortcode include:
 	* `official_format_override` = `'0'` or `'1'` - enables you to change the settings for `show_meta_reply_retweet_favorite` and `show_meta_timestamp` on the 'official formats'.
 
 * **Caching**
-	* `w3tc_render_to` = 'your_choice_of_random_string' - used to support 'fragment caching' by [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/).  For this to work, you also need to ensure that `W3TC_DYNAMIC_SECURITY` is defined in your `wp-config.php` file and that you not using 'HTTP Compression' on the 'Browser Cache' settings page or 'Enhanced Disk caching' on the 'Page Cache' settings page.
+	* `w3tc_render_to` = 'your_choice_of_random_string' - used to support 'fragment caching' by [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/).  For this to work, you also need to ensure that `W3TC_DYNAMIC_SECURITY` is defined in your `wp-config.php` file and that you not using 'HTTP Compression' on the W3 Total Cache 'Browser Cache' settings page or 'Enhanced Disk caching' on the W3 Total Cache 'Page Cache' settings page.
 	
 * **Twitter follow button**
 	* `show_follow` = `'0'` or `'1'` - show follow button - default is `'0'`
@@ -187,9 +187,10 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 
 == Changelog ==
 = 1.7.10 =
-* Move to using `data()` functions to transfer variable values to version 1 of JavaScript - including 'speed' function
+* Move to using HTML5 custom data attributes and `data()` functions to transfer variable values to version 1 of JavaScript - including 'speed' variable
 * Addition of 'pager' via `show_meta_pager` and `show_meta_pager_blob` variables
 * Addition of `rtw_hashtag_link` class to hashtag links
+* Updating object code for the widget
 
 = 1.7.9 =
 * Fixing Tweet timezone display problem 
