@@ -72,10 +72,10 @@ $.fn.cycle2.transitions.scrollLeftGap = {
 jQuery(document).ready(function() {
 	// Not at all sure we need this
 	jQuery('.rotatingtweets').cycle2();
+	// Script to show mouseover effects when going over the Twitter intents
 	var rtw_src,
 		clearOutHovers = /_hover.png$/,
 		srcReplacePattern = /.png$/;
-	// Script to show mouseover effects when going over the Twitter intents
 	jQuery('.rtw_intents a').hover(function() {
 		rtw_src = jQuery(this).find('img').attr('src');
 		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
