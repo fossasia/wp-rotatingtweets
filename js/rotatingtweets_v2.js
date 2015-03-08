@@ -77,10 +77,11 @@ jQuery(document).ready(function() {
 		srcReplacePattern = /.png$/;
 	// Script to show mouseover effects when going over the Twitter intents
 	jQuery('.rtw_intents a').hover(function() {
-		rtw_src = jQuery(this).find('img').attr('src'),
+		rtw_src = jQuery(this).find('img').attr('src');
 		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
 		jQuery(this).find('img').attr('src',rtw_src.replace(srcReplacePattern,"_hover.png"));
 	},function() {
+		rtw_src = jQuery(this).find('img').attr('src');
 		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
 	});
 	jQuery('.rotatingtweets').children().not('.cycle-carousel-wrap').has('.rtw_wide').find('.rtw_wide .rtw_intents').hide();
