@@ -1010,14 +1010,6 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$tw_search = trim($tw_search);
 	endif;
 	$cache_delay = rotatingtweets_get_cache_delay();
-/*
-	$cacheoption = get_option('rotatingtweets-api-settings');
-	if(!isset($cacheoption['cache_delay'])):
-		$cache_delay = 120;
-	else:
-		$cache_delay = max(60,intval($cacheoption['cache_delay']));
-	endif;
-*/
 	if($tw_include_rts != 1) $tw_include_rts = 0;
 	if($tw_exclude_replies != 1) $tw_exclude_replies = 0;
 	
@@ -1031,10 +1023,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	} else {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies;
 	}
-//	$optionname = "rotatingtweets-cache";
-//	$option = delete_option($optionname);
 	$transientname = substr('rtc-'.sanitize_file_name($stringname),0,45);
-//	$transientname = str_replace(array('#','_'),'-',$transientname);
 	$option = rotatingtweets_get_transient($transientname);
 
 	if(WP_DEBUG && !$option):
@@ -1142,6 +1131,13 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		endif;
 		if(is_array($twitterjson) && isset($twitterjson[0] )) $firstentry = $twitterjson[0];
 		if(!empty($firstentry['text'])):
+			$number_returned_tweets = count($twitterjson);
+			if(WP_DEBUG) echo "<!-- ".$number_returned_tweets." tweets returned -->";
+			if($number_returned_tweets < 40 && is_array($latest_json) && count($latest_json)>0 ):
+				if(WP_DEBUG) echo "<!-- ".count($latest_json)." tweets in cache -->";
+				$twitterjson = rotatingtweet_combine_jsons($twitterjson,$latest_json);
+				if(WP_DEBUG) echo "<!-- ".count($twitterjson)." tweets in merged json -->";
+			endif;
 			$latest_json = rotatingtweets_shrink_json($twitterjson);
 			$option[$stringname]['json']=$latest_json;
 			$option[$stringname]['datetime']=time();
@@ -1158,6 +1154,47 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	else:
 		return;
 	endif;
+}
+function rotatingtweet_combine_jsons($a,$b) {
+	$tweet_keys = array();
+	foreach($a as $item) {
+		$tweet_keys[] = $item['id_str'];
+	}
+	/*
+	if(WP_DEBUG):
+		echo "<!-- ";print_r($tweet_keys);echo "\n-->";
+	endif;
+	*/
+	foreach($b as $item) {
+		if( !empty($item['id_str']) && !in_array($item['id_str'],$tweet_keys) ):
+			$a[]=$b;
+		endif;
+	}
+	return rotatingtweets_sort_json($a);
+}
+function rotatingtweets_sort_json($a) {
+	$sort_json = array();
+	$return_json = array();
+	foreach($a as $number => $item) {
+		if(strtotime($item['created_at'])>0):
+			$sort_json[$number] = strtotime($item['created_at']);
+		endif;
+	}
+/*
+	if(WP_DEBUG):
+		echo "<!-- ";print_r($sort_json);echo "\n-->";
+	endif;
+*/
+	arsort($sort_json);
+/*
+	if(WP_DEBUG):
+		echo "<!-- ";print_r($sort_json);echo "\n-->";
+	endif;
+*/
+	foreach($sort_json as $number => $item) {
+		$return_json[] = $a[$number];
+	}
+	return $return_json;
 }
 function rotatingtweets_shrink_json($json) {
 	$return = array();
