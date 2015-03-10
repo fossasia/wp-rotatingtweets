@@ -79,6 +79,7 @@ jQuery(document).ready(function() {
 	jQuery('.rtw_intents a').hover(function() {
 		rtw_src = jQuery(this).find('img').attr('src');
 		jQuery(this).find('img').attr('src',rtw_src.replace(clearOutHovers,".png"));
+		rtw_src = jQuery(this).find('img').attr('src');
 		jQuery(this).find('img').attr('src',rtw_src.replace(srcReplacePattern,"_hover.png"));
 	},function() {
 		rtw_src = jQuery(this).find('img').attr('src');
@@ -91,6 +92,9 @@ jQuery(document).ready(function() {
 	},function() {
 		jQuery(this).find('.rtw_intents').hide();
 	});
+	$( '.dropdown-toggle' ).click( function() {
+		jQuery('.rotatingtweets').cycle2('reinit');
+	} );
 });
 /* And call the Twitter script while we're at it! */
 /* Standard script to call Twitter */
