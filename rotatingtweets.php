@@ -1160,14 +1160,9 @@ function rotatingtweet_combine_jsons($a,$b) {
 	foreach($a as $item) {
 		$tweet_keys[] = $item['id_str'];
 	}
-	/*
-	if(WP_DEBUG):
-		echo "<!-- ";print_r($tweet_keys);echo "\n-->";
-	endif;
-	*/
 	foreach($b as $item) {
 		if( !empty($item['id_str']) && !in_array($item['id_str'],$tweet_keys) ):
-			$a[]=$b;
+			$a[]=$item;
 		endif;
 	}
 	return rotatingtweets_sort_json($a);
@@ -1180,17 +1175,7 @@ function rotatingtweets_sort_json($a) {
 			$sort_json[$number] = strtotime($item['created_at']);
 		endif;
 	}
-/*
-	if(WP_DEBUG):
-		echo "<!-- ";print_r($sort_json);echo "\n-->";
-	endif;
-*/
 	arsort($sort_json);
-/*
-	if(WP_DEBUG):
-		echo "<!-- ";print_r($sort_json);echo "\n-->";
-	endif;
-*/
 	foreach($sort_json as $number => $item) {
 		$return_json[] = $a[$number];
 	}
