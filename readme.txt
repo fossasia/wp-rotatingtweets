@@ -30,7 +30,7 @@ Currently the following languages are available:
 * British English *(complete - mainly changing 'favorite' to 'favourite'!)*
 * Brazilian Portuguese *(complete - many thanks to Wilmerson Felipe for his help on this)*
 * German *(almost complete - many thanks to Nils Kroneberg for his help on this)*
-* Spanish *(basic tweet display only)*
+* Spanish *(complete - many thanks to Alberto Lario for his help on this)*
 * Italian *(complete - many thanks to [Mattia Migliorini](https://profiles.wordpress.org/deshack/) at [deshack](http://deshack.net/) for his help on this)*
 * Dutch *(public facing translation complete - many thanks to Natasja Weijer for her help on this)*
 * French *(almost complete - many thanks to [Alexandre Trudel](http://wordpress.org/support/profile/alexandretrudel) for his help on this)*
@@ -182,10 +182,13 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.10 =
-* Addition of 'pager' option. Fix 'speed' bug.
+= 1.7.11 =
+* Completion of Spanish translation - many thanks to Alberto Lario for his help on this
 
 == Changelog ==
+= 1.7.11 =
+* Completion of Spanish translation - many thanks to Alberto Lario for his help on this
+
 = 1.7.10 =
 * Move to using HTML5 custom data attributes and `data()` functions to transfer variable values to version 1 of JavaScript - including 'speed' variable
 * Addition of 'pager' via `show_meta_pager` and `show_meta_pager_blob` variables
