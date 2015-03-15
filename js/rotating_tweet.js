@@ -97,7 +97,7 @@ jQuery(document).ready(function() {
 			});
 			rt_height = rt_height + 20;
 			var rt_height_px = rt_height + 'px';
-			rotate_vars.rt_height_px = rt_height_px;
+			rotate_vars.height = rt_height_px;
 			if(rotate_wp_debug) {
 				console.log('Resetting height to rt_height_px '+rt_height_px);
 			}
