@@ -189,6 +189,8 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 = 1.7.11 =
 * Completion of Spanish translation - many thanks to Alberto Lario for his help on this
 * Fixing tweet height JavaScript bug
+* CSS tidying for TwentyFifteen template
+* Experimental function combining historical and current tweets
 
 = 1.7.10 =
 * Move to using HTML5 custom data attributes and `data()` functions to transfer variable values to version 1 of JavaScript - including 'speed' variable
