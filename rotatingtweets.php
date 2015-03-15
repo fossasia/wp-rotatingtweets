@@ -1438,13 +1438,13 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 		if($rotation_type == 'carousel'):
 			if(empty($args['carousel_horizontal'])):
 				$v2options['carousel-vertical'] = true;
-				if(isset($args['carousel_count'])):
+				if(isset($args['carousel_count']) && $args['carousel_count'] > 0):
 					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
 				else:
 					$v2options['carousel-visible'] = 3;
 				endif;
 			else:
-				if(isset($args['carousel_count'])):
+				if(isset($args['carousel_count']) && $args['carousel_count'] > 0):
 					$v2options['carousel-visible'] = max(2,intval($args['carousel_count']));
 				endif;
 				if(isset($args['carousel_responsive'])):
