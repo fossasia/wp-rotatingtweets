@@ -254,7 +254,7 @@ jQuery(document).ready(function() {
 					console.log('New height: '+ rt_newheight);
 				}
 				if(rt_newheight > 0) {
-					jQuery(rotate_id).height(rt_oldcontainerheight + rt_newheight - rt_oldheight);
+					jQuery(rotate_id).height( Math.max( rt_oldcontainerheight + rt_newheight - rt_oldheight,rt_newheight) );
 				}
 			}
 		});
