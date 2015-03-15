@@ -176,6 +176,9 @@ jQuery(document).ready(function() {
 			rt_resize_target_tweet = jQuery(rotate_id + ' .rotatingtweet').width(),
 			rt_resize_target_meta = jQuery(rotate_id + ' .rtw_meta').width();
 		jQuery(window).resize(function() {
+			if(rotate_wp_debug) {
+				console.log("== Window Resize Detected ==");
+			}
 			rt_parent = jQuery(rotate_id).parent();
 			rt_grandparent = rt_parent.parent();
 			rt_resize_width_new_parent = rt_parent.innerWidth();

@@ -2170,6 +2170,11 @@ function rotatingtweets_enqueue_scripts() {
 		endswitch;
 		wp_enqueue_script( 'rotating_tweet', plugins_url($rotatingtweetsjsfile, __FILE__),$dependence,$rt_data['Version'],$api['js_in_footer'] );
 	endif;
+/*
+	if($style == 'twentyfifteen'):
+		wp_enqueue_script('rt_twentyfifteen',plugins_url('js/rt_twentyfifteen.js', __FILE__),array('rotating_tweet','twentyfifteen-script'),$rt_data['Version'],$api['js_in_footer']);
+	endif;
+*/
 }
 function rotatingtweets_enqueue_style() {
 	wp_enqueue_style( 'rotatingtweets', plugins_url('css/style.css', __FILE__));
