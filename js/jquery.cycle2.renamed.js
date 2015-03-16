@@ -658,7 +658,7 @@ $.fn.cycle2.transitions = {
 // @see: http://jquery.malsup.com/cycle2/api
 $.fn.cycle2.defaults = {
     allowWrap:        true,
-    autoSelector:     '.cycle-slideshow[data-cycle-auto-init!=false]',
+    autoSelector:     '.rotatingtweets[data-cycle-auto-init!=false]',
     delay:            0,
     easing:           null,
     fx:              'fade',

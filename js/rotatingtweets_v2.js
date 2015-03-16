@@ -71,8 +71,6 @@ $.fn.cycle2.transitions.scrollLeftGap = {
  Script to cycle the rotating tweets
 */
 jQuery(document).ready(function() {
-	// Not at all sure we need this
-	jQuery('.rotatingtweets').cycle2();
 	// Script to show mouseover effects when going over the Twitter intents
 	var rtw_src,
 		clearOutHovers = /_hover.png$/,
