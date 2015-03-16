@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 3.2
 Tested up to: 4.1.1
-Stable tag: 1.7.11
+Stable tag: 1.7.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,10 +182,16 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.11 =
-* Fixing tweet height JavaScript bug & completing of Spanish translation
+= 1.7.12 =
+* Updated version 2 of JavaScript incl. bug fix
 
 == Changelog ==
+= 1.7.12 =
+* Updated version 2 of JavaScript - updated jQuery.cycle2 and removal of bug
+* Fixing height bug
+* Fixing Carousel defaults
+* Updating `.pot` file
+
 = 1.7.11 =
 * Completion of Spanish translation - many thanks to Alberto Lario for his help on this
 * Fixing tweet height JavaScript bug
