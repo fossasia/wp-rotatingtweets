@@ -12,6 +12,9 @@ jQuery(document).ready(function() {
 			rotate_pager = jQuery(this).data('cycle-pager'),
 			rotate_pager_template = jQuery(this).data('cycle-pager-template'),
 			rotate_wp_debug = jQuery(this).hasClass('wp_debug');
+		if( typeof rotate_timeout = "undefined" ) {
+				rotate_timeout = 4000;
+		}
 		if( typeof console == "undefined" || typeof console.log == "undefined" ) {
 			rotate_wp_debug = false;
 		}
