@@ -12,8 +12,12 @@ jQuery(document).ready(function() {
 			rotate_pager = jQuery(this).data('cycle-pager'),
 			rotate_pager_template = jQuery(this).data('cycle-pager-template'),
 			rotate_wp_debug = jQuery(this).hasClass('wp_debug');
-		if( rotate_timeout == "undefined" || jQuery.isNumeric( rotate_timeout ) == false ) {
-			rotate_timeout = 4000;
+		/* Handling old versions of jQuery that handle .data differently */
+		if( typeof rotate_timeout == "undefined" || jQuery.isNumeric( rotate_timeout ) == false ) {
+			var rotate_id_split = rotate_id.split('_');
+			rotate_timeout = rotate_id_split[1];
+			rotate_fx = rotate_id_split[2];
+			rotate_speed = rotate_id_split[3];
 		}
 		if( typeof console == "undefined" || typeof console.log == "undefined" ) {
 			rotate_wp_debug = false;
