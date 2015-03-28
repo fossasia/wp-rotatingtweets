@@ -189,27 +189,6 @@ class rotatingtweets_Widget extends WP_Widget {
 				unset($$val[0]);
 			endif;
 		}
-/*			
-		if(isset($instance['title'])) $title = esc_attr($instance['title']);
-		if(isset($instance['tw_screen_name'])) $tw_screen_name = esc_attr(trim($instance['tw_screen_name']));
-		if(isset($instance['tw_rotation_type'])) $tw_rotation_type = $instance['tw_rotation_type'];
-		if(isset($instance['tw_include_rts'])) $tw_include_rts = absint($instance['tw_include_rts']);
-		if(isset($instance['tw_exclude_replies'])) $tw_exclude_replies = absint($instance['tw_exclude_replies']);
-		if(isset($instance['tw_tweet_count'])) $tw_tweet_count = intval($instance['tw_tweet_count']);
-		if(isset($instance['tw_show_follow'])) $tw_show_follow = absint($instance['tw_show_follow']);
-		if(isset($instance['tw_official_format'])) $tw_official_format = absint($instance['tw_official_format']);
-		if(isset($instance['tw_show_type'])) $tw_show_type = absint($instance['tw_show_type']);
-		if(isset($instance['tw_links_in_new_window'])) $tw_links_in_new_window = absint($instance['tw_links_in_new_window']);
-		if(isset($instance['tw_hide_meta_timestamp'])) $metaoption['tw_show_meta_timestamp'] = !$instance['tw_hide_meta_timestamp'];
-		if(isset($instance['tw_hide_meta_screen_name'])) $metaoption['tw_show_meta_screen_name'] = !$instance['tw_hide_meta_screen_name'];
-		if(isset($instance['tw_hide_meta_via'])) $metaoption['tw_show_meta_via'] = !$instance['tw_hide_meta_via'];
-		if(isset($instance['tw_show_meta_reply_retweet_favorite'])) $metaoption['tw_show_meta_reply_retweet_favorite'] = absint($instance['tw_show_meta_reply_retweet_favorite']);
-		if(isset($instance['tw_timeout'])) $tw_timeout = intval($instance['tw_timeout']);
-# If values not set, set default values
-		if(empty($tw_rotation_type)) $tw_rotation_type = 'scrollUp';
-		if(empty($tw_timeout)) $tw_timeout = 4000;
-		if(empty($tw_tweet_count)) $tw_tweet_count = 5;
-*/
         ?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','rotatingtweets'); ?> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
 		<?php
@@ -409,12 +388,30 @@ function rotatingtweets_intents($twitter_object,$lang, $icons = 1,$targetvalue='
 	return($string);
 }
 // Produces a link to someone's name, icon or screen name (or to the text of your choice) using the 'intent' format for linking
-function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='') {
+function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='',$iconsize='normal') {
 	if(!is_array($person)) return;
 	$return = "<a href='https://twitter.com/intent/user?user_id={$person['id']}' title='".esc_attr($person['name'])."' lang='{$lang}'{$targetvalue}>";
 	switch($linkcontent){
 	case 'icon':
-		$return .= "<img src='{$person['profile_image_url_https']}' alt='".esc_attr($person['name'])."' /></a>";
+		$before = '_normal.';
+		$iconlink = $person['profile_image_url_https'];
+		switch(strtolower($iconsize)) {
+			case 'bigger':
+				$after = '_bigger.';
+				$iconlink = str_replace($before,$after,$iconlink);
+				break;
+			case 'mini':
+				$after = '_mini.';
+				$iconlink = str_replace($before,$after,$iconlink);
+				break;
+			case 'original':
+				$after = '.';
+				$iconlink = str_replace($before,$after,$iconlink);
+				break;
+			default:
+				break;
+		}
+		$return .= "<img src='{$iconlink}' alt='".esc_attr($person['name'])."' /></a>";
 		break;
 	case 'name':
 		$return .= $person['name']."</a>";
@@ -545,7 +542,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'w3tc_render_to' => '',
 			'official_format_override'=>FALSE,
 			'no_cache'=>FALSE,
-			'text_cache_id'=>FALSE
+			'text_cache_id'=>FALSE,
+			'profile_image_size'=>'normal'
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -938,47 +936,6 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 	endif;
 	return($result);
 }
-/*
-# Clear tweets (if too much memory used) // now handled by using separate transients
-function rotatingtweets_shrink_cache() {
-	# Solves a problem that 40+ caches can overload the memory - cuts it to fewer without risking deletion of the tweets on display
-	$optionname = "rotatingtweets-cache";
-	$option = get_option($optionname);
-	$numberidentities = count($option);
-	if(WP_DEBUG) echo "<!-- There are currently ".$numberidentities." Rotating Tweets identities cached -->";
-	# If there are fewer than 10 sets of information cached - just return (for speed)
-	if ( !is_array($option) or $numberidentities == 0 ) return;
-	# Now make sure that we don't overwrite 'live' tweets
-	$minageindays = 1000000;
-	$totalcachesize = 0;
-	# Get the age and size of tweets remaining
-	foreach($option as $stringname => $contents) {
-		$ageindays = (time()-$contents['datetime'])/60/60/24;
-		if($ageindays < $minageindays) $minageindays = $ageindays;		
-		if(WP_DEBUG):
-			$cachesize = strlen(json_encode($contents));
-			echo "\n<!-- $stringname - $cachesize - ".date('d-m-Y',$contents['datetime'])." - ".number_format($ageindays,1)." days -->";
-			$totalcachesize = $totalcachesize + $cachesize;
-		endif;
-	};	
-	if($totalcachesize == 0):
-		if(WP_DEBUG) echo "<!-- Cache failed to read successfully -->";
-		return;
-	endif;
-	if(WP_DEBUG) echo "\n<!-- The youngest age of any cache is ".number_format($minageindays*24*60,2)." minutes (".number_format($minageindays,8)." days) and total cache size is ".$totalcachesize.". -->";
-	if($numberidentities < 10) return;
-	# Set the goal of deleting all the tweets more than 30 days older than the most recent tweets
-	$targetageindays = $minageindays + 30;
-	# Now run through and delete 
-	foreach($option as $stringname => $contents) {
-		$ageindays = (time()-$contents['datetime'])/60/60/24;
-		if($ageindays > $targetageindays) unset($option[$stringname]);
-	};
-	$numberidentities = count($option);
-	if(WP_DEBUG) echo "<!-- There are now ".$numberidentities." identities cached -->";
-	update_option($optionname,$option);
-}
-*/
 function rotatingtweets_get_cache_delay() {
 	$cacheoption = get_option('rotatingtweets-api-settings');
 	if(!isset($cacheoption['cache_delay'])):
@@ -1726,6 +1683,12 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 							endif;
 							$main_text = $twitter_object['text'];
 						endif;
+						# Set the iconsize
+						if(isset($args['profile_image_size'])):
+							$iconsize = $args['profile_image_size'];
+						else:
+							$iconsize = 'normal';
+						endif;
 						# Now for the different display options
 						switch ($args['official_format']) {
 						case 'custom':
@@ -1779,7 +1742,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 							# This is an attempt to replicate the original Tweet
 							$result .= "\n\t<div class='rtw_info'>";
 							$result .= "\n\t\t<div class='rtw_twitter_icon'><img src='".plugins_url('images/twitter-bird-16x16.png', __FILE__)."' width='16' height='16' alt='".__('Twitter','rotatingtweets')."' /></div>";
-							$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
+							$result .= "\n\t\t<div class='rtw_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue,$iconsize)."</div>";
 							$result .= "\n\t\t<div class='rtw_name'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'name',$targetvalue)."</div>";
 							$result .= "\n\t\t<div class='rtw_id'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'screen_name',$targetvalue)."</div>";
 							$result .= "\n\t</div>";
@@ -1807,7 +1770,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 						case 2:
 							# This is a slightly adjusted version of the original tweet - designed for wide boxes - consistent with Twitter guidelines
 							$result .= "\n\t\t<div class='rtw_wide'>";
-							$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue)."</div>";
+							$result .= "\n\t\t<div class='rtw_wide_icon'>".rotatingtweets_user_intent($tweetuser,$twitterlocale,'icon',$targetvalue,$iconsize)."</div>";
 							$result .= "\n\t\t<div class='rtw_wide_block'><div class='rtw_info'>";
 							if($args['show_meta_timestamp'] || !isset($args['official_format_override']) || !$args['official_format_override'] ):
 								$result .= "\n\t\t\t<div class='rtw_time_short'>".rotatingtweets_timestamp_link($twitter_object,'short',$targetvalue).'</div>';
