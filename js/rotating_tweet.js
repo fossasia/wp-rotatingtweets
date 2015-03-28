@@ -13,13 +13,13 @@ jQuery(document).ready(function() {
 			rotate_pager_template = jQuery(this).data('cycle-pager-template'),
 			rotate_wp_debug = jQuery(this).hasClass('wp_debug');
 		/* Handling old versions of jQuery that handle .data differently */
-		if( typeof rotate_timeout == "undefined" || jQuery.isNumeric( rotate_timeout ) == false ) {
+		if ( typeof rotate_timeout === 'undefined' ) {
 			var rotate_id_split = rotate_id.split('_');
 			rotate_timeout = rotate_id_split[1];
 			rotate_fx = rotate_id_split[2];
 			rotate_speed = rotate_id_split[3];
 		}
-		if( typeof console == "undefined" || typeof console.log == "undefined" ) {
+		if( typeof console === "undefined" || typeof console.log === "undefined" ) {
 			rotate_wp_debug = false;
 		}
 		/* If the rotation type has not been set - then set it to scrollUp */
