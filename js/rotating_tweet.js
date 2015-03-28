@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
 			rotate_pager_template = jQuery(this).data('cycle-pager-template'),
 			rotate_wp_debug = jQuery(this).hasClass('wp_debug');
 		/* Handling old versions of jQuery that handle .data differently */
-		if ( typeof rotate_timeout === 'undefined' ) {
+		if ( rotate_timeout === undefined ) {
 			var rotate_id_split = rotate_id.split('_');
 			rotate_timeout = rotate_id_split[1];
 			rotate_fx = rotate_id_split[2];
