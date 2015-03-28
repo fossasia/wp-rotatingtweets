@@ -411,7 +411,7 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='',$
 			default:
 				break;
 		}
-		$return .= "<img src='{$iconlink}' alt='".esc_attr($person['name'])."' /></a>";
+		$return .= "<img src='".esc_url($iconlink)."' alt='".esc_attr($person['name'])."' /></a>";
 		break;
 	case 'name':
 		$return .= $person['name']."</a>";
