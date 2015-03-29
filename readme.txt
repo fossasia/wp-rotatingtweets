@@ -99,6 +99,7 @@ Possible variables for the shortcode include:
 	* `tweet_length` = maximum number of characters to show in tweet - default is `'0'` which allows whole tweet to be shown
 	* `no_emoji` = `'0'` or `'1'` - experimental option that removes emoji from the feed - default is `'0'`
 	* `official_format_override` = `'0'` or `'1'` - enables you to change the settings for `show_meta_reply_retweet_favorite` and `show_meta_timestamp` on the 'official formats'.
+	* `profile_image_size` = `'normal'`, `'bigger'`, `'mini'` or `'original'` - lets you change the size of profile images - default is `'normal'`
 
 * **Caching**
 	* `w3tc_render_to` = 'your_choice_of_random_string' - used to support 'fragment caching' by [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/).  For this to work, you also need to ensure that `W3TC_DYNAMIC_SECURITY` is defined in your `wp-config.php` file and that you not using 'HTTP Compression' on the W3 Total Cache 'Browser Cache' settings page or 'Enhanced Disk caching' on the W3 Total Cache 'Page Cache' settings page.
@@ -186,6 +187,11 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * Updated version 2 of JavaScript incl. bug fix
 
 == Changelog ==
+= 1.7.13 =
+* Adds `profile_image_size` shortcode variable
+* Lowers chance of clashes with other installations of cycle2 - by defaulting `autoSelector` to `.rotatingtweets` instead of `.cycle-slideshow`
+* Handles old versions of jQuery that don't fully support `.data()` better
+
 = 1.7.12 =
 * Updated version 2 of JavaScript - updated jQuery.cycle2 and removal of bug
 * Fixing height bug
