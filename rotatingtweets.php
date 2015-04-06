@@ -543,7 +543,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'official_format_override'=>FALSE,
 			'no_cache'=>FALSE,
 			'text_cache_id'=>FALSE,
-			'profile_image_size'=>'normal'
+			'profile_image_size'=>'normal',
+			'shuffle'=>0
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -1502,6 +1503,9 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 				$firstelement = array_shift($json);
 				array_push($json,$firstelement);
 			}
+		endif;
+		if(isset($args['shuffle']) && $args['shuffle']):
+			shuffle($json);
 		endif;
 		foreach($json as $twitter_object):
 			if ( ! (  ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@') ||  (!$args['include_rts'] && isset($twitter_object['retweeted_status']))  )  ):

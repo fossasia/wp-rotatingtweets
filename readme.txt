@@ -188,7 +188,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 
 == Changelog ==
 = 1.7.13 =
-* Adds `profile_image_size` shortcode variable
+* Adds `profile_image_size` and `shuffle` shortcode variables
 * Lowers chance of clashes with other installations of cycle2 - by defaulting `autoSelector` to `.rotatingtweets` instead of `.cycle-slideshow`
 * Handles old versions of jQuery that don't fully support `.data()` better
 
