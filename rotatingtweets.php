@@ -910,7 +910,11 @@ function rotatingtweets_call_twitter_API($command,$options = NULL,$api = NULL ) 
 			if(isset($data['errors'])):
 				$data['errors'][0]['type'] = 'Twitter';
 				if( empty($api) ) $errorstring[0]['message'] = 'Please enter valid Twitter API Settings on the Rotating Tweets settings page';
-				if(WP_DEBUG  && ! is_admin() ) echo "<!-- Error message from Twitter - {$data['errors']} -->";
+				if(WP_DEBUG  && ! is_admin() ):
+					echo "<!-- Error message from Twitter - \n";
+					print_r($data['errors']);
+					echo "\n-->";
+				endif;
 				update_option('rotatingtweets_api_error',$data['errors']);
 			else:
 				if(WP_DEBUG  && ! is_admin() ) echo "<!-- Successfully read data from Twitter -->";
