@@ -544,7 +544,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'no_cache'=>FALSE,
 			'text_cache_id'=>FALSE,
 			'profile_image_size'=>'normal',
-			'shuffle'=>0
+			'shuffle'=>0,
+			'merge_cache'=>TRUE
 		), $atts ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -562,7 +563,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	rotatingtweets_enqueue_scripts(); 
 	$returnstring = rotatingtweets_get_transient($args['text_cache_id']);
 	if(strlen($returnstring)==0):
-		$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list);
+		$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list,$args['merge_cache']);
 		$returnstring = rotating_tweets_display($tweets,$args,$print);
 	elseif(WP_DEBUG):
 		$returnstring .= "<!-- Transient ".$args['text_cache_id']." loaded -->";
@@ -951,7 +952,7 @@ function rotatingtweets_get_cache_delay() {
 	return($cache_delay);
 }
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
-function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE ) {
+function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE, $tw_merge = TRUE ) {
 	# Set timer
 	$rt_starttime = microtime(true);
 	# Clear up variables
@@ -1095,7 +1096,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		if(!empty($firstentry['text'])):
 			$number_returned_tweets = count($twitterjson);
 			if(WP_DEBUG) echo "<!-- ".$number_returned_tweets." tweets returned -->";
-			if($number_returned_tweets < 40 && is_array($latest_json) && count($latest_json)>0 ):
+			if($tw_merge && $number_returned_tweets < 40 && is_array($latest_json) && count($latest_json)>0 ):
 				if(WP_DEBUG) echo "<!-- ".count($latest_json)." tweets in cache -->";
 				$twitterjson = rotatingtweet_combine_jsons($twitterjson,$latest_json);
 				if(WP_DEBUG) echo "<!-- ".count($twitterjson)." tweets in merged json -->";
@@ -1179,7 +1180,7 @@ function rotatingtweets_shrink_element($json,$no_emoji=0) {
 					$before='/\\p{C}/u'; # Removed all 'other' characters - http://php.net/manual/en/regexp.reference.unicode.php
 					$after='';
 					$json[$rt_element] = str_replace($before,$after,$json[$rt_element]);
-				endif;		
+				endif;
 /*	Experiment to deal with problem caused by emoji crashing a poorly configured database
 				if(function_exists("mb_convert_encoding")):
 					$return[$rt_element]=mb_convert_encoding($json[$rt_element], "UTF-8");
