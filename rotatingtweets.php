@@ -1092,7 +1092,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			endif;
 			$twitterjson = $twitterjson['results'];
 		endif;
-		if(is_array($twitterjson) && isset($twitterjson[0] )) $firstentry = $twitterjson[0];
+		if(isset($twitterjson) && is_array($twitterjson) && isset($twitterjson[0] )) $firstentry = $twitterjson[0];
 		if(!empty($firstentry['text'])):
 			$number_returned_tweets = count($twitterjson);
 			if(WP_DEBUG) echo "<!-- ".$number_returned_tweets." tweets returned -->";
