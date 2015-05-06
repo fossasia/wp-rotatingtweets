@@ -313,6 +313,8 @@ class rotatingtweets_Widget extends WP_Widget {
 		}
 		# This is an appalling hack to deal with the problem that jQuery gets broken when people hit save - as per http://lists.automattic.com/pipermail/wp-hackers/2011-March/037997.html - but it works!
 //		echo "<script type='text/javascript' src='".plugins_url('js/rotating_tweet_admin.js', __FILE__)."'></script>";
+		echo "</div>\n";
+/*
 		echo "</div>\n<script type='text/javascript'>\n";
 		$rtw_admin_script_original = file_get_contents(plugin_dir_path(__FILE__).'js/rotating_tweet_admin.js');
 		$rtw_admin_script_final = str_replace(
@@ -321,6 +323,7 @@ class rotatingtweets_Widget extends WP_Widget {
 			$rtw_admin_script_original);
 		echo $rtw_admin_script_final;
 		echo "\n</script>";
+*/
 	}
 } // class rotatingtweets_Widget
 
