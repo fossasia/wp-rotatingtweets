@@ -1099,7 +1099,7 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		if(!empty($firstentry['text'])):
 			$number_returned_tweets = count($twitterjson);
 			if(WP_DEBUG) echo "<!-- ".$number_returned_tweets." tweets returned -->";
-			if($tw_merge && $number_returned_tweets < 40 && is_array($latest_json) && count($latest_json)>0 ):
+			if($tw_merge && $number_returned_tweets < 40 && isset($latest_json) && is_array($latest_json) && count($latest_json)>0 ):
 				if(WP_DEBUG) echo "<!-- ".count($latest_json)." tweets in cache -->";
 				$twitterjson = rotatingtweet_combine_jsons($twitterjson,$latest_json);
 				if(WP_DEBUG) echo "<!-- ".count($twitterjson)." tweets in merged json -->";
