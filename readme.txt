@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
 Requires at least: 3.2
 Tested up to: 4.1.1
-Stable tag: 1.7.12
+Stable tag: 1.7.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -183,14 +183,16 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.12 =
-* Updated version 2 of JavaScript incl. bug fix
+= 1.7.13 =
+* Adds new shortcode variables. Fixes JavaScript & other bugs.
 
 == Changelog ==
 = 1.7.13 =
-* Adds `profile_image_size` and `shuffle` shortcode variables
+* Adds `profile_image_size`, `shuffle` and `merge_cache` shortcode variables
 * Lowers chance of clashes with other installations of cycle2 - by defaulting `autoSelector` to `.rotatingtweets` instead of `.cycle-slideshow`
 * Handles old versions of jQuery that don't fully support `.data()` better
+* Fixes bug with merge functionality
+* Fixes bug with admin page JavaScript (thanks to this [very helpful article on StackExchange.com](http://wordpress.stackexchange.com/questions/130084/executing-javascript-when-a-widget-is-added-in-the-backend))
 
 = 1.7.12 =
 * Updated version 2 of JavaScript - updated jQuery.cycle2 and removal of bug

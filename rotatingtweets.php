@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.7.12
+Version: 1.7.13
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -2209,4 +2209,19 @@ function rotatingtweets_block_transport() { return false; }
 // add_filter('use_streams_transport', 'rotatingtweets_block_transport');
 // add_filter('use_fopen_transport', 'rotatingtweets_block_transport');
 // add_filter('use_fsockopen_transport', 'rotatingtweets_block_transport');
+
+
+/** Support for Buddy Press */
+/*
+if (is_plugin_active('buddypress/bp-loader.php') && bp_is_user_profile() ):
+	add_action( 'bp_profile_header_meta', 'rotatingtweets_bpdisplay' );
+endif;
+
+function rotatingtweets_bpdisplay() {
+	$bbpressTwittername = bp_get_profile_field_data( array('field'=>'Twitter') );
+	if(!empty($bbpressTwittername) {
+		echo do_shortcode("[rotatingtweets screen_name='".$bbpressTwitterName."']");
+	}
+}
+*/
 ?>
