@@ -100,7 +100,7 @@ Possible variables for the shortcode include:
 	* `no_emoji` = `'0'` or `'1'` - experimental option that removes emoji from the feed - default is `'0'`
 	* `official_format_override` = `'0'` or `'1'` - enables you to change the settings for `show_meta_reply_retweet_favorite` and `show_meta_timestamp` on the 'official formats'.
 	* `profile_image_size` = `'normal'`, `'bigger'`, `'mini'` or `'original'` - lets you change the size of profile images - default is `'normal'`
-	* `shuffle` = `'0'` or `'`'` - shuffle the order that Tweets display - default is `'0'`
+	* `shuffle` = `'0'` or `'1'` - shuffle the order that Tweets display - default is `'0'`
 	* `merge_cache` = `'0'` or `'1'` - switches cacheing of searches on or off - default is `'1'` (i.e. on)
 
 * **Caching**
