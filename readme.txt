@@ -100,6 +100,8 @@ Possible variables for the shortcode include:
 	* `no_emoji` = `'0'` or `'1'` - experimental option that removes emoji from the feed - default is `'0'`
 	* `official_format_override` = `'0'` or `'1'` - enables you to change the settings for `show_meta_reply_retweet_favorite` and `show_meta_timestamp` on the 'official formats'.
 	* `profile_image_size` = `'normal'`, `'bigger'`, `'mini'` or `'original'` - lets you change the size of profile images - default is `'normal'`
+	* `shuffle` = `'0'` or `'`'` - shuffle the order that Tweets display - default is `'0'`
+	* `merge_cache` = `'0'` or `'1'` - switches cacheing of searches on or off - default is `'1'` (i.e. on)
 
 * **Caching**
 	* `w3tc_render_to` = 'your_choice_of_random_string' - used to support 'fragment caching' by [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/).  For this to work, you also need to ensure that `W3TC_DYNAMIC_SECURITY` is defined in your `wp-config.php` file and that you not using 'HTTP Compression' on the W3 Total Cache 'Browser Cache' settings page or 'Enhanced Disk caching' on the W3 Total Cache 'Page Cache' settings page.
