@@ -2212,6 +2212,7 @@ function rotatingtweets_block_transport() { return false; }
 
 
 /** Support for Buddy Press */
+/*
 if ( function_exists('bp_is_user_profile') && bp_is_user_profile() ):
 	add_action( 'bp_profile_header_meta', 'rotatingtweets_bpdisplay' );
 endif;
@@ -2222,4 +2223,5 @@ function rotatingtweets_bpdisplay() {
 		echo do_shortcode("[rotatingtweets screen_name='".$bbpressTwitterName."']");
 	}
 }
+*/
 ?>
