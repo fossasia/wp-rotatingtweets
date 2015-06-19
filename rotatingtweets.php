@@ -1096,10 +1096,10 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			$twitterjson = $twitterjson['results'];
 		endif;
 		if(isset($twitterjson) && is_array($twitterjson) && isset($twitterjson[0] )) $firstentry = $twitterjson[0];
-		if(!empty($firstentry['text'])):
+		if(!empty($firstentry['text']) ):
 			$number_returned_tweets = count($twitterjson);
 			if(WP_DEBUG) echo "<!-- ".$number_returned_tweets." tweets returned -->";
-			if($tw_merge && $number_returned_tweets < 40 && isset($latest_json) && is_array($latest_json) && count($latest_json)>0 ):
+			if( $tw_search && $tw_merge && $number_returned_tweets < 40 && isset($latest_json) && is_array($latest_json) && count($latest_json)>0 ):
 				if(WP_DEBUG) echo "<!-- ".count($latest_json)." tweets in cache -->";
 				$twitterjson = rotatingtweet_combine_jsons($twitterjson,$latest_json);
 				if(WP_DEBUG) echo "<!-- ".count($twitterjson)." tweets in merged json -->";
@@ -2212,16 +2212,14 @@ function rotatingtweets_block_transport() { return false; }
 
 
 /** Support for Buddy Press */
-/*
-if (is_plugin_active('buddypress/bp-loader.php') && bp_is_user_profile() ):
+if ( function_exists('bp_is_user_profile') && bp_is_user_profile() ):
 	add_action( 'bp_profile_header_meta', 'rotatingtweets_bpdisplay' );
 endif;
 
 function rotatingtweets_bpdisplay() {
 	$bbpressTwittername = bp_get_profile_field_data( array('field'=>'Twitter') );
-	if(!empty($bbpressTwittername) {
+	if(!empty($bbpressTwittername)) {
 		echo do_shortcode("[rotatingtweets screen_name='".$bbpressTwitterName."']");
 	}
 }
-*/
 ?>
