@@ -91,22 +91,32 @@ class rotatingtweets_Widget extends WP_Widget {
 		endif;		
 		if(empty($rt_tweet_string)):
 			switch($newargs['show_type']) {
-				case 1:
+				case 1:    // Favorites
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],true);
 					break;
-				case 2:
+				case 2:		// Search
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['search']);
 	//				$newargs['screen_name'] = '';   // Originally put in to avoid confusion when people have a 'follow' button and a search tweet
 					break;
-				case 3:
+				case 3:		// List
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,false,$newargs['list_tag']);
 					break;			
-				case 0:
+				case 4:		// BuddyPress
+					global $bp;
+					$rt_buddyid = bp_displayed_user_id();
+					$rt_buddyargs = array ('field' => 'Twitter', 'user_id'=> $rt_buddyid );
+					print_r($rt_buddyargs);
+					$rt_buddytwitter = bp_get_profile_field_data( $rt_buddyargs );
+					$tweets = rotatingtweets_get_tweets($rt_buddytwitter,$newargs['include_rts'],$newargs['exclude_replies']);
+					break;
+				case 0:		// User name
 				default:
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
 					break;
 			}
-			$rt_tweet_string = rotating_tweets_display($tweets,$newargs,false);
+			if($tweets):
+				$rt_tweet_string = rotating_tweets_display($tweets,$newargs,false);
+			endif;
 		elseif(WP_DEBUG):
 			$rt_tweet_string .= "<!-- Transient ".$newargs['text_cache_id']." loaded -->";
 		endif;
@@ -213,6 +223,11 @@ class rotatingtweets_Widget extends WP_Widget {
 							"2" => __("Search",'rotatingtweets'),
 							"3" => __("List",'rotatingtweets')
 		);
+		if (is_plugin_active('buddypress/bp-loader.php')):
+			$typeoptions["4"] = __("User timeline (BuddyPress)",'rotatingtweets');
+		elseif($tw_show_type==4):
+			$tw_show_type = 0;
+		endif;
 		foreach ($typeoptions as $val => $html) {
 			echo "<input type='radio' value='$val' id='".$this->get_field_id('tw_show_type_'.$val)."' name= '".$this->get_field_name('tw_show_type')."'";
 			if($tw_show_type==$val): ?> checked="checked" <?php endif; 
@@ -504,6 +519,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'screen_name' => '',
 			'url' => 'http://twitter.com/twitter',
 			'include_rts' => FALSE,
+			'only_rts' => FALSE,
 			'exclude_replies' => FALSE,
 			'tweet_count' => 5,
 			'show_follow' => FALSE,
@@ -558,6 +574,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			echo "<!-- $url => $screen_name -->";
 		}
 	endif;
+	if($only_rts) $include_rts=true;
 	$args['w3tc_render_to']=str_replace('widget','shortcode',$args['w3tc_render_to']);
 	if(!$args['text_cache_id']) $args['text_cache_id'] = "rt-sc-".md5(serialize($args));
 	$args['displaytype']='shortcode';
@@ -1516,7 +1533,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 			shuffle($json);
 		endif;
 		foreach($json as $twitter_object):
-			if ( ! (  ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@') ||  (!$args['include_rts'] && isset($twitter_object['retweeted_status']))  )  ):
+			if ((isset($args['only_rts']) && $args['only_rts'] && isset($twitter_object['retweeted_status'] )) || ((!isset($args['only_rts']) || !$args['only_rts']) && ( ! (  ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@') ||  (!$args['include_rts'] && isset($twitter_object['retweeted_status']))  )  ))):
 //			if (! ($args['exclude_replies'] && isset($twitter_object['text']) && substr($twitter_object['text'],0,1)=='@')): // This works to exlude replies
 //			if (! (!$args['include_rts'] && isset($twitter_object['retweeted_status'])) ) : // This works to exclude retweets
 				$tweet_counter++;
