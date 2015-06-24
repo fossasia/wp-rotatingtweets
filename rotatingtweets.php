@@ -91,25 +91,32 @@ class rotatingtweets_Widget extends WP_Widget {
 		endif;		
 		if(empty($rt_tweet_string)):
 			switch($newargs['show_type']) {
-				case 1:    // Favorites
+				// Favourites
+				case 1:
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],true);
 					break;
-				case 2:		// Search
+				// Search
+				case 2:	
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,$newargs['search']);
 	//				$newargs['screen_name'] = '';   // Originally put in to avoid confusion when people have a 'follow' button and a search tweet
 					break;
-				case 3:		// List
+				// List
+				case 3:	
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies'],false,false,$newargs['list_tag']);
-					break;			
-				case 4:		// BuddyPress
-					global $bp;
-					$rt_buddyid = bp_displayed_user_id();
-					$rt_buddyargs = array ('field' => 'Twitter', 'user_id'=> $rt_buddyid );
-					print_r($rt_buddyargs);
-					$rt_buddytwitter = bp_get_profile_field_data( $rt_buddyargs );
-					$tweets = rotatingtweets_get_tweets($rt_buddytwitter,$newargs['include_rts'],$newargs['exclude_replies']);
-					break;
-				case 0:		// User name
+					break;	
+				// Buddypress
+				case 4:		
+					if( function_exists('bp_displayed_user_id')):
+						global $bp;
+						$rt_buddyid = bp_displayed_user_id();
+						$rt_buddyargs = array ('field' => 'Twitter', 'user_id'=> $rt_buddyid );
+						print_r($rt_buddyargs);
+						$rt_buddytwitter = bp_get_profile_field_data( $rt_buddyargs );
+						$tweets = rotatingtweets_get_tweets($rt_buddytwitter,$newargs['include_rts'],$newargs['exclude_replies']);
+						break;
+					endif;
+				// User name
+				case 0:	
 				default:
 					$tweets = rotatingtweets_get_tweets($newargs['screen_name'],$newargs['include_rts'],$newargs['exclude_replies']);
 					break;
