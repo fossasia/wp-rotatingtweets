@@ -2205,7 +2205,7 @@ Forces the inclusion of Rotating Tweets CSS in the header - irrespective of whet
 add_action('wp_enqueue_scripts','rotatingtweets_enqueue_style');
 // add_action('wp_enqueue_scripts','rotatingtweets_enqueue_scripts'); // Use this if you are loading the tweet page via ajax
 $style = strtolower(get_stylesheet());
-if($style == 'gleam'):
+if($style == 'gleam' || $style == 'sydney' || $style == 'sydney child theme' ):
 	add_action('wp_enqueue_scripts','rotatingtweets_enqueue_scripts');
 endif;
 
