@@ -2192,20 +2192,23 @@ function rotatingtweets_enqueue_style() {
 		endif;
 	endforeach;
 }
-function rotatingtweets_enqueue_admin_scripts($hook) {
+function rotatingtweets_enqueue_admin_scripts_widget_page($hook) {
 	if( 'widgets.php' != $hook ) return;
+	rotatingtweets_enqueue_admin_scripts($hook);
+}
+function rotatingtweets_enqueue_admin_scripts($hook) {
 	wp_enqueue_script( 'jquery' ); 
 	wp_enqueue_script( 'rotating_tweet_admin', plugins_url('js/rotating_tweet_admin.js', __FILE__),array('jquery'),FALSE,FALSE );		
 }
-add_action( 'admin_enqueue_scripts', 'rotatingtweets_enqueue_admin_scripts' );
-
+add_action( 'admin_enqueue_scripts', 'rotatingtweets_enqueue_admin_scripts_widget_page' );
+add_action( 'siteorigin_panel_enqueue_admin_scripts', 'rotatingtweets_enqueue_admin_scripts' );
 /*
 Forces the inclusion of Rotating Tweets CSS in the header - irrespective of whether the widget or shortcode is in use.  I wouldn't normally do this, but CSS needs to be in the header for HTML5 compliance (at least if the intention is not to break other browsers) - and short-code only pages won't do that without some really time-consuming and complicated code up front to check for this
 */
 add_action('wp_enqueue_scripts','rotatingtweets_enqueue_style');
 // add_action('wp_enqueue_scripts','rotatingtweets_enqueue_scripts'); // Use this if you are loading the tweet page via ajax
 $style = strtolower(get_stylesheet());
-if($style == 'gleam' || $style == 'sydney' || $style == 'sydney child theme' ):
+if($style == 'gleam' || function_exists('siteorigin_panels_render') ):
 	add_action('wp_enqueue_scripts','rotatingtweets_enqueue_scripts');
 endif;
 
