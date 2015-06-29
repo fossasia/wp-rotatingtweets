@@ -62,7 +62,9 @@ class rotatingtweets_Widget extends WP_Widget {
 		}
 		$negative_variables = array('meta_timestamp','meta_screen_name','meta_via');
 		foreach($negative_variables as $var) {
-			$newargs['show_'.$var] = !$instance['tw_hide_'.$var];
+			if(isset($instance['tw_'.$var])):
+				$newargs['show_'.$var] = !$instance['tw_hide_'.$var];
+			endif;
 		}
 		switch($newargs['show_follow']) {
 		case 2: 
