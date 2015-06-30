@@ -2,7 +2,7 @@
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.7.13
+Version: 1.7.14
 Text Domain: rotatingtweets
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
@@ -233,7 +233,7 @@ class rotatingtweets_Widget extends WP_Widget {
 							"3" => __("List",'rotatingtweets')
 		);
 		if (is_plugin_active('buddypress/bp-loader.php')):
-			$typeoptions["4"] = __("User timeline (BuddyPress)",'rotatingtweets');
+//			$typeoptions["4"] = __("User timeline (BuddyPress)",'rotatingtweets');
 		elseif($tw_show_type==4):
 			$tw_show_type = 0;
 		endif;

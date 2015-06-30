@@ -1,10 +1,10 @@
 === Rotating Tweets (Twitter widget and shortcode) ===
 Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
-Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive
+Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive,page builder
 Requires at least: 3.2
 Tested up to: 4.1.1
-Stable tag: 1.7.13
+Stable tag: 1.7.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,7 @@ Possible variables for the shortcode include:
 	* `search` = a term to search for. There's a useful guide to using Twitter's search function at https://support.twitter.com/articles/71577-using-advanced-search
 * **Twitter options**
 	* `include_rts` = `'0'` or `'1'` - include retweets - default is `'0'`
+	* `only_rts` = `'0'` or `'1'` - only include retweets - default is `'0'`
 	* `exclude_replies` = `'0'` or `'1'` - exclude replies - default is `'0'`
 	* `tweet_count` = number of tweets to show - default is `5`
 	* `get_favorites` = `'0'` or `'1'` - show someone's favorites rather than their timeline - default is `'0'`
@@ -185,10 +186,14 @@ into your CSS - changing `123px;` to the width you're aiming at - either via put
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
-= 1.7.13 =
-* Adds new shortcode variables. Fixes JavaScript & other bugs.
+= 1.7.14 =
+* Works with [Page Builder by SiteOrigin](https://wordpress.org/plugins/siteorigin-panels/). Adds new shortcode variable.
 
 == Changelog ==
+= 1.7.14 =
+* Works with [Page Builder by SiteOrigin](https://wordpress.org/plugins/siteorigin-panels/).
+* Adds new shortcode variable `only_rts`
+
 = 1.7.13 =
 * Adds `profile_image_size`, `shuffle` and `merge_cache` shortcode variables
 * Lowers chance of clashes with other installations of cycle2 - by defaulting `autoSelector` to `.rotatingtweets` instead of `.cycle-slideshow`
