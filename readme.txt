@@ -74,6 +74,7 @@ Possible variables for the shortcode include:
 	* `offset` = ''number'' - default is `'0'` - enables you to start on a later tweet - `'1'` starts on the 2nd tweet, `'2'` starts on the 3rd tweet, etc.
 * **Display options**
 	* `official_format` = `'1'`, `'2'` or `'custom'` - show one of the two official formats or a custom format if you have written your own `rotatingtweets_display_override()` function - default is `'0'`
+	* `rtw_display_order`=`'info,main,media,meta'` - change the order that the main elements of the tweet are shown - `info`, `main`, `media` and `meta` - via a string using the four keywords separated by commas - default is `'info,main,media,meta'`
 	* `timeout` = time that each tweet is shown in milliseconds - default is `'4000'` (i.e. 4 seconds). `timeout=0` allows for continuous scrolling.
 	* `speed` = time it takes to change from one tweet to the next in milliseconds - default is `'1000'` (i.e. 1 second)
 	* `links_in_new_window` = `'0'` or `'1'` - show links in a new tab or window - default is `'0'`
