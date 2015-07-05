@@ -51,6 +51,23 @@ class rotatingtweets_Widget extends WP_Widget {
     /** @see WP_Widget::widget */
     public function widget($args, $instance) {		
 		extract( $args );
+		if(!isset($instance['title'])):
+			$instance = array(
+				'title'			=>	'',
+				'tw_show_follow'	=>	FALSE,
+				'tw_show_type'		=>	0,
+				'tw_screen_name'	=>	'',
+				'tw_include_rts'	=>	FALSE,
+				'tw_exclude_replies'=>	FALSE,
+				'tw_tweet_count'	=>	5,
+				'tw_rotation_type'	=>	'scrollUp',
+				'tw_official_format'=>	FALSE,
+				'tw_hide_meta_timestamp' => FALSE,
+				'tw_hide_meta_screen_name' => FALSE,
+				'tw_hide_meta_via'	=> 	FALSE,
+				'tw_show_meta_reply_retweet_favorite' => FALSE
+			);
+		endif;
         $title = apply_filters('widget_title', $instance['title']);
 		$positive_variables = array('screen_name','shorten_links','include_rts','exclude_replies','links_in_new_window','tweet_count','show_follow','timeout','rotation_type','show_meta_reply_retweet_favorite','official_format','show_type','list_tag','search');
 		$newargs['displaytype']='widget';
@@ -62,7 +79,7 @@ class rotatingtweets_Widget extends WP_Widget {
 		}
 		$negative_variables = array('meta_timestamp','meta_screen_name','meta_via');
 		foreach($negative_variables as $var) {
-			if(isset($instance['tw_'.$var])):
+			if(isset($instance['tw_hide_'.$var])):
 				$newargs['show_'.$var] = !$instance['tw_hide_'.$var];
 			endif;
 		}
@@ -575,7 +592,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'shuffle'=>0,
 			'merge_cache'=>TRUE,
 			'rtw_display_order'=>'info,main,media,meta'
-		), $atts ) ;
+		), $atts, 'rotatingtweets' ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
 		$screen_name = rotatingtweets_link_to_screenname($url);
