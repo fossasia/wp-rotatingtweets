@@ -1659,6 +1659,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 								endif;
 							endforeach;
 						endif;
+						$show_media = '';
 						if(isset($entities['media'])):
 							$media = $entities['media'];
 							$media_data = $media[0];
@@ -1670,7 +1671,6 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 							endif;
 						else:
 							unset($media);
-							$show_media='';
 						endif;
 						if(!empty($media)):
 							foreach($media as $medium):
