@@ -475,6 +475,7 @@ function rotatingtweets_user_intent($person,$lang,$linkcontent,$targetvalue='',$
 }
 // Many thanks to Moondrop for highlighting the need to do this - https://wordpress.org/support/topic/no-tweets-available-mostly?replies=30
 function rotatingtweets_set_transient($transient,$value,$expiration) {
+	$expiration = max(intval($expiration),10);
 	$newvalue = base64_encode(serialize($value));
 	return set_transient($transient,$newvalue,$expiration);
 }
@@ -591,7 +592,8 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'profile_image_size'=>'normal',
 			'shuffle'=>0,
 			'merge_cache'=>TRUE,
-			'rtw_display_order'=>'info,main,media,meta'
+			'rtw_display_order'=>'info,main,media,meta',
+			'collection_id' => 0
 		), $atts, 'rotatingtweets' ) ;
 	extract($args);
 	if(empty($screen_name) && empty($search) && !empty($url)):
@@ -999,7 +1001,7 @@ function rotatingtweets_get_cache_delay() {
 	return($cache_delay);
 }
 # Get the latest data from Twitter (or from a cache if it's been less than 2 minutes since the last load)
-function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE, $tw_merge = TRUE ) {
+function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_replies,$tw_get_favorites = FALSE,$tw_search = FALSE,$tw_list = FALSE, $tw_merge = TRUE, $tw_collection = FALSE ) {
 	# Set timer
 	$rt_starttime = microtime(true);
 	# Clear up variables
