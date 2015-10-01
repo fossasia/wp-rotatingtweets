@@ -593,10 +593,10 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 			'shuffle'=>0,
 			'merge_cache'=>TRUE,
 			'rtw_display_order'=>'info,main,media,meta',
-			'collection_id' => 0
+			'collection' => FALSE
 		), $atts, 'rotatingtweets' ) ;
 	extract($args);
-	if(empty($screen_name) && empty($search) && !empty($url)):
+	if(empty($screen_name) && empty($search) && !empty($url) && empty($collection)):
 		$screen_name = rotatingtweets_link_to_screenname($url);
 		$args['screen_name'] = $screen_name;
 		if(WP_DEBUG) {
@@ -612,7 +612,7 @@ function rotatingtweets_display_shortcode( $atts, $content=null, $code="", $prin
 	rotatingtweets_enqueue_scripts(); 
 	$returnstring = rotatingtweets_get_transient($args['text_cache_id']);
 	if(strlen($returnstring)==0):
-		$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list,$args['merge_cache']);
+		$tweets = rotatingtweets_get_tweets($screen_name,$include_rts,$exclude_replies,$get_favorites,$search,$list,$args['merge_cache'],$collection);
 		$returnstring = rotating_tweets_display($tweets,$args,$print);
 	elseif(WP_DEBUG):
 		$returnstring .= "<!-- Transient ".$args['text_cache_id']." loaded -->";
@@ -1014,12 +1014,15 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		$rt_namesarray = false;
 		foreach($possibledividers as $possibledivider):
 			if(strpos($tw_screen_name,$possibledivider) !== false ):
-				$rt_namesarray = explode(' ',$tw_screen_name);
+				$rt_namesarray = explode($possibledivider,$tw_screen_name);
 				$tw_search = 'from:'.implode(' OR from:',$rt_namesarray);
 			endif;
 		endforeach;	
 	else:
 		$tw_search = trim($tw_search);
+	endif;
+	if($tw_collection):
+		$tw_collection = trim($tw_collection);
 	endif;
 	$cache_delay = rotatingtweets_get_cache_delay();
 	if($tw_include_rts != 1) $tw_include_rts = 0;
@@ -1028,6 +1031,8 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	# Get the option strong
 	if($tw_search) {
 		$stringname = 'search-'.$tw_include_rts.$tw_exclude_replies.'-'.$tw_search;
+	} elseif($tw_collection) {
+		$stringname = 'collection-'.$tw_collection;
 	} elseif ($tw_get_favorites) {
 		$stringname = $tw_screen_name.$tw_include_rts.$tw_exclude_replies.'favorites';
 	} elseif ($tw_list) {
@@ -1076,10 +1081,14 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	# Checks if it is time to call Twitter directly yet or if it should use the cache
 	if($timegap > $cache_delay):
 		$apioptions = array('screen_name'=>$tw_screen_name,'include_entities'=>1,'count'=>40,'include_rts'=>$tw_include_rts,'exclude_replies'=>$tw_exclude_replies);
+		$twitterusers = FALSE;
 		if($tw_search) {
 			$apioptions['q']=$tw_search;
 //			$apioptions['result_type']='recent';
 			$twitterdata = rotatingtweets_call_twitter_API('search/tweets',$apioptions);
+		} elseif($tw_collection) {
+			$twitterdata = rotatingtweets_call_twitter_API('collections/entries',$apioptions);
+			$twitterusers = rotatingtweets_call_twitter_API('collections/show',$apioptions);
 		} elseif($tw_get_favorites) {
 			$twitterdata = rotatingtweets_call_twitter_API('favorites/list',$apioptions);
 		} elseif($tw_list) {
@@ -1091,7 +1100,11 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 			$twitterdata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apioptions);
 		}
 		if(!is_wp_error($twitterdata)):
-			$twitterjson = json_decode($twitterdata['body'],TRUE);
+			if($twitterusers) {
+				$twitterjson = rotatingtweets_transform_collection_data($twitterdata,$twitterusers);
+			} else {
+				$twitterjson = json_decode($twitterdata['body'],TRUE);
+			}
 			if(WP_DEBUG):
 				$rt_time_taken = number_format(microtime(true)-$rt_starttime,4);
 				echo "<!-- Rotating Tweets - got new data - time taken: $rt_time_taken seconds -->";
@@ -1166,6 +1179,35 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 	else:
 		return;
 	endif;
+}
+/* Collections use a different format to the standard API. This is an attempt to convert from one to the other! */
+function rotatingtweets_transform_collection_data($twittertweets,$twitterusers) {
+	$tweetobject = json_decode($twittertweets['body'],TRUE);
+	if(isset($tweetobject['errors'])):
+		return ($tweetobject);
+	endif;
+	if(WP_DEBUG):
+		echo "<!--- Collection Tweets object ";
+		print_r($tweetobject);
+	endif;
+	$userobject = json_decode($twitterusers['body'],TRUE);
+	if(WP_DEBUG):
+		echo "\n\n--- Collection Users object \n\n";
+		print_r($userobject);
+	endif;
+	$pretweets = $tweets['objects']['tweets'];
+	$posttweets = array();
+	foreach($pretweets as $tweet):
+		$tweet['user'] = $userobject['objects']['users'][$tweet['user']['id_str']] ;
+		$posttweets[] = $tweet;
+	endforeach;
+	$return = array( 'results' => $posttweets );
+	if(WP_DEBUG):
+		echo "\n\n--- Combined object \n\n";
+		print_r($return);
+		echo "\n--->";
+	endif;
+	return $return;
 }
 function rotatingtweet_combine_jsons($a,$b) {
 	$tweet_keys = array();
