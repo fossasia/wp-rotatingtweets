@@ -2123,9 +2123,10 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 }
 # Load the language files - needs to come after the widget_init line - and possibly the shortcode one too!
 function rotatingtweets_init() {
-	load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+//	load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'rotatingtweets' );
 }
-// add_action('plugins_loaded', 'rotatingtweets_init');
+add_action('plugins_loaded', 'rotatingtweets_init');
 
 function rotatingtweets_possible_rotations($dropbox = FALSE) {
 	# Check if we're using jQuery Cycle 1 or 2 - sends back response for validity checking or raw data for a drop down box
