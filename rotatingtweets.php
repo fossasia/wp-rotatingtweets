@@ -1,9 +1,11 @@
 <?php
 /*
 Plugin Name: Rotating Tweets (Twitter widget & shortcode)
+Plugin Name: Rotating Tweets (Twitter widget & shortcode)
 Description: Replaces a shortcode such as [rotatingtweets screen_name='your_twitter_name'], or a widget, with a rotating tweets display 
-Version: 1.7.17
+Version: 1.7.18
 Text Domain: rotatingtweets
+Domain Path: /languages
 Author: Martin Tod
 Author URI: http://www.martintod.org.uk
 License: GPL2
@@ -2123,8 +2125,8 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 }
 # Load the language files - needs to come after the widget_init line - and possibly the shortcode one too!
 function rotatingtweets_init() {
-//	load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-	load_plugin_textdomain( 'rotatingtweets' );
+	load_plugin_textdomain( 'rotatingtweets', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+//	load_plugin_textdomain( 'rotatingtweets' );  // Previous attempt to use language packs
 }
 add_action('plugins_loaded', 'rotatingtweets_init');
 
