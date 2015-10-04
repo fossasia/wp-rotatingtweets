@@ -109,6 +109,16 @@ Most of this is my own work, but special thanks are owed to:
 * [Liam Gaddy](http://profiles.wordpress.org/lgladdy/) at [Storm Consultancy](http://www.stormconsultancy.co.uk/) for [his work](http://www.stormconsultancy.co.uk/blog/development/tools-plugins/oauth-twitter-feed-for-developers-library-and-wordpress-plugin/) on [oAuth Twitter Feed for Developers](http://wordpress.org/extend/plugins/oauth-twitter-feed-for-developers/) (although I ended up using it for inspiration rather than plugging it in directly).
 * All the people who have given advice and suggested improvements
 
+Thank you to the people who did the original translation work for the following packs:
+
+* Wilmerson Felipe for his work on Brazilian Portuguese
+* Nils Kroneberg for his work on German
+* Alberto Lario for his work on Spanish
+* [Mattia Migliorini](https://profiles.wordpress.org/deshack/) at [deshack](http://deshack.net/) for his work on Italian
+* Natasja Weijer for her work on Dutch
+* [Alexandre Trudel](http://wordpress.org/support/profile/alexandretrudel) for his help on French
+* Borisa Djuraskovic at [Web Hosting Hub](http://www.webhostinghub.com/) for his help on Serbian
+
 == Frequently Asked Questions ==
 = What options can I use for the shortcode? =
 All the options are listed on the [Rotating Tweets installation page](http://wordpress.org/extend/plugins/rotatingtweets/installation/).
