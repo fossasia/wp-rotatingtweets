@@ -1847,6 +1847,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 									endif;
 									if(isset($args['show_meta_tweet_counter']) && $args['show_meta_tweet_counter']):
 										if(!empty($meta)) $meta .= ' &middot; ';
+										/* translators: used for the tweet counter - e.g. 1 of 23, 3 of 34 */
 										$meta .= sprintf(__('%1$s of %2$s','rotatingtweets'),$tweet_counter,$tweet_count);
 									endif;
 									if(isset($args['show_meta_prev_next']) && $args['show_meta_prev_next'] && $args['np_pos']=='tweets'):
