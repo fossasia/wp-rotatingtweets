@@ -1732,7 +1732,7 @@ function rotating_tweets_display($json,$args,$print=FALSE) {
 	//					$before[]="%#([0-9]*[\p{L}a-zA-Z_]+\w*)%";
 						# This is designed to find hashtags and turn them into links...
 						$before[]="%#\b(\d*[^\d\s[:punct:]]+[^\s[:punct:]]*)%u";
-						$after[]='<a href="http://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.' class="rtw_hashtag_link">#$1</a>';
+						$after[]='<a href="https://twitter.com/search?q=%23$1&amp;src=hash" title="#$1"'.$targetvalue.' class="rtw_hashtag_link">#$1</a>';
 						# Attempts to remove emoji - see http://www.regular-expressions.info/unicode.html https://en.wikipedia.org/wiki/Emoji
 						if(isset($args['no_emoji']) && $args['no_emoji']):
 							// $before[]='/\\p{InGreek_Extended}/u'; #Not supported by PCRE http://php.net/manual/en/regexp.reference.unicode.php
