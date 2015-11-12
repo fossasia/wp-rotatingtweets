@@ -1402,7 +1402,7 @@ function rotatingtweets_trigger_rate_limiting() {
 	}
 }
 function rotatingtweets_convert_charset($string) {
-	if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8' && strtoupper(DB_CHARSET)!= '' ):
+	if( defined('DB_CHARSET') && strtoupper(DB_CHARSET) !='UTF-8' && strtoupper(DB_CHARSET)!= 'UTF8' && strtoupper(DB_CHARSET)!= 'UTF8MB4'  && strtoupper(DB_CHARSET)!= '' ):
 		$new_string = iconv("UTF-8",DB_CHARSET . '//TRANSLIT',$string);
 		if(empty($new_string)):
 			if(WP_DEBUG):
