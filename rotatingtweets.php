@@ -513,6 +513,15 @@ function rotatingtweets_timestamp_link($twitter_object,$timetype = 'default',$ta
 			if(!empty($timezone_string)):
 				date_default_timezone_set( get_option('timezone_string') );
 			endif;
+			if(WP_DEBUG) {
+				echo "\n<!-- Timezone debug";
+				echo "\n- Default timezone used in this script: ".date_default_timezone_get(); 
+				echo "\n- Wordpress timezone setting:           ".$timezone_string;
+				echo "\n- Tweet timestamp:                      ".$tweettimestamp;
+				echo "\n- Time format:                          ".get_option('time_format');
+				echo "\n- Display time:                         ".date_i18n(get_option('time_format'),$tweettimestamp );
+				echo "\n-->";
+			}
 			$string .= date_i18n(get_option('time_format'),$tweettimestamp )." &middot; ".date_i18n(get_option('date_format') ,$tweettimestamp  );
 			break;
 		default:
