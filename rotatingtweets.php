@@ -726,7 +726,7 @@ function rotatingtweets_admin_init(){
 }
 function rotatingtweets_option_loklak_api() {
 	$options = get_option('rotatingtweets-api-settings');
-	echo "<input type='checkbox' id='rotatingtweets_api_loklak_api' name='rotatingtweets-api-settings[loklak_api]' size='70' value='1' />";
+	echo "<input type='checkbox' id='rotatingtweets_api_loklak_api_input' name='rotatingtweets-api-settings[loklak_api]' size='70' value='1' />";
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');

@@ -1,7 +1,25 @@
 /*
  Script to cycle the rotating tweets
 */
+function rotatingtweets_update_twitter_auth(arg) {
+    jQuery("#rotatingtweets_api_key_input").prop('disabled', arg);
+	jQuery("#rotatingtweets_api_secret_input").prop('disabled', arg);
+	jQuery("#rotatingtweets_api_token_input").prop('disabled', arg);
+	jQuery("#rotatingtweets_api_token_secret_input").prop('disabled', arg);
+}
 jQuery(document).ready(function() {
+	if(jQuery("#rotatingtweets_api_loklak_api_input").prop('checked')){
+		rotatingtweets_update_twitter_auth(true);
+	}
+	console.log("init");
+    jQuery("#rotatingtweets_api_loklak_api_input").live('change', function() {
+    	if(jQuery(this).is(':checked')){
+	    	rotatingtweets_update_twitter_auth(true);
+	    }
+	    else {
+	    	rotatingtweets_update_twitter_auth(false);
+	    }
+	});
 	jQuery('.rotatingtweets').each(function() {
 		/* Get the ID of the rotating tweets div - and parse it to get rotation speed and rotation fx */
 		var rotate_id = "#"+this.id,

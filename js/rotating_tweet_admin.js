@@ -1,6 +1,7 @@
 /*
  Script to cycle the rotating tweets
 */
+
 jQuery(document).ready(function() {
 	function rotatingtweets_runselect() {
 		// Script to show or hide display options on start up
