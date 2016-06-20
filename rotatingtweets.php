@@ -33,6 +33,7 @@ License: GPL2
  *
  */
 require_once('lib/wp_twitteroauth.php');
+require_once('lib/loklak_php_api/loklak.php');
 /**
  * rotatingtweets_Widget_Class
  * Shows tweets sequentially for a given user
@@ -675,7 +676,9 @@ function rotatingtweets_call_twitter_API_options() {
 	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.','rotatingtweets' ) );
 	}
-	echo sprintf(__('<p>Twitter <a href="%s">has changed</a> the way that they allow people to use the information in their tweets.</p><p>You need to take the following steps to make sure that Rotating Tweets can access the information it needs from Twitter:</p>','rotatingtweets'),'https://dev.twitter.com/blog/changes-coming-to-twitter-api');
+	echo sprintf(__('<p>Twitter <a href="%s">has changed</a> the way that they allow people to use the information in their tweets.</p>','rotatingtweets'),'https://dev.twitter.com/blog/changes-coming-to-twitter-api');
+	echo sprintf(__('<h3>Option 1:</h3><p> You can use anonymous API from <a href="%s">loklak.org</a> and get plugin data through loklak.</p>','rotatingtweets'),'http://loklak.org/');
+	echo sprintf(__('<h3>Option 2:</h3><p> Or you need to take the following steps to make sure that Rotating Tweets can access the information it needs from Twitter:</p>','rotatingtweets'));
 	echo sprintf(__('<h3>Step 1:</h3><p>Go to the <a href="%s">My applications page</a> on the Twitter website to set up your website as a new Twitter \'application\'. You may need to log-in using your Twitter user name and password.</p>','rotatingtweets'),'https://dev.twitter.com/apps');
 	echo sprintf(__('<h3>Step 2:</h3><p>If you don\'t already have a suitable \'application\' that you can use for your website, set one up on the <a href="%s">Create an Application page</a>.</p> <p>It\'s normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets.</p><p>You don\'t need a Callback URL.</p>','rotatingtweets'),'https://dev.twitter.com/apps/new');
 	_e('<h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</strong>, on the following page, click on <strong>Create my access token</strong>.</p>','rotatingtweets');
@@ -716,6 +719,10 @@ function rotatingtweets_admin_init(){
 	add_settings_section('rotatingtweets_jquery_main', __('JavaScript Settings','rotatingtweets'), 'rotatingtweets_jquery_explanation', 'rotatingtweets_api_settings');
 	add_settings_field('rotatingtweets_jquery_cycle_version', __('Version of JQuery Cycle','rotatingtweets'), 'rotatingtweets_option_show_cycle_version','rotatingtweets_api_settings','rotatingtweets_jquery_main');
 	add_settings_field('rotatingtweets_js_in_footer', __('Where to load Rotating Tweets JavaScript','rotatingtweets'), 'rotatingtweets_option_show_in_footer','rotatingtweets_api_settings','rotatingtweets_jquery_main');
+}
+function rotatingtweets_option_loklak_api() {
+	$options = get_option('rotatingtweets-api-settings');
+	echo "<checkbox id='rotatingtweets_api_loklak' name='rotatingtweets-api-settings[loklak_api]' size='70' type='text' value='{$options['loklak_api']}' />";
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');
