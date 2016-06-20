@@ -676,9 +676,7 @@ function rotatingtweets_call_twitter_API_options() {
 	if ( !current_user_can( 'manage_options' ) )  {
 		wp_die( __( 'You do not have sufficient permissions to access this page.','rotatingtweets' ) );
 	}
-	echo sprintf(__('<p>Twitter <a href="%s">has changed</a> the way that they allow people to use the information in their tweets.</p>','rotatingtweets'),'https://dev.twitter.com/blog/changes-coming-to-twitter-api');
-	echo sprintf(__('<h3>Option 1:</h3><p> You can use anonymous API from <a href="%s">loklak.org</a> and get plugin data through loklak.</p>','rotatingtweets'),'http://loklak.org/');
-	echo sprintf(__('<h3>Option 2:</h3><p> Or you need to take the following steps to make sure that Rotating Tweets can access the information it needs from Twitter:</p>','rotatingtweets'));
+	echo sprintf(__('<p>Twitter <a href="%s">has changed</a> the way that they allow people to use the information in their tweets.</p><p>You need to take the following steps to make sure that Rotating Tweets can access the information it needs from Twitter:</p>','rotatingtweets'),'https://dev.twitter.com/blog/changes-coming-to-twitter-api');
 	echo sprintf(__('<h3>Step 1:</h3><p>Go to the <a href="%s">My applications page</a> on the Twitter website to set up your website as a new Twitter \'application\'. You may need to log-in using your Twitter user name and password.</p>','rotatingtweets'),'https://dev.twitter.com/apps');
 	echo sprintf(__('<h3>Step 2:</h3><p>If you don\'t already have a suitable \'application\' that you can use for your website, set one up on the <a href="%s">Create an Application page</a>.</p> <p>It\'s normally best to use the name, description and website URL of the website where you plan to use Rotating Tweets.</p><p>You don\'t need a Callback URL.</p>','rotatingtweets'),'https://dev.twitter.com/apps/new');
 	_e('<h3>Step 3:</h3><p>After clicking <strong>Create your Twitter application</strong>, on the following page, click on <strong>Create my access token</strong>.</p>','rotatingtweets');
@@ -694,6 +692,7 @@ function rotatingtweets_call_twitter_API_options() {
 	echo "\n</ol>";
 	_e('<h3>Getting information from more than one Twitter account</h3>','rotatingtweets');
 	_e('<p>Even though you are only entering one set of Twitter API data, Rotating Tweets will continue to support multiple widgets and shortcodes pulling from a variety of different Twitter accounts.</p>','rotatingtweets');
+	echo sprintf(__('<b>Or</b> <p>You can use anonymous API of <a href="%s">loklak.org</a> and get plugin data through loklak (no registration and authentication required). <a href="%s">Find out more</a></p>','rotatingtweets'),'http://loklak.org/','http://loklak.org/');
 	echo '<form method="post" action="options.php">';
 	settings_fields( 'rotatingtweets_options' );
 	do_settings_sections('rotatingtweets_api_settings');
@@ -703,8 +702,13 @@ function rotatingtweets_call_twitter_API_options() {
 add_action('admin_init', 'rotatingtweets_admin_init');
 
 function rotatingtweets_admin_init(){
-// API settings
+
 	register_setting( 'rotatingtweets_options', 'rotatingtweets-api-settings', 'rotatingtweets_api_validate' );
+
+// Loklak API settings
+	add_settings_section('rotatingtweets_loklak_api_main', __('Loklak API Settings','rotatingtweets'), 'rotatingtweets_loklak_api_explanation', 'rotatingtweets_api_settings');
+	add_settings_field('rotatingtweets_loklak_api', __('Use Loklak API instead of Twitter','rotatingtweets'), 'rotatingtweets_option_loklak_api', 'rotatingtweets_api_settings', 'rotatingtweets_loklak_api_main');
+// Twitter API settings
 	add_settings_section('rotatingtweets_api_main', __('Twitter API Settings','rotatingtweets'), 'rotatingtweets_api_explanation', 'rotatingtweets_api_settings');
 	add_settings_field('rotatingtweets_key', __('Twitter API Consumer Key','rotatingtweets'), 'rotatingtweets_option_show_key', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
 	add_settings_field('rotatingtweets_secret', __('Twitter API Consumer Secret','rotatingtweets'), 'rotatingtweets_option_show_secret', 'rotatingtweets_api_settings', 'rotatingtweets_api_main');
@@ -722,7 +726,7 @@ function rotatingtweets_admin_init(){
 }
 function rotatingtweets_option_loklak_api() {
 	$options = get_option('rotatingtweets-api-settings');
-	echo "<checkbox id='rotatingtweets_api_loklak' name='rotatingtweets-api-settings[loklak_api]' size='70' type='text' value='{$options['loklak_api']}' />";
+	echo "<input type='checkbox' id='rotatingtweets_api_loklak_api' name='rotatingtweets-api-settings[loklak_api]' size='70' value='1' />";
 }
 function rotatingtweets_option_show_key() {
 	$options = get_option('rotatingtweets-api-settings');
@@ -837,6 +841,10 @@ function rotatingtweets_option_show_in_footer() {
 	echo "\n</select>";
 }
 // Explanatory text
+function rotatingtweets_loklak_api_explanation() {
+	
+};
+// Explanatory text
 function rotatingtweets_api_explanation() {
 	
 };
@@ -852,30 +860,33 @@ function rotatingtweets_jquery_explanation() {
 function rotatingtweets_api_validate($input) {
 	$options = get_option('rotatingtweets-api-settings');
 	$error = 0;
+
+	// Check 'loklak_api'
+	$options['loklak_api'] = trim($input['loklak_api']);
 	// Check 'key'
 	$options['key'] = trim($input['key']);
-	if(!preg_match('/^[a-z0-9]+$/i', $options['key'])) {
+	if(!preg_match('/^[a-z0-9]+$/i', $options['key']) && !$options['loklak']) {
 		$options['key'] = '';
 		$error = 1;
 		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-key'), __('Error: Twitter API Consumer Key not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'secret'
 	$options['secret'] = trim($input['secret']);
-	if(!preg_match('/^[a-z0-9]+$/i', $options['secret'])) {
+	if(!preg_match('/^[a-z0-9]+$/i', $options['secret']) && !$options['loklak']) {
 		$options['secret'] = '';
 		$error = 1;
 		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-secret'), __('Error: Twitter API Consumer Secret not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'token'
 	$options['token'] = trim($input['token']);
-	if(!preg_match('/^[a-z0-9]+\-[a-z0-9]+$/i', $options['token'])) {
+	if(!preg_match('/^[a-z0-9]+\-[a-z0-9]+$/i', $options['token']) && !$options['loklak']) {
 		$options['token'] = '';
 		$error = 1;
 		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token'), __('Error: Twitter API Access Token not correctly formatted.','rotatingtweets'));
 	}
 	// Check 'token_secret'
 	$options['token_secret'] = trim($input['token_secret']);
-	if(!preg_match('/^[a-z0-9]+$/i', $options['token_secret'])) {
+	if(!preg_match('/^[a-z0-9]+$/i', $options['token_secret']) && !$options['loklak']) {
 		$options['token_secret'] = '';
 		$error = 1;
 		add_settings_error( 'rotatingtweets', esc_attr('rotatingtweets-api-token-secret'), __('Error: Twitter API Access Token Secret not correctly formatted.','rotatingtweets'));
