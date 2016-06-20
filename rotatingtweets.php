@@ -199,32 +199,32 @@ class rotatingtweets_Widget extends WP_Widget {
 			'tw_search' => array('tw_search','','string')
 		);
 		foreach($variables as $var => $val) {
-			if(isset($instance[$var])):
+			if(isset($instance[$var]) && is_array($instance[$var])):
 				switch($val[2]):
 					case "string":
-						$$val[0] = esc_attr(trim($instance[$var]));
+						${$val[0]} = esc_attr(trim($instance[$var]));
 						break;
 					case "format":
 						if($instance[$var]==='custom'):
-							$$val[0] = 'custom';
+							${$val[0]} = 'custom';
 						else:
-							$$val[0] = absint($instance[$var]);
+							${$val[0]} = absint($instance[$var]);
 						endif;
 						break;
 					case "number":
 					case "boolean":
-						$$val[0] = absint($instance[$var]);
+						${$val[0]} = absint($instance[$var]);
 						break;
 					case "notboolean":
-						$$val[0] = !$instance[$var];
+						${$val[0]} = !$instance[$var];
 						break;
 				endswitch;
 			else:
-				$$val[0] = $val[1];
+				${$val[0]} = $val[1];
 			endif;
 			if(isset($val[3])):
-				$metaoption[$val[0]]=$$val[0];
-				unset($$val[0]);
+				$metaoption[$val[0]]=${$val[0]};
+				unset(${$val[0]});
 			endif;
 		}
         ?>
