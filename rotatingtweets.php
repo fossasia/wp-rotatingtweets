@@ -924,7 +924,7 @@ function rotatingtweets_api_validate($input) {
 		$transientname = 'rotatingtweets_check_wp_remote_request'; // This whole code is to help someone who has a problem with wp_remote_request
 		if(!rotatingtweets_get_transient($transientname)):
 			rotatingtweets_set_transient($transientname,true,24*60*60);
-			$test = rotatingtweets_call_twitter_API('statuses/user_timeline',NULL,$options);
+			$test = rotatingtweets_call_API('statuses/user_timeline',NULL,$options);
 			delete_transient($transientname);
 			$error = get_option('rotatingtweets_api_error');
 			if(!empty($error)):
@@ -940,7 +940,7 @@ function rotatingtweets_api_validate($input) {
 }
 
 function rotatingtweets_call_API($command, $options = NULL, $api = NULL ) {
-
+	$settings = get_option('rotatingtweets-api-settings');
 }
 function rotatingtweets_call_loklak_API($command, $options = NULL, $api = NULL ) {
 
@@ -1128,19 +1128,19 @@ function rotatingtweets_get_tweets($tw_screen_name,$tw_include_rts,$tw_exclude_r
 		if($tw_search) {
 			$apioptions['q']=$tw_search;
 //			$apioptions['result_type']='recent';
-			$twitterdata = rotatingtweets_call_twitter_API('search/tweets',$apioptions);
+			$twitterdata = rotatingtweets_call_API('search/tweets',$apioptions);
 		} elseif($tw_collection) {
-			$twitterdata = rotatingtweets_call_twitter_API('collections/entries',$apioptions);
-			$twitterusers = rotatingtweets_call_twitter_API('collections/show',$apioptions);
+			$twitterdata = rotatingtweets_call_API('collections/entries',$apioptions);
+			$twitterusers = rotatingtweets_call_API('collections/show',$apioptions);
 		} elseif($tw_get_favorites) {
-			$twitterdata = rotatingtweets_call_twitter_API('favorites/list',$apioptions);
+			$twitterdata = rotatingtweets_call_API('favorites/list',$apioptions);
 		} elseif($tw_list) {
 			unset($apioptions['screen_name']);
 			$apioptions['slug']=$tw_list;
 			$apioptions['owner_screen_name']=$tw_screen_name;
-			$twitterdata = rotatingtweets_call_twitter_API('lists/statuses',$apioptions);
+			$twitterdata = rotatingtweets_call_API('lists/statuses',$apioptions);
 		} else {
-			$twitterdata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apioptions);
+			$twitterdata = rotatingtweets_call_API('statuses/user_timeline',$apioptions);
 		}
 		if(!is_wp_error($twitterdata)):
 			if($twitterusers) {
@@ -1350,7 +1350,7 @@ function rotatingtweets_get_rate_data() {
 //	$callstring = "http://api.twitter.com/1/account/rate_limit_status.json";
 //	$command = 'account/rate_limit_status';
 	if(WP_DEBUG) echo "<!-- Retrieving Rate Data \n";
-	$ratedata = rotatingtweets_call_twitter_API('application/rate_limit_status',array('resources'=>'statuses'));
+	$ratedata = rotatingtweets_call_API('application/rate_limit_status',array('resources'=>'statuses'));
 //	$ratedata = wp_remote_request($callstring);
 	if(!is_wp_error($ratedata)):
 		$rate = json_decode($ratedata['body'],TRUE);
@@ -1398,7 +1398,7 @@ function rotatingtweets_get_twitter_language() {
 //		$callstring = "https://api.twitter.com/1/help/languages.json";
 //		$twitterdata = wp_remote_request($callstring);
 		if(WP_DEBUG) echo "<!-- Retrieving Twitter Language Options -->";
-		$twitterdata = rotatingtweets_call_twitter_API('help/languages');
+		$twitterdata = rotatingtweets_call_API('help/languages');
 		if(!is_wp_error($twitterdata)):
 			$twitterjson = json_decode($twitterdata['body'],TRUE);
 			if(!empty($twitterjson['errors'])||!empty($twitterjson['error'])):
@@ -1435,7 +1435,7 @@ function rotatingtweets_trigger_rate_limiting() {
 	$apidata = array('screen_name'=>'twitter');
 	for ($i=1; $i<150; $i++) {
 //		$ratedata = wp_remote_request($callstring);
-		$ratedata = rotatingtweets_call_twitter_API('statuses/user_timeline',$apidata);
+		$ratedata = rotatingtweets_call_API('statuses/user_timeline',$apidata);
 	}
 }
 function rotatingtweets_convert_charset($string) {
