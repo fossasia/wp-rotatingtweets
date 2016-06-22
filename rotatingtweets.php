@@ -938,6 +938,13 @@ function rotatingtweets_api_validate($input) {
 	endif;
 	return $options;
 }
+
+function rotatingtweets_call_API($command, $options = NULL, $api = NULL ) {
+
+}
+function rotatingtweets_call_loklak_API($command, $options = NULL, $api = NULL ) {
+
+}
 /*
 And now the Twitter API itself!
 */
