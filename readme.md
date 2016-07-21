@@ -562,6 +562,7 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 * First published version
 
 == Screenshots ==
+
 1. This animation shows rotating tweets inserted into a blog-post via a short code. It is slightly faster than the default setting, but gives a sense of what you get.
 
 	![Tweet Widget](./screenshot-1.gif)
