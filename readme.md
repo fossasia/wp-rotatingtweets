@@ -1,4 +1,5 @@
 === Rotating Tweets (Twitter widget and shortcode) ===
+
 Contributors: mpntod
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9XCNM4QSVHYT8
 Tags: shortcode,widget,twitter,rotating,rotate,rotator,tweet,tweets,animation,jquery,jquery cycle,cycle,multilingual,responsive,page builder
@@ -11,6 +12,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Twitter widget and shortcode to show your latest tweets one at a time an animated rotation
 
 == Description ==
+
 * **Replaces a [shortcode](http://codex.wordpress.org/Shortcode) such as `[rotatingtweets screen_name='your_twitter']`, or a [widget](http://codex.wordpress.org/WordPress_Widgets), with a rotating display of your most recent tweets**
 * **Supports v 1.1 of the Twitter API** ([i.e. it still works](https://blog.twitter.com/2013/api-v1-is-retired))
 * **Space efficient** - instead of showing all your tweets at once, shows one at a time and then smoothly replaces it with the next one. After showing all your tweets, loops back to the beginning again.
@@ -27,7 +29,9 @@ Twitter widget and shortcode to show your latest tweets one at a time an animate
 If you'd like to see what the plug-in looks like in action, you can [see the plug-in working here](http://www.martintod.org.uk/2012/05/29/new-twitter-plugin-to-show-tweets-in-rotation/).
 
 == Installation ==
+
 = Installation =
+
 1. Upload the contents of `rotatingtweets.zip` to the `/wp-content/plugins/` directory or use the Wordpress installer
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Go to the [My applications page](https://dev.twitter.com/apps) on the Twitter website to set up your website as a new Twitter 'application'. You may need to log-in using your Twitter user name and password.
@@ -37,6 +41,7 @@ If you'd like to see what the plug-in looks like in action, you can [see the plu
 1. Place a shortcode such `[rotatingtweets screen_name='mpntod']` in your post or page, or use a widget
 
 = Set-up =
+
 Options include:
 
 1. Going to the Widgets menu on the admin page and adding the Rotating Tweets widget. Options include the name of the Twitter account to show, whether to show retweets and the speed of rotation.
@@ -44,6 +49,7 @@ Options include:
 1. Using a more complicated Rotating Tweets shortcode, for example `[rotatingtweets screen_name='mpntod' include_rts='1' tweet_count='7' timeout='3000']`
 
 = Shortcode variables =
+
 Possible variables for the shortcode include:
 
 * **Required settings** - at least one of the following three settings is required for the short-code to function:
@@ -100,6 +106,7 @@ Possible variables for the shortcode include:
 	* `no_show_screen_name` = `'0'` or `'1'` - remove the screen name from the Twitter follow button - default is `'0'`
 
 == Credits ==
+
 Most of this is my own work, but special thanks are owed to:
 
 * The [jQuery](http://jquery.com/) team
@@ -120,21 +127,27 @@ Thank you to the people who did the original translation work for the following 
 * Borisa Djuraskovic at [Web Hosting Hub](http://www.webhostinghub.com/) for his help on Serbian
 
 == Frequently Asked Questions ==
+
 = What options can I use for the shortcode? =
+
 All the options are listed on the [Rotating Tweets installation page](http://wordpress.org/extend/plugins/rotatingtweets/installation/).
 
 = How can I include Rotating Tweets in my template? =
+
 Try something like:
 `<?php echo do_shortcode( "[rotatingtweets screen_name='your_twitter']" ) ?>`
 A common mistake with `do_shortcode` shortcodes is to use single-quotes or double-quotes all the way through without 'escaping' them.  This will normally break your site! It's best to use double-quotes to enclose the shortcode string and single-quotes inside the shortcode string (or vice-versa!).
 
 = How can I pull information from two accounts into one widget =
+
 The easiest way is to list more than one account in the 'Twitter name' box in the widget or use something like `screen_name='account1 account2'` in the shortcode.
 
 = How often does the plug-in call Twitter =
+
 In most cases, each use (or "instance") of this plug-in gets data from Twitter every 2 minutes. The exception is when two or more instances share the same settings (screen name etc.), in which case they share the same data rather than each calling it separately.
 
 = My Rotating Tweets are not updating. What can I do? =
+
 This normally happens if there is an SSL problem. Try going to the settings page and switching off SSL validation.
 
 If this doesn't solve the problem, check your Twitter API key settings.
@@ -142,6 +155,7 @@ If this doesn't solve the problem, check your Twitter API key settings.
 If neither of these approaches work, Rotating Tweets will normally be reporting the error as a comment in the HTML of your page. This should give you an idea of how to solve the problem.
 
 = The Rotating Tweets are not rotating. What can I do? =
+
 This normally happens if there is more than one copy of `jQuery` installed on a page - or more than one copy of `jQuery.cycle`.
 
 To see if this is the case, search the HTML on your website to see if either script is called more than once.  To do this:
@@ -171,18 +185,21 @@ Try installing the [Core Control plug-in](http://wordpress.org/extend/plugins/co
 Thank you to [darkiko](http://wordpress.org/support/profile/darkiko) for sharing their solution to this problem.
 
 = My widget is too wide! =
+
 Try putting:
-`
+```
 div.widget_rotatingtweets_widget, div.rotatingtweet, div.widget_rotatingtweets_widget div.widget-title {
 	max-width: 123px;
 }
-`
+```
 into your CSS - changing `123px;` to the width you're aiming at - either via putting `rotatingtweets.css` into `wp-content/uploads` or by editing your own template files.
 
 = How can I add a Twitter bird to the left of my tweets? =
+
 You can do this by going to the `rotatingtweets/css` directory and renaming `rotatingtweets-sample.css` to `rotatingtweets.css` and putting it in the `wp-content/uploads/` directory.  This displays a Twitter bird to the left of your tweets.  Any CSS you put into `rotatingtweets.css` won't be overwritten when the plug-in is upgraded to the latest version.
 
 == Upgrade notice ==
+
 = 1.7.18 =
 * Reinstalling translation packs.
 
@@ -546,5 +563,13 @@ You can do this by going to the `rotatingtweets/css` directory and renaming `rot
 
 == Screenshots ==
 1. This animation shows rotating tweets inserted into a blog-post via a short code. It is slightly faster than the default setting, but gives a sense of what you get.
+
+	![Tweet Widget](./screenshot-1.gif)
+
 2. You can add rotating tweets via a Widget:
+
+	![Rotating tweets](./screenshot-2.png)
+
 3. Or by using a shortcode:
+	
+	![Shortcode](./screenshot-3.png)
